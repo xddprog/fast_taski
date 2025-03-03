@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from fastapi import BackgroundTasks
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
 from starlette.templating import Jinja2Templates
@@ -10,7 +12,8 @@ class SMTPClients:
     def __init__(self):
         self.yandex_smtp = FastMail(self.create_yandex_config())
         # self.google_smtp = FastMail(self.create_google_config())
-        self.templates = Jinja2Templates(directory="/Users/mago/Documents/fastapi-auth/backend/utils/email_templates")
+        BASE_DIR = Path(__file__).resolve().parent.parent.parent
+        self.templates = Jinja2Templates(directory=BASE_DIR / "utils" / "email_templates")
 
     def create_yandex_config(self):
         yandex_config = load_yandex_smtp_config()
