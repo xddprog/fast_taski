@@ -37,19 +37,19 @@ services:
     networks:
       - app-network
   
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: nginx-proxy
-  #   volumes:
-  #     - /etc/nginx/sites-available/fasttaski.ru:/etc/nginx/conf.d/fasttaski.conf
-  #     - /etc/letsencrypt:/etc/letsencrypt:ro
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   depends_on:
-  #     - app
-  #   networks:
-  #     - app-network
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    volumes:
+      - /etc/nginx/sites-available/fasttaski.ru:/etc/nginx/conf.d/fasttaski.conf
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+    networks:
+      - app-network
       
   app:
     build:
