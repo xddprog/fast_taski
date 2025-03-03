@@ -1,0 +1,20 @@
+body,
+html {
+	background: #1e2022;
+	margin: 0;
+}
+
+
+:where(.css-dev-only-do-not-override-1nuwokp).ant-btn-color-default {
+	box-shadow:none;
+}
+
+
+:where(.css-dev-only-do-not-override-1nuwokp).ant-btn-color-primary {
+	box-shadow:none;
+}
+
+a {
+	text-decoration: none;
+	color: #8762bf
+}
