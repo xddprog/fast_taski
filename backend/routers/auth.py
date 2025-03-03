@@ -61,9 +61,7 @@ async def login_user(
     auth_service: Annotated[AuthService, Depends(get_auth_service)],
 ) -> BaseUserModel:
     user = await auth_service.get_user_by_email(form.email)
-
     await two_factor_service.check_code(user.username, code)
-
     access_token = await auth_service.create_access_token(user.username)
     refresh_token = await auth_service.create_refresh_token(user.username)
     await set_cookie_tokens(access_token, refresh_token, response)
