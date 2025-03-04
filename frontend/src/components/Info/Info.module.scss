@@ -1,0 +1,44 @@
+$font-name: "Roboto", sans-serif;
+
+.infoContainer {
+  background-color: #161616;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+
+  width: 100vw;
+  height: auto;
+
+  padding: 56px 258px 60px;
+
+  .fastTaskiInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+
+    img {
+      width: 274px;
+      height: 78px;
+    }
+
+    h1 {
+      color: #ffffff;
+
+      font-family: $font-name;
+      font-weight: 400;
+      font-size: 30px;
+    }
+
+    .spanElement {
+      color: #6096fd;
+    }
+  }
+
+  .image {
+    width: 456px;
+    height: 404px;
+  }
+}

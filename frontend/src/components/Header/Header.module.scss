@@ -1,0 +1,92 @@
+$font-name: "Roboto", sans-serif;
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 164px 12px;
+
+  background-color: #1f1f1f;
+
+  .leftHeaderBlock {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+
+    .imageContainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 82px;
+      height: auto;
+
+      img {
+        width: 16px;
+        height: 32px;
+      }
+    }
+
+    .hrefContainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+
+      .headerHref {
+        color: #ffffffbf;
+        padding: 8px 16px 8px;
+
+        font-family: $font-name;
+        font-weight: 400;
+        font-size: 16px;
+
+        text-decoration: none;
+      }
+    }
+  }
+
+  .rightHeaderBlock {
+    display: flex;
+    gap: 12px;
+
+    width: 175px;
+    height: auto;
+
+    .helpButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+
+      border: none;
+
+      background-color: #1f1f1f;
+      color: #ffffffbf;
+
+      font-family: $font-name;
+      font-weight: 400;
+      font-size: 16px;
+    }
+
+    .registrationButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 82px;
+      height: auto;
+
+      border-radius: 8px;
+      border: none;
+
+      background-color: #6096fd;
+      color: #ffffff;
+
+      font-family: $font-name;
+      font-weight: 400;
+      font-size: 16px;
+    }
+  }
+}
