@@ -8,8 +8,8 @@ from backend.infrastructure.database.connection.postgres_connection import Datab
 
 
 class AppProvider(Provider):
-    @provide(scope=Scope.REQUEST)
-    async def get_redis_client(self, request: Request) -> RedisClient:
+    @provide(scope=Scope.APP)
+    async def get_redis_client(self) -> RedisClient:
         return RedisClient()
 
     @provide(scope=Scope.APP)
