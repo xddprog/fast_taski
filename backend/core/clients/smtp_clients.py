@@ -4,8 +4,8 @@ from fastapi import BackgroundTasks
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
 from starlette.templating import Jinja2Templates
 
-from backend.core.config.smtp_configs import load_google_smtp_config, load_yandex_smtp_config
-from backend.core.enums import EmailServices
+from backend.utils.enums import EmailServices
+from backend.infrastructure.config.smtp_configs import YANDEX_SMTP_CONFIG
 
 
 class SMTPClients:
@@ -16,15 +16,14 @@ class SMTPClients:
         self.templates = Jinja2Templates(directory=BASE_DIR / "utils" / "email_templates")
 
     def create_yandex_config(self):
-        yandex_config = load_yandex_smtp_config()
         return ConnectionConfig(
-            MAIL_USERNAME=yandex_config.YANDEX_SMTP_USER,
-            MAIL_PASSWORD=yandex_config.YANDEX_SMTP_PASSWORD,
-            MAIL_PORT=yandex_config.YANDEX_SMTP_PORT,
-            MAIL_SERVER=yandex_config.YANDEX_SMTP_HOST,
+            MAIL_USERNAME=YANDEX_SMTP_CONFIG.YANDEX_SMTP_USER,
+            MAIL_PASSWORD=YANDEX_SMTP_CONFIG.YANDEX_SMTP_PASSWORD,
+            MAIL_PORT=YANDEX_SMTP_CONFIG.YANDEX_SMTP_PORT,
+            MAIL_SERVER=YANDEX_SMTP_CONFIG.YANDEX_SMTP_HOST,
             MAIL_STARTTLS=True, 
             MAIL_SSL_TLS=False, 
-            MAIL_FROM=yandex_config.YANDEX_SMTP_USER,
+            MAIL_FROM=YANDEX_SMTP_CONFIG.YANDEX_SMTP_USER,
             VALIDATE_CERTS=False
         )
 

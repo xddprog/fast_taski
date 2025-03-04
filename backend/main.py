@@ -1,13 +1,14 @@
+from dishka.integrations.fastapi import setup_dishka
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.api.dependency.setup import setup_container
+from backend.api.v1.routers import v1_router
 from backend.core.clients.smtp_clients import SMTPClients
-from backend.core.dependencies import get_current_user_dependency
 from backend.core.clients.redis_client import RedisClient
-from backend.database.connection.connection import DatabaseConnection
-from backend.routers import api_router
+from backend.infrastructure.database.connection.postgres_connection import DatabaseConnection
 
 
 async def lifespan(app: FastAPI):
@@ -18,7 +19,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-PROTECTED = Depends(get_current_user_dependency)
 
 
 origins = ["http://localhost:5173", "https://www.fasttaski.ru", "https://fasttaski.ru"]
@@ -31,14 +31,14 @@ app.add_middleware(
 )
 
 
-app.include_router(api_router)
+app.include_router(v1_router, prefix="/api")
+setup_dishka(setup_container(), app)
 
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     try:
         errors = []
-
         for error in exc.errors():
             field = error["loc"]
             input = error["input"]
@@ -54,7 +54,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
                     "input": input,
                 }
             )
-
         return JSONResponse(content=errors, status_code=422)
     except TypeError:
         return JSONResponse(
