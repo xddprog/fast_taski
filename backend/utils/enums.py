@@ -11,3 +11,9 @@ class AuthServices(str, Enum):
 class EmailServices(str, Enum):
     YANDEX = "yandex"
     GOOGLE = "google"
+
+
+class TeamRoles(str, Enum):
+    OWNER = "owner"
+    ADMIN = "admin"
+    MEMBER = "member"

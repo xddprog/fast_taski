@@ -29,6 +29,7 @@ class RequestProvider(Provider):
             repository=repositories.UserRepository(session=session),
             redis_client=redis_client
         )
+        
     
 
 @inject

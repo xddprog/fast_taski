@@ -22,7 +22,6 @@ class SqlAlchemyRepository[ModelType](RepositoryInterface):
     async def get_by_attribute(
         self, attribute: MappedColumn[Any], value: str | UUID4 | int
     ) -> list[ModelType] | None:
-        print(self.model)
         query = select(self.model).where(attribute == value)
         items: Result = await self.session.execute(query)
         return items.scalars().all()

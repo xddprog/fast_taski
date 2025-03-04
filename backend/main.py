@@ -12,6 +12,7 @@ from backend.infrastructure.database.connection.postgres_connection import Datab
 
 
 async def lifespan(app: FastAPI):
+    await DatabaseConnection.create_tables()
     yield
 
 
