@@ -3,13 +3,12 @@ import secrets
 
 from backend.core.clients.redis_client import RedisClient
 from backend.core.repositories.user_repository import UserRepository
-from backend.core.services.base_service import BaseService
 from backend.infrastructure.errors.auth_errors import CodeIsIncorrectOrExpired
 
 
-class TwoFactorAuthService(BaseService):
+class TwoFactorAuthService:
     def __init__(self, repository: UserRepository, redis_client: RedisClient):
-        super().__init__(repository)
+        self.repository = repository
         self.redis_client = redis_client
 
     async def generate_code(self, user: str):

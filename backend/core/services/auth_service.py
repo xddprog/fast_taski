@@ -10,17 +10,14 @@ from passlib.context import CryptContext
 from backend.core.dto.auth_dto import ExternalServiceUserData, LoginForm, RegisterForm
 from backend.core.dto.user_dto import BaseUserModel
 from backend.core.repositories.user_repository import UserRepository
-from backend.core.services.base_service import BaseService
 from backend.infrastructure.config.oauth_configs import JWT_CONFIG
 from backend.infrastructure.database.models.user import User
 from backend.infrastructure.errors.auth_errors import InvalidLoginData, InvalidToken, UserAlreadyNotRegister, UserAlreadyRegister
 
 
-class AuthService(BaseService):
-    repository: UserRepository
-
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+class AuthService:
+    def __init__(self, repository: UserRepository) -> None:
+        self.repository = repository
         self.context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
     async def get_user_by_username(self, username: str) -> User | None:
@@ -31,15 +28,10 @@ class AuthService(BaseService):
         return None if not user else user[0]
     
     async def get_user_by_email(self, email: str) -> User | None:
-        user = await self.repository.get_by_attribute(
-            self.repository.model.email, 
-            email
-        )
+        user = await self.repository.get_by_attribute(self.repository.model.email, email)
         return None if not user else user[0]
     
-    async def verify_password(
-        self, password: str, hashed_password: str
-    ) -> bool:
+    async def verify_password(self, password: str, hashed_password: str) -> bool:
         return self.context.verify(password, hashed_password)
 
     async def authenticate_user(self, form: LoginForm, is_external: bool = False) -> User:
@@ -50,7 +42,7 @@ class AuthService(BaseService):
             raise UserAlreadyNotRegister
         if not is_external and not await self.verify_password(form.password, user.password):
             raise InvalidLoginData
-        return await self.model_dump(user, BaseUserModel)
+        return BaseUserModel.model_validate(user, from_attributes=True)
 
     async def create_access_token(self, username: str) -> str:
         expire = datetime.now() + timedelta(minutes=JWT_CONFIG.JWT_ACCESS_TOKEN_TIME)
@@ -91,7 +83,7 @@ class AuthService(BaseService):
         user = await self.get_user_by_username(username)
         if user is None:
             raise InvalidToken
-        return await self.model_dump(user, BaseUserModel)
+        return BaseUserModel.model_validate(user, from_attributes=True)
 
     async def register_user(self, form: RegisterForm) -> BaseUserModel:
         user = await self.get_user_by_email(form.email)
@@ -100,12 +92,9 @@ class AuthService(BaseService):
 
         form.password = self.context.hash(form.password)
         new_user = await self.repository.add_item(**form.model_dump())
-        return await self.model_dump(new_user, BaseUserModel)
+        return BaseUserModel.model_validate(new_user, from_attributes=True)
 
-    async def register_external_service_user(
-        self, 
-        form: ExternalServiceUserData
-    ) -> BaseUserModel:
+    async def register_external_service_user(self, form: ExternalServiceUserData) -> BaseUserModel:
         user = await self.get_user_by_username(form.username)
         if user:
             return user
@@ -113,8 +102,8 @@ class AuthService(BaseService):
         new_user = await self.repository.register_external_service_user(
             **form.model_dump(),
         )
-        return await self.model_dump(new_user, BaseUserModel)
-
+        return BaseUserModel.model_validate(new_user, from_attributes=True)
+    
     async def auth_extarnal_service_user(self, form: RegisterForm) -> BaseUserModel:
         user_registered = await self.authenticate_user(form, is_external=True)
         if not user_registered:

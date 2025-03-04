@@ -1,15 +1,12 @@
-
-
-
 from typing import Any
 from pydantic import UUID4
 from sqlalchemy import Result, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import MappedColumn
-from backend.infrastructure.interfaces.repository import BaseRepository
+from backend.infrastructure.interfaces.repository import RepositoryInterface
 
 
-class SqlAlchemyRepository[ModelType](BaseRepository):
+class SqlAlchemyRepository[ModelType](RepositoryInterface):
     def __init__(self, session: AsyncSession):
         self.session = session
 
@@ -25,6 +22,7 @@ class SqlAlchemyRepository[ModelType](BaseRepository):
     async def get_by_attribute(
         self, attribute: MappedColumn[Any], value: str | UUID4 | int
     ) -> list[ModelType] | None:
+        print(self.model)
         query = select(self.model).where(attribute == value)
         items: Result = await self.session.execute(query)
         return items.scalars().all()

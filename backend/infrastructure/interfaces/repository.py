@@ -4,7 +4,7 @@ from typing import Any
 from pydantic import UUID4
 
 
-class BaseRepository[ModelType](ABC):
+class RepositoryInterface[ModelType](ABC):
     @abstractmethod
     async def get_item(self, item_id: int) -> ModelType | None:
         raise NotImplementedError

@@ -12,9 +12,6 @@ from backend.infrastructure.database.connection.postgres_connection import Datab
 
 
 async def lifespan(app: FastAPI):
-    app.state.db_connection = await DatabaseConnection()()
-    app.state.redis_client = RedisClient()
-    app.smtp_clients = SMTPClients()
     yield
 
 

@@ -1,6 +1,8 @@
-from unittest.mock import Base
 from sqlalchemy import BigInteger, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from backend.infrastructure.database.models.base import Base
+from backend.infrastructure.database.models.auth_methods import AuthMethod
 
 
 class User(Base):

@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
-from backend.core.repositories.base import BaseRepository
+from backend.infrastructure.interfaces.repository import RepositoryInterface
 
 
-class ServiceInterface(ABC):
-    def __init__(self, repository: BaseRepository):
+class DbModelServiceInterface(ABC):
+    def __init__(self, repository: RepositoryInterface):
         self.repository = repository
 
     @abstractmethod

@@ -1,6 +1,7 @@
-from unittest.mock import Base
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from backend.infrastructure.database.models.base import Base
 
 
 class AuthMethod(Base):
