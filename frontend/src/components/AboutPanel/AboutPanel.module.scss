@@ -1,0 +1,99 @@
+$font-name: "Roboto", sans-serif;
+
+.aboutPanelBlock {
+  display: flex;
+  height: 294px;
+  display: flex;
+  padding: 16px 258px 49px 258px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 120px;
+}
+
+.aboutPanelText {
+  display: flex;
+  width: 362px;
+  height: 254px;
+  padding: 28px 32px 24px 32px;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 16px;
+  background: #1f1f1f;
+
+  h1 {
+    color: #fff;
+    font-family: $font-name;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: #fff;
+    font-family: $font-name;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+}
+
+.supportBlock {
+  position: relative;
+  display: flex;
+  width: 550px;
+  height: 254px;
+  padding: 28px 32px 24px 32px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-radius: 16px;
+  background: #fff;
+
+  h1 {
+    color: #1f1f1f;
+    font-family: $font-name;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: #1f1f1f;
+    font-family: $font-name;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 80px;
+  }
+
+  button {
+    display: flex;
+    height: 36px;
+    padding: 8px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    background: #6096fd;
+    border: none;
+    color: #fff;
+    font-family: $font-name;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  img {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}

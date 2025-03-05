@@ -1,0 +1,50 @@
+$font-name: "Roboto", sans-serif;
+
+footer {
+  height: 142px;
+  width: 100%;
+  background: #1f1f1f;
+
+  display: flex;
+  padding: 16px 258px 49px 258px;
+  justify-content: space-between;
+  align-items: center;
+
+  .logoAndText img {
+    width: 203.94px;
+    height: 58px;
+  }
+
+  .logoAndText p {
+    color: #fff;
+
+    text-align: center;
+    font-family: $font-name;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .icons p {
+    color: #fff;
+    text-align: center;
+    font-family: $font-name;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 8px;
+  }
+
+  .socialMediaRow {
+    display: flex;
+    gap: 16px;
+  }
+}

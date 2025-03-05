@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./Header.module.scss";
 
 const Header: React.FC = () => {
@@ -8,15 +9,15 @@ const Header: React.FC = () => {
           <img src="/icons/fastTaskiLogo.png" alt="fastTaskiLogo" />
         </div>
         <ul className={styles.hrefContainer}>
-          <a href="" className={styles.headerHref}>
+          <Link to="/" className={styles.headerHref}>
             Главная
-          </a>
-          <a href="" className={styles.headerHref}>
+          </Link>
+          <Link to="/about" className={styles.headerHref}>
             О нас
-          </a>
-          <a href="" className={styles.headerHref}>
+          </Link>
+          <Link to="/" className={styles.headerHref}>
             Тарифы
-          </a>
+          </Link>
         </ul>
       </div>
       <div className={styles.rightHeaderBlock}>
