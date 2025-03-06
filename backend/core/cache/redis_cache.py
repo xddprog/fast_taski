@@ -83,6 +83,7 @@ def clear(
                         logger.warning(f"Error clearing cache: namespace={namespace}, error={e}")
             
             value = await func(request, *args, **kwargs)
+            
             if set_after:
                 if not namespaces:
                     raise ValueError("Namespace required for set_after")

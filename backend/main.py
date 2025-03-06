@@ -1,3 +1,6 @@
+from contextlib import asynccontextmanager
+import multiprocessing
+from dishka import AsyncContainer, FromDishka
 from dishka.integrations.fastapi import setup_dishka
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -6,31 +9,37 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.dependency.setup import setup_container
 from backend.api.v1.routers import v1_router
-from backend.core.clients.smtp_clients import SMTPClients
-from backend.core.clients.redis_client import RedisClient
+from backend.core.clients.rabbit_client import RabbitClient
+from backend.core.worker.manager import TaskManager
 from backend.infrastructure.database.connection.postgres_connection import DatabaseConnection
 
 
-async def lifespan(app: FastAPI):
-    await DatabaseConnection.create_tables()
-    yield
+def create_lifespan(di_container: AsyncContainer):
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        db: DatabaseConnection = await di_container.get(DatabaseConnection)
+        await db.create_tables()
+
+        task_manager = TaskManager()
+        await task_manager.start()
+        yield
+        await task_manager.close()
+    return lifespan
 
 
-app = FastAPI(lifespan=lifespan)
+di_container = setup_container()
+app = FastAPI(lifespan=create_lifespan(di_container))
 
 
-origins = ["http://localhost:5173", "https://www.fasttaski.ru", "https://fasttaski.ru"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:5173", "https://www.fasttaski.ru", "https://fasttaski.ru"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
+setup_dishka(di_container, app)
 app.include_router(v1_router, prefix="/api")
-setup_dishka(setup_container(), app)
 
 
 @app.exception_handler(RequestValidationError)

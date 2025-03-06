@@ -1,9 +1,12 @@
+import asyncio
 from dishka import Provider, Scope, provide
 from fastapi import Request
 
 from backend.core.clients.aws_client import AWSClient
+from backend.core.clients.rabbit_client import RabbitClient
 from backend.core.clients.redis_client import RedisClient
 from backend.core.clients.smtp_clients import SMTPClients
+from backend.core.worker.manager import TaskManager
 from backend.infrastructure.database.connection.postgres_connection import DatabaseConnection
 
 
@@ -23,3 +26,7 @@ class AppProvider(Provider):
     @provide(scope=Scope.APP)
     async def get_aws_client(self) -> AWSClient:
         return AWSClient()
+    
+    @provide(scope=Scope.APP)
+    async def get_tasks_manager(self) -> TaskManager:
+        return TaskManager()
