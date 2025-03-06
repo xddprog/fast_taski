@@ -43,6 +43,14 @@ $font-name: "Roboto", sans-serif;
         font-size: 16px;
 
         text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+
+        &:hover,
+        &:active,
+        &:focus {
+          color: #ffffff;
+        }
       }
     }
   }
@@ -68,6 +76,15 @@ $font-name: "Roboto", sans-serif;
       font-family: $font-name;
       font-weight: 400;
       font-size: 16px;
+
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+
+      &:hover,
+      &:active,
+      &:focus {
+        color: #ffffff;
+      }
     }
 
     .registrationButton {
@@ -87,6 +104,13 @@ $font-name: "Roboto", sans-serif;
       font-family: $font-name;
       font-weight: 400;
       font-size: 16px;
+
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        background-color: #0059ff;
+      }
     }
   }
 }
