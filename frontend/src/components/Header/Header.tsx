@@ -15,14 +15,16 @@ const Header: React.FC = () => {
           <Link to="/about" className={styles.headerHref}>
             О нас
           </Link>
-          <Link to="/" className={styles.headerHref}>
+          <Link to="/tarifs" className={styles.headerHref}>
             Тарифы
           </Link>
         </ul>
       </div>
       <div className={styles.rightHeaderBlock}>
         <button className={styles.helpButton}>Помощь</button>
-        <button className={styles.registrationButton}>Вход</button>
+        <Link to="/login" className={styles.registrationButton}>
+          Вход
+        </Link>
       </div>
     </header>
   );

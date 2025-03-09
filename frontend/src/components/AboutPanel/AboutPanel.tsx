@@ -2,7 +2,7 @@ import styles from "./AboutPanel.module.scss";
 
 const AboutPanel: React.FC = () => {
   return (
-    <div className={styles.aboutPanelBlock}>
+    <section className={styles.aboutPanelBlock}>
       <div className={styles.aboutPanelText}>
         <h1>Наша команда</h1>
         <p>
@@ -26,7 +26,7 @@ const AboutPanel: React.FC = () => {
         </div>
         <img src="/images/aboutPanel_img.png" />
       </div>
-    </div>
+    </section>
   );
 };
 

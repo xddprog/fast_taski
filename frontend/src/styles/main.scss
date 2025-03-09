@@ -2,8 +2,23 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
 }
 
 body {
   background-color: #161616;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+input {
+  border: none;
+  outline: none;
 }
