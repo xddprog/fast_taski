@@ -29,7 +29,7 @@ const LoginForm: React.FC<FormProps> = ({
         <>
           <label htmlFor="password">Повторите пароль</label>
           <input
-            type="password_repeat"
+            type="password"
             id="password_repeat"
             name="password_repeat"
             placeholder="Повторите пароль"
