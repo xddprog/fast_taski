@@ -1,6 +1,6 @@
 from aiohttp import ClientSession
 
-from backend.infrastructure.config.oauth_configs import GITHUB_CONFIG, VK_CONFIG, YANDEX_CONFIG
+from backend.infrastructure.config.oauth_configs import VK_CONFIG, YANDEX_CONFIG
 
 
 class AuthRequests:
