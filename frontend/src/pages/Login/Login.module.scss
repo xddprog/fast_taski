@@ -1,0 +1,27 @@
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.loginContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.registrationText {
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  a {
+    color: #5785dc;
+  }
+}

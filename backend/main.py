@@ -31,6 +31,7 @@ di_container = setup_container()
 app = FastAPI(lifespan=create_lifespan(di_container))
 
 
+origins = ["http://localhost:5173", "https://www.fasttaski.ru", "https://fasttaski.ru"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "https://www.fasttaski.ru", "https://fasttaski.ru"],

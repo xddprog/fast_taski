@@ -1,0 +1,36 @@
+.tarifsText {
+  display: flex;
+  padding: 16px 258px 49px 258px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 21px;
+
+  h1 {
+    color: #fff;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: #fff;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  span {
+    color: #6096fd;
+  }
+
+  .imgContainer {
+    width: 362px;
+    height: 362px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

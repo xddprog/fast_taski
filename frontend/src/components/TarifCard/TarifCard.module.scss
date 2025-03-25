@@ -1,0 +1,175 @@
+.tarifCard {
+  display: flex;
+  width: 269px;
+  height: 512px;
+  padding: 16px 32px 24px 32px;
+  flex-direction: column;
+  border-radius: 16px;
+  background: #1f1f1f;
+
+  h1 {
+    color: #fff;
+    font-size: 24px;
+  }
+
+  .description {
+    color: #fff;
+  }
+
+  .price {
+    font-size: 36px;
+    color: #fff;
+  }
+
+  span,
+  .featuresDescription {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  button {
+    display: flex;
+    height: 36px;
+    padding: 8px 16px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .featuresTitle {
+    color: #fff;
+  }
+
+  ul {
+    color: #fff;
+  }
+}
+
+.tarifSpecialCard {
+  display: flex;
+  width: 362px;
+  height: 552px;
+  padding: 16px 32px 24px 32px;
+  flex-direction: column;
+  border-radius: 16px;
+  background: #fff;
+
+  h1 {
+    color: #1f1f1f;
+    font-size: 28px;
+  }
+
+  .description {
+    color: #1f1f1f;
+  }
+
+  .price {
+    font-size: 48px;
+    color: #1f1f1f;
+  }
+
+  span {
+    font-size: 16px;
+    color: rgba(31, 31, 31, 0.75);
+  }
+
+  button {
+    display: flex;
+    height: 42px;
+    padding: 8px 16px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background: #6096fd;
+    color: #fff;
+  }
+
+  .featuresTitle {
+    color: #1f1f1f;
+  }
+
+  .featuresDescription {
+    font-size: 12px;
+    color: rgba(31, 31, 31, 0.75);
+  }
+
+  ul {
+    color: #1f1f1f;
+  }
+}
+
+.tarifTitle {
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 16px;
+}
+
+.description {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 32px;
+}
+
+.price {
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 16px;
+}
+
+.tarifBtn {
+  color: #1f1f1f;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 32px;
+}
+
+.featuresTitle {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 4px;
+}
+
+.featuresDescription {
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 16px;
+}
+
+.featuresList {
+  color: #1f1f1f;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  li {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 4px;
+  }
+
+  li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    background-image: url("/icons/plus.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+}

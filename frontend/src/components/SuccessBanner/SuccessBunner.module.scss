@@ -1,0 +1,45 @@
+.successCard {
+  display: flex;
+  width: 363px;
+  height: 420px;
+  padding: 16px 16px 32px 16px;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 16px;
+  background: #1f1f1f;
+
+  h1 {
+    color: #fff;
+    text-align: center;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  a {
+    display: flex;
+    width: 177px;
+    padding: 8px 16px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background: rgba(96, 150, 253, 0.85);
+    color: #fff;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 25px;
+  }
+}
