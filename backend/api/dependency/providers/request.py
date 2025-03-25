@@ -12,7 +12,7 @@ from backend.infrastructure.database.connection.postgres_connection import Datab
 
 class RequestProvider(Provider):
     @provide(scope=Scope.REQUEST)
-    async def get_session(self, db_connection: DatabaseConnection) -> AsyncIterable[AsyncSession]: # type: ignore
+    async def get_session(self, db_connection: DatabaseConnection) -> AsyncIterable[AsyncSession]:
         session = await db_connection.get_session()
         try:
             yield session
@@ -29,6 +29,22 @@ class RequestProvider(Provider):
             repository=repositories.UserRepository(session=session),
             redis_client=redis_client
         )
+    
+    @provide(scope=Scope.REQUEST)
+    def get_note_service(self, session: AsyncSession) -> services.NoteService:    
+        return services.NoteService(repository=repositories.NoteRepository(session=session))
+    
+    @provide(scope=Scope.REQUEST)
+    def get_task_service(self, session: AsyncSession) -> services.TaskService:    
+        return services.TaskService(repository=repositories.TaskRepository(session=session))
+    
+    @provide(scope=Scope.REQUEST)
+    def get_team_service(self, session: AsyncSession) -> services.TeamService:    
+        return services.TeamService(repository=repositories.TeamRepository(session=session))
+    
+    @provide(scope=Scope.REQUEST)
+    def get_user_service(self, session: AsyncSession) -> services.UserService:    
+        return services.UserService(repository=repositories.UserRepository(session=session))
     
 
 @inject

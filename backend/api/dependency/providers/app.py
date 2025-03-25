@@ -6,7 +6,7 @@ from backend.core.clients.aws_client import AWSClient
 from backend.core.clients.rabbit_client import RabbitClient
 from backend.core.clients.redis_client import RedisClient
 from backend.core.clients.smtp_clients import SMTPClients
-from backend.core.worker.manager import TaskManager
+from backend.core.tasks_manager.manager import TasksManager
 from backend.infrastructure.database.connection.postgres_connection import DatabaseConnection
 
 
@@ -28,5 +28,5 @@ class AppProvider(Provider):
         return AWSClient()
     
     @provide(scope=Scope.APP)
-    async def get_tasks_manager(self) -> TaskManager:
-        return TaskManager()
+    async def get_tasks_manager(self) -> TasksManager:
+        return TasksManager()

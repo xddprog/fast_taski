@@ -10,6 +10,9 @@ class AWSClient:
     def __init__(self):
         self.client = None
 
+    async def get_url(self, path: str):
+        return f"{AWS_STORAGE_CONFIG.AWS_ENDPOINT_URL}/{AWS_STORAGE_CONFIG.AWS_BUCKET_NAME}/{path}"
+
     async def get_client(self):
         session = AioSession()
         async with session.create_client(

@@ -6,11 +6,12 @@ from sqlalchemy.orm import MappedColumn
 from backend.infrastructure.interfaces.repository import RepositoryInterface
 
 
-class SqlAlchemyRepository[ModelType](RepositoryInterface):
-    def __init__(self, session: AsyncSession):
+class SqlAlchemyRepository[ModelType](RepositoryInterface[ModelType]):
+    def __init__(self, session: AsyncSession, model: type[ModelType]):
         self.session = session
+        self.model = model
 
-    async def get_item(self, item_id: int | UUID4 | str) -> ModelType | None:
+    async def get_item(self, item_id: int | UUID4 | str) -> ModelType:
         item = await self.session.get(self.model, item_id)
         return item
 

@@ -8,7 +8,7 @@ class Team(Base):
     __tablename__ = "teams"
 
     name: Mapped[str]
-    description: Mapped[str]
+    description: Mapped[str] = mapped_column(nullable=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     
     owner = relationship("User", back_populates="created_teams")

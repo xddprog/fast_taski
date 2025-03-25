@@ -4,33 +4,6 @@ from backend.infrastructure.config.oauth_configs import GITHUB_CONFIG, VK_CONFIG
 
 
 class AuthRequests:
-    async def get_github_access_token(self, code: str) -> str:
-        async with ClientSession() as session:
-            async with session.get(
-                f"{GITHUB_CONFIG.GITHUB_BASE_URL}/login/oauth/access_token",
-                params={
-                    "client_id": GITHUB_CONFIG.GITHUB_CLIENT_ID,
-                    "client_secret": GITHUB_CONFIG.GITHUB_CLIENT_SECRET,
-                    "code": code
-                },
-                headers={"Accept": "application/vnd.github+json"},
-                ssl=False
-            ) as response:
-                response = await response.json()
-                return response["access_token"]
-            
-    async def get_github_user(self, token: str) -> dict:
-        async with ClientSession() as session:
-            async with session.get(
-                f"{GITHUB_CONFIG.GITHUB_API_URL}/user", 
-                headers={
-                    "Authorization": f"Bearer {token}",
-                    "Accept": "application/json"
-                },
-                ssl=False
-            ) as response:
-                return await response.json()
-            
     async def get_vk_access_token(self, code: str) -> str:
         async with ClientSession() as session:
             async with session.get(
@@ -40,7 +13,7 @@ class AuthRequests:
                     "client_secret": VK_CONFIG.VK_CLIENT_SECRET,
                     "code": code,
                     "grant_type": "authorization_code",
-                    "redirect_uri": "https://d6af-176-124-206-69.ngrok-free.app/auth/callback",
+                    "redirect_uri": "https://www.fasttaski.ru/auth/callback",
                     "v": "5.131"
                 },
                 headers={"Accept": "application/json"},

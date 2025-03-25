@@ -105,31 +105,6 @@ async def register_user(
     return new_user
 
 
-@router.post("/github")
-@inject
-async def login_with_github(
-    code: str, 
-    auth_requests: FromDishka[AuthRequests],
-    auth_service: FromDishka[services.AuthService],
-    response: Response
-) -> BaseUserModel:
-    token = await auth_requests.get_github_access_token(code)
-    user = await auth_requests.get_github_user(token)
-    user = await auth_service.auth_github_user(
-        ExternalServiceUserData(
-            username=user["login"],
-            email=user["email"],
-            external_id=user["id"],
-            service=AuthServices.GITHUB.value,
-        )
-    )
-    access_token = await auth_service.create_access_token(user.username)
-    refresh_token = await auth_service.create_refresh_token(user.username)
-
-    await set_cookie_tokens(access_token, refresh_token, response)
-    return user
-
-
 @router.post("/vk")
 @inject
 async def login_with_vk(

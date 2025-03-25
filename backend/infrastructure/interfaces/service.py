@@ -3,13 +3,9 @@ from abc import ABC, abstractmethod
 from backend.infrastructure.interfaces.repository import RepositoryInterface
 
 
-class DbModelServiceInterface(ABC):
-    def __init__(self, repository: RepositoryInterface):
+class DbModelServiceInterface[ModelType](ABC):
+    def __init__(self, repository: RepositoryInterface[ModelType]):
         self.repository = repository
-
-    @abstractmethod
-    def get_model(self, item_id: str):
-        raise NotImplementedError
     
     @abstractmethod
     def get_one(self, item_id: str):

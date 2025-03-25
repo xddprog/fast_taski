@@ -26,15 +26,17 @@ class RepeatableTask(BaseTask):
         func: Callable[..., Awaitable[Any]], 
         namespace: str,
         task_name: str,
+        func_args: list[Any] | None = None,
+        func_kwargs: dict[str, Any] | None = None,
         interval: int | None = None,
         hours: int | None = None,
         minutes: int | None = None,
         max_repeat: int | None = 3
-    ):
-        super().__init__(func, namespace, task_name)
-        
+    ):        
         if not interval and not (hours or minutes):
             raise ValueError("Either interval or hours and minutes must be provided")
+        
+        super().__init__(func, namespace, task_name, func_args, func_kwargs)
         
         self.interval = interval
         self.hours = hours

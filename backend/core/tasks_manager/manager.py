@@ -2,10 +2,11 @@ import asyncio
 from datetime import timedelta
 import threading
 import time
+from typing import Any, Awaitable, Callable
 
 import orjson
 from backend.core.clients.rabbit_client import RabbitClient
-from backend.core.worker.tasks import BaseTask, RepeatableTask
+from backend.core.tasks_manager.tasks import BaseTask, RepeatableTask
 
 
 class SingletonMeta(type):
@@ -17,7 +18,7 @@ class SingletonMeta(type):
         return cls._instances[cls]
     
 
-class TaskManager(metaclass=SingletonMeta):
+class TasksManager(metaclass=SingletonMeta):
     def __init__(self):
         self._rabbit = RabbitClient()
         self._repeatable_tasks: dict[str, RepeatableTask] = {}
@@ -26,20 +27,43 @@ class TaskManager(metaclass=SingletonMeta):
         self._delayed_queue = None
         self._running = False
 
-    async def add_base_task(self, task: BaseTask):
-        if not isinstance(task, BaseTask):
-            raise ValueError("Task must be instance of BaseTask")
-        self._default_tasks[task.full_name] = task
-        await self._rabbit.send_message(
-            self._queue.name, 
-            {"task_name": task.full_name}
-        )
+    async def add_base_task(
+        self, 
+        func: Callable[..., Awaitable[Any]], 
+        namespace: str, 
+        task_name: str,
+        func_args: list[Any] | None = None,
+        func_kwargs: dict[str, Any] | None = None
+    ) -> None:
+        new_task = BaseTask(func, namespace, task_name, func_args, func_kwargs)
+        self._default_tasks[new_task.full_name] = new_task
+        await self._rabbit.send_message(self._queue.name, {"task_name": new_task.full_name})
 
-    async def add_repeatable_task(self, task: RepeatableTask):
-        if not isinstance(task, RepeatableTask):
-            raise ValueError("Task must be instance of RepeatableTask")
-        self._repeatable_tasks[task.full_name] = task
-        await self._send_delayed_task(task)
+    async def add_repeatable_task(
+        self,
+        func: Callable[..., Awaitable[Any]], 
+        namespace: str, 
+        task_name: str,
+        func_args: list[Any] | None = None,
+        func_kwargs: dict[str, Any] | None = None,
+        interval: int | None = None,
+        hours: int | None = None,
+        minutes: int | None = None,
+        max_repeat: int | None = 3
+    ) -> None:
+        new_task = RepeatableTask(
+            func=func, 
+            namespace=namespace, 
+            task_name=task_name, 
+            func_args=func_args, 
+            func_kwargs=func_kwargs, 
+            interval=interval, 
+            hours=hours, 
+            minutes=minutes, 
+            max_repeat=max_repeat
+        )
+        self._repeatable_tasks[new_task.full_name] = new_task
+        await self._send_delayed_task(new_task)
 
     async def _run_repeatable_task(self, task_name: str):
         try:
@@ -101,7 +125,6 @@ class TaskManager(metaclass=SingletonMeta):
                     task_data = orjson.loads(message.body)
                     task_name = task_data.get("task_name")
                     if task_name in self._repeatable_tasks:
-                        print(task_name)
                         await self._run_repeatable_task(task_name)
                     elif task_name in self._default_tasks:
                         await self._run_default_task(task_name)

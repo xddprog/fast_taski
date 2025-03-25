@@ -21,7 +21,12 @@ class RabbitClient:
             await self.init_connection()
         return await self.channel.declare_queue(queue_name, durable=True)
 
-    async def declare_delayed_queue(self, queue_name: str, dead_letter_exchange: str, dead_letter_routing_key: str) -> AbstractQueue:
+    async def declare_delayed_queue(
+        self, 
+        queue_name: str, 
+        dead_letter_exchange: str, 
+        dead_letter_routing_key: str
+    ) -> AbstractQueue:
         if not self._initialized:
             await self.init_connection()
         dlx = await self.channel.declare_exchange(dead_letter_exchange, durable=True)
