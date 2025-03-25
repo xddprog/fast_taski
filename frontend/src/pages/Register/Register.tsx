@@ -3,17 +3,32 @@ import styles from "./Register.module.scss";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import { useState } from "react";
 import SuccessBunner from "../../components/SuccessBanner/SuccessBunner";
+import { registerUser } from "../../api/register/route";
 
 const Register: React.FC = () => {
   const [success, setSuccess] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordRepeat, setPasswordRepeat] = useState<string>("");
 
   function registre() {
-    setSuccess(true);
+    console.log();
+    if (password !== passwordRepeat) {
+      alert("Пароли не совпадают");
+    } else {
+      setSuccess(true);
+    }
   }
 
-  function verify() {
+  async function verify() {
     setVerifying(true);
+    try {
+      const result = await registerUser("username", email, password);
+      console.log("Регистрация успешна:", result);
+    } catch {
+      console.error("Ошибка:");
+    }
   }
 
   return (
@@ -41,6 +56,12 @@ const Register: React.FC = () => {
                 title={"Регистрация"}
                 formType="register"
                 handleRegistre={registre}
+                login={email}
+                pass={password}
+                passRep={passwordRepeat}
+                handleEmail={setEmail}
+                handlePass={setPassword}
+                handlePassRep={setPasswordRepeat}
               ></LoginForm>
             )}
           </>

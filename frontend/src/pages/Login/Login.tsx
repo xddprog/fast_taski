@@ -6,6 +6,8 @@ import SuccessBunner from "../../components/SuccessBanner/SuccessBunner";
 
 const Login: React.FC = () => {
   const [success, setSuccess] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   function login() {
     setSuccess(true);
@@ -23,7 +25,14 @@ const Login: React.FC = () => {
           ></SuccessBunner>
         ) : (
           <>
-            <LoginForm title={"Войти"} handleLogin={login}></LoginForm>
+            <LoginForm
+              title={"Войти"}
+              login={email}
+              pass={password}
+              handleLogin={login}
+              handleEmail={setEmail}
+              handlePass={setPassword}
+            ></LoginForm>
             <div className={styles.registrationText}>
               Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
             </div>
