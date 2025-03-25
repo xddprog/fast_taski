@@ -1,0 +1,81 @@
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.registerContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.verifyingCard {
+  display: flex;
+  width: 363px;
+  padding: 16px 16px 32px 16px;
+  flex-direction: column;
+  border-radius: 16px;
+  background: #1f1f1f;
+
+  h1 {
+    color: #fff;
+    text-align: center;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 48px;
+  }
+
+  label {
+    color: #fff;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 4px;
+  }
+
+  input {
+    display: flex;
+    padding: 8px;
+    align-items: center;
+    border-radius: 6px;
+    background: #161616;
+    margin-bottom: 48px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  button {
+    display: flex;
+    height: 36px;
+    padding: 8px 16px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background: rgba(96, 150, 253, 0.85);
+    color: #fff;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+}

@@ -1,0 +1,236 @@
+.PanelsContainer {
+  width: 100vw;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 258px 120px;
+  gap: 12px;
+
+  overflow: hidden;
+
+  width: 100%;
+  max-width: 100%;
+
+  .firstRow {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+
+    .leftBlockInFirstRow {
+      position: relative;
+      background-color: #1f1f1f;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 32px 24px;
+
+      width: 550px;
+      height: 254px;
+      border-radius: 16px;
+
+      img {
+        position: absolute;
+
+        top: 45px;
+        left: 265px;
+      }
+
+      button {
+        color: #ffffff;
+        background-color: #6096fd;
+
+        width: 165px;
+        height: 36px;
+        gap: 8px;
+
+        padding: 8.5px 16px;
+
+        font-weight: 400;
+        font-size: 16px;
+
+        border: none;
+        border-radius: 8px;
+
+        white-space: nowrap;
+
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+          background-color: #0059ff;
+        }
+      }
+
+      .leftBlockText {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        h1 {
+          color: #ffffff;
+
+          font-weight: 700;
+          font-size: 25px;
+        }
+
+        h3 {
+          color: #ffffff;
+
+          font-weight: 400;
+          font-size: 12px;
+
+          word-break: break-word;
+          white-space: normal;
+        }
+      }
+    }
+
+    .rightBlockInFirstRow {
+      background-color: #6096fd;
+
+      display: flex;
+      flex-direction: column;
+
+      padding: 28px 32px 24px;
+
+      width: 362px;
+      height: 254px;
+      justify-content: space-between;
+      border-radius: 16px;
+
+      .rightBlockUpperText {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        h1 {
+          color: #ffffff;
+
+          font-weight: 700;
+          font-size: 24px;
+          line-height: 28.13px;
+          letter-spacing: 0%;
+
+          word-break: break-word;
+          white-space: normal;
+        }
+
+        h2 {
+          color: #ffffff;
+
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 14.06px;
+          letter-spacing: 0%;
+
+          word-break: break-word;
+          white-space: normal;
+        }
+      }
+
+      .rightBlockSaleText {
+        color: #ffffff80;
+
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14.06px;
+        letter-spacing: 0%;
+      }
+    }
+  }
+
+  .secondRow {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+
+    .leftBlockInSecondRow {
+      background-color: #ffffff;
+
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      width: 362px;
+      height: 254px;
+      padding: 28px 32px 24px;
+      border-radius: 16px;
+
+      h1 {
+        font-weight: 700;
+        font-size: 24px;
+      }
+
+      h3 {
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14.06px;
+        letter-spacing: 0%;
+      }
+    }
+
+    .rightBlockInSecondRow {
+      position: relative;
+      background-color: #1f1f1f;
+
+      display: flex;
+      flex-direction: column;
+
+      width: 550px;
+      height: 254px;
+      justify-content: space-between;
+      padding: 28px 32px;
+      border-radius: 16px;
+
+      img {
+        position: absolute;
+        top: 73px;
+        left: 303px;
+      }
+
+      .aiTextBlock {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        h1 {
+          color: #ffffff;
+
+          font-weight: 700;
+          font-size: 24px;
+        }
+
+        .containerForLi {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          h3,
+          ul {
+            color: #ffffff;
+
+            font-weight: 400;
+            font-size: 12px;
+          }
+
+          ul {
+            padding-left: 16px;
+          }
+        }
+      }
+
+      .underTextAboutTarif {
+        color: #ffffff80;
+
+        font-weight: 400;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media (max-width: 1440px) {
+}

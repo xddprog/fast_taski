@@ -1,0 +1,37 @@
+.aboutBlock {
+  display: inline-flex;
+  height: 294px;
+  display: flex;
+  padding: 16px 258px 49px 258px;
+  // justify-content: space-between;
+  align-items: center;
+  gap: 106px;
+  margin: 56px 0 120px 0;
+}
+
+.aboutText {
+  width: 50%;
+
+  h1 {
+    color: #fff;
+
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: #fff;
+
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  span {
+    color: #6096fd;
+  }
+}
