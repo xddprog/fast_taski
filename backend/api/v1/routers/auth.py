@@ -52,12 +52,11 @@ async def check_user_in_app(
 async def login_user(
     form: LoginForm,
     response: Response,
-    code: str,
-    two_factor_service: FromDishka[services.TwoFactorAuthService],
+    # code: str,
     auth_service: FromDishka[services.AuthService]
 ) -> BaseUserModel:
     user = await auth_service.get_user_by_email(form.email)
-    await two_factor_service.check_code(user.username, code)
+    # await two_factor_service.check_code(user.username, code)
     access_token = await auth_service.create_access_token(user.username)
     refresh_token = await auth_service.create_refresh_token(user.username)
     await set_cookie_tokens(access_token, refresh_token, response)
