@@ -18,7 +18,7 @@ def create_lifespan(di_container: AsyncContainer):
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         db: DatabaseConnection = await di_container.get(DatabaseConnection)
-        # await db.create_tables()
+        await db.create_tables()
 
         task_manager = TasksManager()
         await task_manager.start()
