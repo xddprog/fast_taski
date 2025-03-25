@@ -13,14 +13,6 @@ class JwtConfig(BaseModel):
     JWT_REFRESH_TOKEN_TIME: int
 
 
-
-class GithubOAuthConfig(BaseModel):
-    GITHUB_CLIENT_ID: str
-    GITHUB_CLIENT_SECRET: str
-    GITHUB_BASE_URL: str
-    GITHUB_API_URL: str
-
-
 class VKOAuthConfig(BaseModel):
     VK_BASE_URL: str
     VK_API_URL: str
@@ -38,9 +30,6 @@ class YandexOAuthConfig(BaseModel):
 
 JWT_CONFIG = JwtConfig(
     **{field: env.str(field) for field in JwtConfig.model_fields}
-)
-GITHUB_CONFIG = GithubOAuthConfig(
-    **{field: env.str(field) for field in GithubOAuthConfig.model_fields}
 )
 VK_CONFIG = VKOAuthConfig(
     **{field: env.str(field) for field in VKOAuthConfig.model_fields}   
