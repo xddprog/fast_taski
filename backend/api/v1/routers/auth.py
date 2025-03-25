@@ -5,12 +5,9 @@ from fastapi import APIRouter, BackgroundTasks, Depends, Request, Response
 
 from backend.api.dependency.providers.request import get_current_user_dependency
 from backend.core import clients, services
-from backend.core.clients.smtp_clients import SMTPClients
 from backend.core.dto.auth_dto import ExternalServiceUserData, LoginForm, RegisterForm
 from backend.core.dto.user_dto import BaseUserModel
 from backend.utils.enums import AuthServices
-from backend.core.services.auth_service import AuthService
-from backend.core.services.tfa_service import TwoFactorAuthService
 from backend.utils.auth_requests import AuthRequests
 
 
@@ -91,12 +88,12 @@ async def logout_user(response: Response) -> dict[str, str]:
 @inject
 async def register_user(
     form: RegisterForm,
-    code: str,
+    # code: str,
     response: Response,
     auth_service: FromDishka[services.AuthService],
     two_factor_service: FromDishka[services.TwoFactorAuthService]
 ) -> BaseUserModel:
-    await two_factor_service.check_code(form.username, code)
+    # await two_factor_service.check_code(form.username, code)
     new_user = await auth_service.register_user(form)
 
     access_token = await auth_service.create_access_token(form.email)

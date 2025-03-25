@@ -18,9 +18,9 @@ class TwoFactorAuthService:
         return code
     
     async def check_code(self, user: str, code: str):
-        redis_code = await self.redis_client.get_item(user)
+        redis_code = await self.redis_client.get(user)
         if not redis_code or redis_code.decode() == code:
-            await self.redis_client.delete_item(user)
+            await self.redis_client.delete_by_key(user)
             return True
         raise CodeIsIncorrectOrExpired
     
