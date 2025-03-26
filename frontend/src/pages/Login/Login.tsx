@@ -17,7 +17,7 @@ const Login: React.FC = () => {
     try {
       const result = await loginUser(null, email, password);
       console.log("Вход успешен:", result);
-      navigate("/profile");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Ошибка:", error);
     }
