@@ -1,15 +1,11 @@
 import { Link } from "react-router-dom";
 import styles from "./SuccessBunner.module.scss";
 
-interface BunnerProps {
-  description: string;
-}
-
-const SuccessBunner: React.FC<BunnerProps> = ({ description }) => {
+const SuccessBunner: React.FC = () => {
   return (
     <div className={styles.successCard}>
       <h1>Успех!</h1>
-      <p>{description}</p>
+      <p>Вы успешно зарегистрировались</p>
       <img src="/images/success_img.png" />
       <Link to="/">Продолжить</Link>
     </div>

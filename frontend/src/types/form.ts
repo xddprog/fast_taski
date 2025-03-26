@@ -4,8 +4,8 @@ export interface FormProps {
   login: string;
   pass?: string;
   passRep?: string;
-  handleLogin?: () => void;
-  handleRegistre?: () => void;
+  handleLogin?: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleRegistre?: (e: React.FormEvent<HTMLFormElement>) => void;
   handlePass?: (value: string) => void;
   handlePassRep?: (value: string) => void;
   handleEmail: (value: string) => void;

@@ -1,5 +1,6 @@
 import styles from "./LoginForm.module.scss";
 import { FormProps } from "../../types/form.ts";
+import AuthButtons from "../AuthButtons/AuthButtons.tsx";
 
 const LoginForm: React.FC<FormProps> = ({
   login,
@@ -14,7 +15,10 @@ const LoginForm: React.FC<FormProps> = ({
   handlePassRep,
 }) => {
   return (
-    <form className={styles.loginForm}>
+    <form
+      className={styles.loginForm}
+      onSubmit={formType === "register" ? handleRegistre : handleLogin}
+    >
       <h1>{title}</h1>
       <label htmlFor="email">Почта</label>
       <input
@@ -55,11 +59,14 @@ const LoginForm: React.FC<FormProps> = ({
               }
             }}
           />
-          <button onClick={handleRegistre}>Продолжить</button>
         </>
       ) : (
-        <button onClick={handleLogin}>Продолжить</button>
+        <></>
       )}
+      <button className={styles.continueBtn} type="submit">
+        Продолжить
+      </button>
+      <AuthButtons></AuthButtons>
     </form>
   );
 };

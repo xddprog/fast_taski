@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./HomeRegistration.module.scss";
-import AufButtons from "../AufButtons/AufButtons";
+import AuthButtons from "../AuthButtons/AuthButtons";
 
 const HomeRegistration: React.FC = () => {
   return (
@@ -11,7 +11,9 @@ const HomeRegistration: React.FC = () => {
         alt="homeRegistrationImage"
       />
       <div className={styles.homeRegistrationPart}>
-        <h1>Начинайте с Fast TASKI <br /> <span>прямо сейчас!</span></h1>
+        <h1>
+          Начинайте с Fast TASKI <br /> <span>прямо сейчас!</span>
+        </h1>
         <div className={styles.homeRegistrationForm}>
           <div className={styles.registrationInputContainer}>
             <label>Почта</label>
@@ -22,9 +24,11 @@ const HomeRegistration: React.FC = () => {
               placeholder="Введите вашу почту"
             />
           </div>
-          <Link to="/register" className={styles.registrationButton}>Зарегистрироваться</Link>
+          <Link to="/register" className={styles.registrationButton}>
+            Зарегистрироваться
+          </Link>
         </div>
-        <AufButtons />
+        <AuthButtons></AuthButtons>
       </div>
     </section>
   );
