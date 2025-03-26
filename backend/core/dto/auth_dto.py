@@ -12,7 +12,6 @@ class RegisterForm(BaseModel):
 class LoginForm(BaseModel):
     email: str
     password: str
-    username: None = None
 
 
 class ExternalServiceUserData(BaseModel):
