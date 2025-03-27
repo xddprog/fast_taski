@@ -25,7 +25,7 @@ class TeamService(BaseDbModelService[Team]):
             form.avatar = await self.aws_client.get_url(f"teams/{form.name}/{form.avatar.filename}")
 
         form.members = members
-        new_team = super().create(**form.model_dump(), owner_id=current_user.id)
+        new_team = await super().create(**form.model_dump(), owner_id=current_user.id)
         return TeamModel.model_validate(new_team, from_attributes=True)
     
     async def get_team(self, team_id: int):
