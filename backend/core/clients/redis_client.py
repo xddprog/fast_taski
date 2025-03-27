@@ -23,7 +23,9 @@ class RedisClient:
         await self.redis.delete(key)
 
     async def delete_by_prefix(self, prefix: str) -> None:
-        keys = await self.redis.keys(f"{prefix}*")
+        keys = await self.redis.keys(prefix)
+        if not keys:
+            return
         await self.redis.delete(*keys)
 
     async def reset(self) -> None:

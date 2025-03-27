@@ -18,7 +18,7 @@ logger.addHandler(handler)
 def _key_builder(request: Request, namespace: str, user_id: int) -> str:
     path_params = ":".join(f"{k}={v}" for k, v in sorted(request.path_params.items()))
     router_prefix = request.url.path.split("/")[3]
-    return f"{namespace}:{router_prefix}:{path_params}:{user_id}"
+    return f"{user_id}:{namespace}:{router_prefix}:{path_params}"
 
 
 def get(namespace: str, expire: int = 60) -> Callable:
@@ -26,7 +26,7 @@ def get(namespace: str, expire: int = 60) -> Callable:
         @wraps(func)
         async def wrapper(
             request: Request,
-            redis_client: RedisClient = FromDishka[RedisClient](),
+            redis_client: RedisClient = RedisClient(),
             *args,
             **kwargs,
         ) -> Any:
@@ -73,13 +73,15 @@ def clear(
         @wraps(func)
         async def wrapper(
             request: Request,
-            redis_client: RedisClient = FromDishka[RedisClient](),
+            redis_client: RedisClient = RedisClient(),
             *args,
             **kwargs
         ) -> Any:
+            value = await func(request, *args, **kwargs)
+            current_user = kwargs.get("current_user")
             if all:
                 try:
-                    await redis_client.redis.flushdb()
+                    await redis_client.reset()
                 except Exception as e:
                     logger.error(f"Error clearing entire cache: {e}")
             elif by_key:
@@ -87,7 +89,7 @@ def clear(
                     raise ValueError("Namespace required for by_key")
                 cache_key = _key_builder(request, namespaces[0], *args, **kwargs)
                 try:
-                    await redis_client.redis.delete(cache_key)
+                    await redis_client.delete_by_key(cache_key)
                 except Exception as e:
                     logger.warning(f"Error clearing cache: key={cache_key}, error={e}")
             else:
@@ -95,14 +97,10 @@ def clear(
                     raise ValueError("Namespaces required unless all=True")
                 for namespace in namespaces:
                     try:
-                        keys = await redis_client.redis.keys(f"{namespace}:*")
-                        if keys:
-                            await redis_client.redis.delete(*keys)
+                        await redis_client.delete_by_prefix(f"{current_user.id}:{namespace}:*")
                     except Exception as e:
                         logger.warning(f"Error clearing cache: namespace={namespace}, error={e}")
-            
-            value = await func(request, *args, **kwargs)
-            
+                        
             if set_after:
                 if not namespaces:
                     raise ValueError("Namespace required for set_after")

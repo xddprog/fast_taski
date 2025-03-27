@@ -8,7 +8,7 @@ class Column(Base):
 
     name: Mapped[str] 
     color: Mapped[str]
-    tasks = relationship("Task", back_populates="column", lazy="joined")
+    tasks = relationship("Task", back_populates="column")
     team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"), nullable=False)
     
     team = relationship("Team", back_populates="columns")

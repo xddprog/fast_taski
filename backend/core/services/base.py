@@ -35,13 +35,14 @@ class BaseDbModelService[ModelType](DbModelServiceInterface[ModelType]):
         return await self.repository.update_item(item_id, **item)
     
     async def delete(self, item_id: int):
-        return await self.repository.delete_item(item_id)
+        item = await self.repository.get_item(item_id)
+        return await self.repository.delete_item(item)
     
     async def delete_many(self, item_ids: list[int]):
         for item_id in item_ids:
             item = await self.repository.get_item(item_id)
             await self.repository.delete_item(item)
 
-    async def get_by_attribute(self, attribute: MappedColumn[Any], value: Any):
+    async def get_by_attribute(self, attribute: str, value: Any):
         return await self.repository.get_by_attribute(attribute, value)
     

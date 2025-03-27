@@ -12,10 +12,14 @@ class Team(Base):
     avatar: Mapped[str] = mapped_column(nullable=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     
-    members: Mapped[list['UserTeam']] = relationship(back_populates="team", uselist=True)
+    members: Mapped[list['UserTeam']] = relationship(
+        back_populates="team", 
+        uselist=True, 
+        cascade="all, delete-orphan"
+    )
     owner = relationship("User", back_populates="created_teams")
-    columns = relationship("Column",back_populates="team")
-    notes = relationship("Note", back_populates="team")
+    columns = relationship("Column",back_populates="team", cascade="all, delete-orphan")
+    notes = relationship("Note", back_populates="team", cascade="all, delete-orphan")
     
 
 class UserTeam(Base):

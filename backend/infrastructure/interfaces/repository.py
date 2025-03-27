@@ -15,7 +15,7 @@ class RepositoryInterface[ModelType](ABC):
 
     @abstractmethod
     async def get_by_attribute(
-        self, attribute: Any, value: int
+        self, attribute: str, value: Any
     ) -> list[ModelType] | None:
         raise NotImplementedError
 

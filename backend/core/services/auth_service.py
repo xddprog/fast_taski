@@ -21,14 +21,11 @@ class AuthService:
         self.context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
     async def get_user_by_username(self, username: str) -> User | None:
-        user = await self.repository.get_by_attribute(
-            self.repository.model.username, 
-            username
-        )
+        user = await self.repository.get_by_attribute("username", username)
         return None if not user else user[0]
     
     async def get_user_by_email(self, email: str) -> User | None:
-        user = await self.repository.get_by_attribute(self.repository.model.email, email)
+        user = await self.repository.get_by_attribute("email", email)
         return None if not user else user[0]
     
     async def verify_password(self, password: str, hashed_password: str) -> bool:

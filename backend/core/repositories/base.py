@@ -20,10 +20,8 @@ class SqlAlchemyRepository[ModelType](RepositoryInterface[ModelType]):
         items: Result = await self.session.execute(query)
         return items.scalars().all()
 
-    async def get_by_attribute(
-        self, attribute: MappedColumn[Any], value: str | UUID4 | int
-    ) -> list[ModelType] | None:
-        query = select(self.model).where(attribute == value)
+    async def get_by_attribute(self, attribute: str, value: str | UUID4 | int) -> list[ModelType] | None:
+        query = select(self.model).where(getattr(self.model, attribute) == value)
         items: Result = await self.session.execute(query)
         return items.scalars().all()
 
@@ -53,3 +51,6 @@ class SqlAlchemyRepository[ModelType](RepositoryInterface[ModelType]):
 
     async def get_model(self, **kwargs: int | str | UUID4) -> ModelType:
         return self.model(**kwargs)
+
+    async def refresh_item(self, item: ModelType):
+        return await self.session.refresh(item)
