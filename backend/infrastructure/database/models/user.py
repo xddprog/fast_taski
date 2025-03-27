@@ -16,8 +16,8 @@ class User(Base):
     password: Mapped[str] = mapped_column(nullable=True)
     profile_photo: Mapped[str] = mapped_column(nullable=True)
 
-    teams = relationship("UserTeam", back_populates="user")    
-    created_teams = relationship("Team", back_populates="owner")
+    teams = relationship("UserTeam", back_populates="user", lazy="selectin")    
+    created_teams = relationship("Team", back_populates="owner", lazy="selectin")
     auth_methods = relationship("AuthMethod", back_populates="user", cascade="all, delete-orphan")
     created_tasks = relationship("Task", back_populates="creator", cascade="all, delete-orphan")
     assigned_tasks = relationship("Task", secondary="task_assignees", back_populates="assignees")

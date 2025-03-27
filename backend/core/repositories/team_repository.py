@@ -6,4 +6,4 @@ from backend.infrastructure.database.models.team import Team
 
 class TeamRepository(SqlAlchemyRepository[Team]):
     def __init__(self, session: AsyncSession):
-        super().__init__(session, Task)
+        super().__init__(session, Team)

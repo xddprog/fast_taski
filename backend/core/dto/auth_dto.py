@@ -10,7 +10,7 @@ class RegisterForm(BaseModel):
 
 
 class LoginForm(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 

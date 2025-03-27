@@ -6,3 +6,9 @@ class BaseTaskModel(BaseModel):
     name: str
     description: str
     deadline: str
+
+
+class CreateTaskModel(BaseModel):
+    name: str
+    description: str
+    

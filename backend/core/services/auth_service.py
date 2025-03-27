@@ -34,8 +34,11 @@ class AuthService:
     async def verify_password(self, password: str, hashed_password: str) -> bool:
         return self.context.verify(password, hashed_password)
 
-    async def authenticate_user(self, form: LoginForm, is_external: bool = False) -> User:
-        user = await self.get_user_by_username(form.username)
+    async def authenticate_user(self, form: LoginForm | RegisterForm, is_external: bool = False) -> User:
+        if is_external:
+            user = await self.get_user_by_username(form.username)
+        else:
+            user = await self.get_user_by_email(form.email)
         if not user and is_external:
             return False
         if not user:

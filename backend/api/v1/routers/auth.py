@@ -4,7 +4,7 @@ from dishka.integrations.fastapi import inject
 from fastapi import APIRouter, BackgroundTasks, Depends, Request, Response
 
 from backend.api.dependency.providers.request import get_current_user_dependency
-from backend.core import clients, services
+from backend.core import cache, clients, services
 from backend.core.dto.auth_dto import ExternalServiceUserData, LoginForm, RegisterForm
 from backend.core.dto.user_dto import BaseUserModel
 from backend.utils.enums import AuthServices
@@ -21,7 +21,9 @@ async def set_cookie_tokens(access_token: str, refresh_token: str, response: Res
 
 @router.get("/current_user")
 @inject
+@cache.get(namespace="current_user", expire=60)
 async def get_current_user(
+    request: Request,
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
 ) -> BaseUserModel:
     return current_user
@@ -55,7 +57,7 @@ async def login_user(
     # code: str,
     auth_service: FromDishka[services.AuthService]
 ) -> BaseUserModel:
-    user = await auth_service.get_user_by_email(form.email)
+    user = await auth_service.authenticate_user(form)
     # await two_factor_service.check_code(user.username, code)
     access_token = await auth_service.create_access_token(user.username)
     refresh_token = await auth_service.create_refresh_token(user.username)

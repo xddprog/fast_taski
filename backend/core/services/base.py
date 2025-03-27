@@ -28,8 +28,8 @@ class BaseDbModelService[ModelType](DbModelServiceInterface[ModelType]):
     async def get_all(self):
         return await self.repository.get_all_items()
     
-    async def create(self, item: BaseModel):
-        return await self.repository.add_item(**item)
+    async def create(self, **kwargs):
+        return await self.repository.add_item(**kwargs)
     
     async def update(self, item_id: int, item: BaseModel):
         return await self.repository.update_item(item_id, **item)

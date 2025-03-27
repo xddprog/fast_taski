@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.core.repositories.base import SqlAlchemyRepository
 from backend.infrastructure.database.models.auth_methods import AuthMethod
@@ -16,3 +17,8 @@ class UserRepository(SqlAlchemyRepository[User]):
         await self.session.commit()
         await self.session.refresh(user)
         return user
+
+    async def get_by_ids(self, ids: list[int]):
+        query = select(self.model).where(self.model.id.in_(ids))
+        users = await self.session.execute(query)
+        return users.scalars().all()

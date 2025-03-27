@@ -9,11 +9,12 @@ class Team(Base):
 
     name: Mapped[str]
     description: Mapped[str] = mapped_column(nullable=True)
+    avatar: Mapped[str] = mapped_column(nullable=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     
-    owner = relationship("User", back_populates="created_teams")
     members: Mapped[list['UserTeam']] = relationship(back_populates="team", uselist=True)
-    tasks = relationship("Task",back_populates="team")
+    owner = relationship("User", back_populates="created_teams")
+    columns = relationship("Column",back_populates="team")
     notes = relationship("Note", back_populates="team")
     
 

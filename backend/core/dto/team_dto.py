@@ -1,6 +1,7 @@
 from fastapi import Form, UploadFile
 from pydantic import BaseModel
 
+from backend.core.dto.column_dto import ColumnModel
 from backend.core.dto.task_dto import BaseTaskModel
 from backend.core.dto.user_dto import BaseUserModel
 
@@ -8,9 +9,9 @@ from backend.core.dto.user_dto import BaseUserModel
 class BaseTeamModel(BaseModel):
     id: int
     name: str
-    avatar: str
+    avatar: str | None = None
     description: str
-    owner_id: int
+    owner: BaseUserModel
 
 
 class CreateTeamModel(BaseModel):
@@ -23,4 +24,4 @@ class CreateTeamModel(BaseModel):
 class TeamModel(BaseTeamModel):
     members: list[BaseUserModel]
     owner: BaseUserModel
-    tasks: list[BaseTaskModel]
+    columns: list[ColumnModel]
