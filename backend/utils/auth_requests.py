@@ -1,4 +1,5 @@
 from aiohttp import ClientSession
+from fastapi import HTTPException
 
 from backend.infrastructure.config.oauth_configs import VK_CONFIG, YANDEX_CONFIG
 
@@ -19,6 +20,9 @@ class AuthRequests:
                 headers={"Accept": "application/json"},
                 ssl=False
             ) as response:
+                if response.status != 200:
+                    print(await response.json())
+                    raise HTTPException(status_code=400, detail="Во время авторизации произошла ошибка")
                 response = await response.json()
                 return response["access_token"], response["user_id"]
             
