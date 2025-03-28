@@ -69,13 +69,12 @@ const LoginForm: React.FC<FormProps> = ({
       ) : (
         <button type="submit">Продолжить</button>
       )}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <p
           style={{
             color: "#fff",
             fontSize: 12,
             marginBottom: 10,
-            width: "100%",
             textAlign: "center",
           }}
         >

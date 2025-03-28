@@ -11,7 +11,7 @@ import AuthCallback from "./pages/AuthCallback/AuthCallback";
 const App: React.FC = () => {
   const location = useLocation(); // Получаем текущий маршрут
   const hideHeaderFooter =
-    location.pathname === "/login" || location.pathname === "/register";
+    location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/auth/callback";
   return (
     <>
       {!hideHeaderFooter && <Header />}
