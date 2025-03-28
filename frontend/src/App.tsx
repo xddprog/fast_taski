@@ -21,7 +21,7 @@ const App: React.FC = () => {
         <Route path="/tarifs" element={<Tarifs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/auth" element={<AuthCallback />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         {/* <Route path="*" element={<NotFound />} />{" "} */}
         {/* 404 - для всех несуществующих путей */}
       </Routes>
