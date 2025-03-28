@@ -28,7 +28,7 @@ export default function useUserAuthCallback(
                 setUser(response.data)
             })
         } else {
-            navigate("/register")
+            // navigate("/register")
         }
         // navigate("/")
     // eslint-disable-next-line react-hooks/exhaustive-deps
