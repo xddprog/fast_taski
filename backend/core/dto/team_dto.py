@@ -20,6 +20,9 @@ class CreateTeamModel(BaseModel):
     members: list[int] = Form(default=[])   
 
 
+class UpdateTeamModel(BaseModel):
+    name: str | None = Form(default=None)
+
 class TeamModel(BaseTeamModel):
     owner: BaseUserModel
     members: list[UserTeamModel]

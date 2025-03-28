@@ -11,7 +11,7 @@ class SqlAlchemyRepository[ModelType](RepositoryInterface[ModelType]):
         self.session = session
         self.model = model
 
-    async def get_item(self, item_id: int | UUID4 | str) -> ModelType:
+    async def get_item(self, item_id: int) -> ModelType:
         item = await self.session.get(self.model, item_id)
         return item
 
@@ -20,12 +20,12 @@ class SqlAlchemyRepository[ModelType](RepositoryInterface[ModelType]):
         items: Result = await self.session.execute(query)
         return items.scalars().all()
 
-    async def get_by_attribute(self, attribute: str, value: str | UUID4 | int) -> list[ModelType] | None:
+    async def get_by_attribute(self, attribute: str, value: str) -> list[ModelType] | None:
         query = select(self.model).where(getattr(self.model, attribute) == value)
         items: Result = await self.session.execute(query)
         return items.scalars().all()
 
-    async def add_item(self, **kwargs: int | str | UUID4) -> ModelType:
+    async def add_item(self, **kwargs: int) -> ModelType:
         item = self.model(**kwargs)
         self.session.add(item)
         await self.session.commit()
@@ -36,9 +36,7 @@ class SqlAlchemyRepository[ModelType](RepositoryInterface[ModelType]):
         await self.session.delete(item)
         await self.session.commit()
 
-    async def update_item(
-        self, item_id: int | str | UUID4, **update_values
-    ) -> ModelType:
+    async def update_item(self, item_id: int, **update_values) -> ModelType:
         query = (
             update(self.model)
             .where(self.model.id == item_id)
@@ -49,7 +47,7 @@ class SqlAlchemyRepository[ModelType](RepositoryInterface[ModelType]):
         await self.session.commit()
         return item.scalars().all()[0]
 
-    async def get_model(self, **kwargs: int | str | UUID4) -> ModelType:
+    async def get_model(self, **kwargs: int) -> ModelType:
         return self.model(**kwargs)
 
     async def refresh_item(self, item: ModelType):

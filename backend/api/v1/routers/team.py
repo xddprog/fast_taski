@@ -36,7 +36,7 @@ async def get_team(
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
     team_service: FromDishka[services.TeamService]
 ):
-    return await team_service.get_team(team_id)
+    return await team_service.get(team_id)
 
 
 @router.delete("/{team_id}")

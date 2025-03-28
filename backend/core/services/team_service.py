@@ -1,4 +1,4 @@
-from backend.core.dto.team_dto import BaseTeamModel, CreateTeamModel, TeamModel
+from backend.core.dto.team_dto import BaseTeamModel, CreateTeamModel, TeamModel, UpdateTeamModel
 from backend.core.dto.user_dto import BaseUserModel
 from backend.core.repositories import TeamRepository
 from backend.core.services.base import BaseDbModelService
@@ -35,7 +35,7 @@ class TeamService(BaseDbModelService[Team]):
         await self.repository.refresh_item(new_team)
         return BaseTeamModel.model_validate(new_team, from_attributes=True)
     
-    async def get_team(self, team_id: int):
+    async def get(self, team_id: int):
         team = await self.repository.get_item(team_id)
         if team is None:
             return TeamNotFound
@@ -44,3 +44,18 @@ class TeamService(BaseDbModelService[Team]):
     async def get_user_teams(self, user_id: int):
         teams = await self.repository.get_user_teams(user_id)
         return [TeamModel.model_validate(team, from_attributes=True) for team in teams]
+    
+    async def update(self, item_id: int, item: UpdateTeamModel):
+        team = await self.repository.get_item(item_id)
+        if team is None:
+            return TeamNotFound
+
+        if item.avatar:
+            self.tasks_manager.add_base_task(
+                func=self.aws_client.upload_one_file,
+                namespace="team",
+                task_name="upload_team_avatar",
+                func_args=(item.avatar, f"teams/{team.name}/{item.avatar.filename}"),
+            )
+            item.avatar = await self.aws_client.get_url(f"teams/{team.name}/{item.avatar.filename}")
+        return await self.repository.update_item(item_id, **item.model_dump())
