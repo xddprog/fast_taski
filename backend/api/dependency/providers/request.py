@@ -8,6 +8,7 @@ from backend.core import repositories, services
 from backend.core.clients.redis_client import RedisClient
 from backend.core.dto.user_dto import BaseUserModel
 from backend.infrastructure.database.connection.postgres_connection import DatabaseConnection
+from backend.utils.auth_requests import AuthRequests
 
 
 class RequestProvider(Provider):
@@ -46,6 +47,9 @@ class RequestProvider(Provider):
     def get_user_service(self, session: AsyncSession) -> services.UserService:    
         return services.UserService(repository=repositories.UserRepository(session=session))
     
+    @provide(scope=Scope.REQUEST)
+    async def get_auth_requests(self) -> AuthRequests:
+        return AuthRequests()
 
 @inject
 async def get_current_user_dependency(

@@ -30,3 +30,4 @@ class AppProvider(Provider):
     @provide(scope=Scope.APP)
     async def get_tasks_manager(self) -> TasksManager:
         return TasksManager()
+    
