@@ -1,13 +1,13 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import useUserAuthCallback from "./hook";
-import { BaseUserInterface } from "./interfaces";
 import { useState } from "react";
-import AuthService from "./service";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import AuthService from "../../api/services/authService";
+import { BaseUserInterface } from "../../interfaces/authInterfaces";
+import useUserAuthCallback from "./hook";
 
 
 const AuthCallback: React.FC = () => {
     const navigate = useNavigate();
-    const [searchParam, ] = useSearchParams()
+    const [searchParam,] = useSearchParams()
     const authService = new AuthService();
     const [user, setUser] = useState<BaseUserInterface | null>(null);
 

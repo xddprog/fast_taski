@@ -92,7 +92,9 @@ class AuthService:
 
         form.password = self.context.hash(form.password)
         new_user = await self.repository.add_item(**form.model_dump())
-        return BaseUserModel.model_validate(new_user, from_attributes=True)
+        access_token = await self.create_access_token(new_user.username)
+        refresh_token = await self.create_refresh_token(new_user.username)
+        return BaseUserModel.model_validate(new_user, from_attributes=True), access_token, refresh_token
 
     async def register_external_service_user(self, form: ExternalServiceUserData) -> BaseUserModel:
         user = await self.get_user_by_username(form.username)
@@ -106,12 +108,18 @@ class AuthService:
     
     async def auth_extarnal_service_user(self, form: RegisterForm) -> BaseUserModel:
         user_registered = await self.authenticate_user(form, is_external=True)
+        print(user_registered)
         if not user_registered:
             return await self.register_external_service_user(form)
         return user_registered
 
-    async def check_user_in_app(self, form: RegisterForm | LoginForm, is_register: bool) -> bool:
+    async def check_user_in_app(self, form: RegisterForm) -> bool:
         user = await self.get_user_by_email(form.email)
-        if user and is_register:
+        if user:
             raise UserAlreadyRegister
-        return user.username if user else False
+    
+    async def login_user(self, form: LoginForm) -> BaseUserModel:
+        user = await self.authenticate_user(form)
+        access_token = await self.create_access_token(user.username)
+        refresh_token = await self.create_refresh_token(user.username)
+        return user, access_token, refresh_token

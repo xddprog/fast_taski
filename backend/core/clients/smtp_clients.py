@@ -4,17 +4,21 @@ from fastapi import BackgroundTasks
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
 from starlette.templating import Jinja2Templates
 
+from backend.core.clients.aws_client import AWSClient
+from backend.core.tasks_manager.manager import TasksManager
 from backend.utils.enums import EmailServices
 from backend.infrastructure.config.smtp_configs import YANDEX_SMTP_CONFIG
 
 
 class SMTPClients:
-    def __init__(self):
+    def __init__(self, tasks_manager: TasksManager):
         self.yandex_smtp = FastMail(self.create_yandex_config())
+        self.tasks_manager = tasks_manager
         # self.google_smtp = FastMail(self.create_google_config())
-        BASE_DIR = Path(__file__).resolve().parent.parent.parent
-        self.templates = Jinja2Templates(directory=BASE_DIR / "utils" / "email_templates")
+        self.templates = Jinja2Templates(directory=self._get_path_to_templates())
 
+    def _get_path_to_templates(self):
+        return Path(__file__).resolve().parent.parent.parent / "utils" / "email_templates"
     def create_yandex_config(self):
         return ConnectionConfig(
             MAIL_USERNAME=YANDEX_SMTP_CONFIG.YANDEX_SMTP_USER,
@@ -44,7 +48,6 @@ class SMTPClients:
         email: str, 
         code: str, 
         username: str,
-        background_tasks: BackgroundTasks
     ) -> None:
         template = self.templates.get_template("verification_code.html")
         message = MessageSchema(
@@ -56,7 +59,12 @@ class SMTPClients:
         service = email.split("@")[1].split(".")[0]
 
         if service == EmailServices.YANDEX.value:
-            background_tasks.add_task(self.yandex_smtp.send_message, message)
+            await self.tasks_manager.add_base_task(
+                self.yandex_smtp.send_message, 
+                namespace=f"verify_email_{email}",
+                task_name="send_email",
+                func_args=(message,)
+            )
         elif service == EmailServices.GOOGLE.value: 
-            background_tasks.add_task(self.google_smtp.send_message, message)
+            self.tasks_manager.add_task(self.google_smtp.send_message, message)
         return 

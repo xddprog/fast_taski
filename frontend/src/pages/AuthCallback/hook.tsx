@@ -1,14 +1,14 @@
+import { AxiosResponse } from "axios";
 import { useEffect } from "react";
 import { NavigateFunction } from "react-router-dom";
-import { AxiosResponse } from "axios";
-import { BaseUserInterface } from "./interfaces";
-import AuthService from "./service";
+import AuthService from "../../api/services/authService";
+import { BaseUserInterface } from "../../interfaces/authInterfaces";
 
 export default function useUserAuthCallback(
-    searchParam: URLSearchParams, 
-    navigate: NavigateFunction, 
-    authService: AuthService, 
-    setUser: React.Dispatch<React.SetStateAction<BaseUserInterface | null>> 
+    searchParam: URLSearchParams,
+    navigate: NavigateFunction,
+    authService: AuthService,
+    setUser: React.Dispatch<React.SetStateAction<BaseUserInterface | null>>
 ) {
     useEffect(() => {
         const code = searchParam.get("code");
@@ -16,8 +16,8 @@ export default function useUserAuthCallback(
 
         if (service === "yandex") {
             const hashParams = new URLSearchParams(window.location.hash.slice(1))
-            const access_token =  hashParams.get("access_token")
-            
+            const access_token = hashParams.get("access_token")
+
             if (access_token) {
                 authService.authWithYandex(access_token).then((response: AxiosResponse) => {
                     setUser(response.data)
@@ -31,6 +31,6 @@ export default function useUserAuthCallback(
             navigate("/register")
         }
         // navigate("/")
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 }

@@ -16,8 +16,8 @@ class AppProvider(Provider):
         return RedisClient()
 
     @provide(scope=Scope.APP)
-    async def get_smtp_clients(self) -> SMTPClients:
-        return SMTPClients()
+    async def get_smtp_clients(self, tasks_manager: TasksManager) -> SMTPClients:
+        return SMTPClients(tasks_manager)
 
     @provide(scope=Scope.APP)
     async def get_db_connection(self) -> DatabaseConnection:

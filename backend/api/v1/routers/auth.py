@@ -32,20 +32,17 @@ async def get_current_user(
 @router.post("/check-exist")
 @inject
 async def check_user_in_app(
-    userForm: RegisterForm | LoginForm,
-    is_register: bool,
+    userForm: RegisterForm,
     auth_service: FromDishka[services.AuthService],
     two_factor_service: FromDishka[services.TwoFactorAuthService],
     smtp_clients: FromDishka[clients.SMTPClients],
-    background_tasks: BackgroundTasks
 ) -> None:
-    username = await auth_service.check_user_in_app(userForm, is_register)
-    code = await two_factor_service.generate_code(userForm.username if is_register else username)
+    await auth_service.check_user_in_app(userForm)
+    code = await two_factor_service.generate_code(userForm.username )
     await smtp_clients.send_verification_code(
         userForm.email,
         code,
-        userForm.username if is_register else username,
-        background_tasks
+        userForm.username,
     )
 
 
@@ -54,13 +51,9 @@ async def check_user_in_app(
 async def login_user(
     form: LoginForm,
     response: Response,
-    # code: str,
     auth_service: FromDishka[services.AuthService]
 ) -> BaseUserModel:
-    user = await auth_service.authenticate_user(form)
-    # await two_factor_service.check_code(user.username, code)
-    access_token = await auth_service.create_access_token(user.username)
-    refresh_token = await auth_service.create_refresh_token(user.username)
+    user, access_token, refresh_token = await auth_service.login_user(form)
     await set_cookie_tokens(access_token, refresh_token, response)
     return user
 
@@ -89,16 +82,14 @@ async def logout_user(response: Response) -> dict[str, str]:
 @inject
 async def register_user(
     form: RegisterForm,
-    # code: str,
+    code: str,
     response: Response,
     auth_service: FromDishka[services.AuthService],
     two_factor_service: FromDishka[services.TwoFactorAuthService]
 ) -> BaseUserModel:
-    # await two_factor_service.check_code(form.username, code)
-    new_user = await auth_service.register_user(form)
-
-    access_token = await auth_service.create_access_token(form.email)
-    refresh_token = await auth_service.create_refresh_token(form.email)
+    await auth_service.check_user_in_app(form)
+    await two_factor_service.check_code(form.username, code)
+    new_user, access_token, refresh_token = await auth_service.register_user(form)
     await set_cookie_tokens(access_token, refresh_token, response)
     return new_user
 

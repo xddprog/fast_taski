@@ -5,8 +5,8 @@ import { FormEvent } from "react";
 interface FormProps {
   title: string;
   formType?: string;
-  handleLogin?: () => void;
-  handleRegistre?: () => void;
+  handleLogin?: (event: FormEvent<HTMLFormElement>) => void;
+  handleRegistre?: (event: FormEvent<HTMLFormElement>) => void;
 }
 
 const LoginForm: React.FC<FormProps> = ({
@@ -19,9 +19,9 @@ const LoginForm: React.FC<FormProps> = ({
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (formType === "register" && handleRegistre) {
-      handleRegistre();
+      handleRegistre(event);
     } else if (handleLogin) {
-      handleLogin();
+      handleLogin(event);
     }
   };
 
@@ -51,6 +51,12 @@ const LoginForm: React.FC<FormProps> = ({
       <h1>{title}</h1>
       <label htmlFor="email">Почта</label>
       <input type="text" id="email" name="email" placeholder="mail@mail.mail" />
+      {formType === "register" && (
+        <>
+          <label htmlFor="username">Имя пользователя</label>
+          <input type="text" id="username" name="username" placeholder="username" />
+        </>
+      )}
       <label htmlFor="password">Пароль</label>
       <input
         type="password"

@@ -24,7 +24,7 @@ class TeamService(BaseDbModelService[Team]):
         if form.avatar:
             self.tasks_manager.add_base_task(
                 func=self.aws_client.upload_one_file,
-                namespace="team",
+                namespace=f"team_{form.name}",
                 task_name="upload_team_avatar",
                 func_args=(form.avatar, f"teams/{form.name}/{form.avatar.filename}"),
             )

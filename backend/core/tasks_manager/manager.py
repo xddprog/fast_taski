@@ -1,5 +1,6 @@
 import asyncio
 from datetime import timedelta
+import logging
 import threading
 import time
 from typing import Any, Awaitable, Callable
@@ -7,6 +8,13 @@ from typing import Any, Awaitable, Callable
 import orjson
 from backend.core.clients.rabbit_client import RabbitClient
 from backend.core.tasks_manager.tasks import BaseTask, RepeatableTask
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter('%(levelname)s - %(asctime)s - %(name)s - %(message)s'))
+logger.addHandler(handler)
 
 
 class SingletonMeta(type):
@@ -32,7 +40,7 @@ class TasksManager(metaclass=SingletonMeta):
         func: Callable[..., Awaitable[Any]], 
         namespace: str, 
         task_name: str,
-        func_args: list[Any] | None = None,
+        func_args: tuple[Any] | None = None,
         func_kwargs: dict[str, Any] | None = None
     ) -> None:
         new_task = BaseTask(func, namespace, task_name, func_args, func_kwargs)
@@ -77,6 +85,7 @@ class TasksManager(metaclass=SingletonMeta):
             else:
                 await self._send_delayed_task(task)
         except Exception:
+            logger.error("Error running repeatable task, task_name={task_name}", exc_info=True)
             pass
     
     def _calculate_delay(self, task: RepeatableTask) -> int:
@@ -101,7 +110,9 @@ class TasksManager(metaclass=SingletonMeta):
             if task:
                 await task.func(*(task.func_args or []), **(task.func_kwargs or {}))
                 self._default_tasks.pop(task.full_name)
-        except Exception:
+        except Exception as e:
+            print(e)
+            logger.error("Error running default task, task_name={task_name}", exc_info=True)
             pass
 
     async def _run_handle_queue(self):

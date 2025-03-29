@@ -14,7 +14,7 @@ class TwoFactorAuthService:
     async def generate_code(self, user: str):
         code = secrets.token_hex(3)
         ttl = timedelta(minutes=10)
-        await self.redis_client.set_item(user, code, ttl)
+        await self.redis_client.set(f"user_verify_code:{user}", code, ttl)
         return code
     
     async def check_code(self, user: str, code: str):
