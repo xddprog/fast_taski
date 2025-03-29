@@ -1,25 +1,37 @@
-// Login.tsx
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.scss";
 import LoginForm from "../../components/LoginForm/LoginForm";
-import { useState } from "react";
-import { loginUser } from "../../api/login/route";
-import { useNavigate } from "react-router-dom";
+import { FormEvent, useState } from "react";
+import SuccessBunner from "../../components/SuccessBanner/SuccessBunner";
+import AuthService from "../../api/services/authService";
+import { LoginUserInterface } from "../../interfaces/authInterfaces";
 
 const Login: React.FC = () => {
+  const [success, setSuccess] = useState(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const navigate = useNavigate();
+  const authService = new AuthService();
 
-  async function login(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function login(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const loginData: LoginUserInterface = {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+    };
+
     try {
-      const result = await loginUser(null, email, password);
-      console.log("Вход успешен:", result);
-      navigate("/dashboard");
+      const res = await authService.loginUser(loginData);
+      console.log("Вход успешен:", res);
+      setSuccess(true);
+      setTimeout(() => {
+        navigate("/dashboard"); // Переход на /dashboard после успешного логина
+      }, 2000); // Задержка 2 секунды, чтобы пользователь увидел SuccessBunner
     } catch (error) {
       console.error("Ошибка:", error);
+      alert("Ошибка при входе. Проверьте данные.");
     }
   }
 
@@ -29,18 +41,24 @@ const Login: React.FC = () => {
         <img className={styles.closeBtn} src="/icons/close.png" alt="Close" />
       </Link>
       <div className={styles.loginContainer}>
-        <LoginForm
-          title={"Войти"}
-          login={email}
-          pass={password}
-          formType="login"
-          handleLogin={login}
-          handleEmail={setEmail}
-          handlePass={setPassword}
-        />
-        <div className={styles.registrationText}>
-          Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
-        </div>
+        {success ? (
+          <SuccessBunner />
+        ) : (
+          <>
+            <LoginForm
+              title={"Войти"}
+              formType="login"
+              handleLogin={login}
+              login={email}
+              pass={password}
+              handleEmail={setEmail}
+              handlePass={setPassword}
+            />
+            <div className={styles.registrationText}>
+              Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
