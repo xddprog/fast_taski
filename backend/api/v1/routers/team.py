@@ -51,6 +51,19 @@ async def delete_team(
     return await team_service.delete(team_id)
 
 
+@router.patch("/{team_id}/owner/{user_id}")
+@inject
+@cache.clear(namespaces=["team", "teams"])
+async def change_team_owner(
+    request: Request,
+    team_id: int,
+    user_id: int,
+    current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
+    team_service: FromDishka[services.TeamService]
+):
+    return await team_service.change_owner(team_id, user_id, current_user.id)
+
+
 @router.put("/{team_id}")
 @inject
 async def update_team(

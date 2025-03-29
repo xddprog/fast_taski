@@ -5,7 +5,7 @@ from backend.core.services.base import BaseDbModelService
 from backend.core.tasks_manager.tasks import BaseTask
 from backend.infrastructure.database.models.team import Team
 from backend.infrastructure.database.models.user import User
-from backend.infrastructure.errors.team_errors import TeamAlreadyExist, TeamNotFound
+from backend.infrastructure.errors.team_errors import TeamAlreadyExist, TeamNotFound, UserNotFoundRights
 from backend.infrastructure.interfaces import repository
 from backend.utils.enums import TeamRoles
 
@@ -59,3 +59,15 @@ class TeamService(BaseDbModelService[Team]):
             )
             item.avatar = await self.aws_client.get_url(f"teams/{team.name}/{item.avatar.filename}")
         return await self.repository.update_item(item_id, **item.model_dump())
+    
+    async def change_owner(self, team_id: int, user_id: int, current_user_id: int):
+        team = await self.repository.get_item(team_id)
+        if team is None:
+            return TeamNotFound
+        if team.owner_id != current_user_id:
+            return UserNotFoundRights
+        await self.repository.update_member(team_id, user_id, role=TeamRoles.OWNER)
+        await self.repository.update_member(team_id, current_user_id, role=TeamRoles.ADMIN)
+        await self.repository.refresh_item(team)
+        return TeamModel.model_validate(team, from_attributes=True)
+    

@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import styles from "./LoginForm.module.scss";
 import { FormEvent } from "react";
 
@@ -15,7 +14,6 @@ const LoginForm: React.FC<FormProps> = ({
   handleLogin,
   handleRegistre,
 }) => {
-  const navigate = useNavigate();
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (formType === "register" && handleRegistre) {
@@ -37,7 +35,6 @@ const LoginForm: React.FC<FormProps> = ({
   }
 
   function authWithYandex(event: React.MouseEvent<HTMLButtonElement>) {
-    navigate("/auth/callback", { state: { service: "yandex", code: "123" } });
     event.preventDefault();
     window.location.assign(
       `${import.meta.env.VITE_YANDEX_API_URL}/authorize?response_type=token&client_id=${

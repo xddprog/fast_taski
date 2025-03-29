@@ -1,3 +1,4 @@
+from dns import query, update
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -40,3 +41,11 @@ class TeamRepository(SqlAlchemyRepository[Team]):
         )
         item = await self.session.execute(query)
         return item.scalar_one_or_none()
+    
+    async def update_member(self, team_id: int, user_id: int, **kwargs):
+        query = (
+            update(UserTeam)
+            .where(UserTeam.team_id == team_id , UserTeam.user_id == user_id)
+            .values(**kwargs)
+            .returning(UserTeam)
+        )

@@ -20,7 +20,7 @@ class CreateTeamModel(BaseModel):
     members: list[int] = Form(default=[])   
 
 
-class UpdateTeamModel(BaseModel):
+class UpdateTeamModel(CreateTeamModel):
     name: str | None = Form(default=None)
 
 class TeamModel(BaseTeamModel):
