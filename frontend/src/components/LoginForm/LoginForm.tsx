@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./LoginForm.module.scss";
 import { FormProps } from "../../types/form.ts";
 import { FormEvent } from "react";
+import AuthButtons from "../AuthButtons/AuthButtons.tsx";
 
 const LoginForm: React.FC<FormProps> = ({
   login,
@@ -101,7 +102,7 @@ const LoginForm: React.FC<FormProps> = ({
       <button type="submit" className={styles.continueBtn}>
         Продолжить
       </button>
-      <div className={styles.authOptions}>
+      {/* <div className={styles.authOptions}>
         <p className={styles.authText}>
           Или {formType === "register" ? "зарегистрируйтесь" : "войдите"} с
           помощью
@@ -114,15 +115,15 @@ const LoginForm: React.FC<FormProps> = ({
           >
             Яндекс ID
           </button>
-          <button
-            type="button"
-            onClick={authWithVk}
-            className={styles.authButton}
-          >
+          <button type="button" onClick={} className={styles.authButton}>
             VK ID
           </button>
         </div>
-      </div>
+      </div> */}
+      <AuthButtons
+        yandexAuth={authWithYandex}
+        vkauth={authWithVk}
+      ></AuthButtons>
     </form>
   );
 };

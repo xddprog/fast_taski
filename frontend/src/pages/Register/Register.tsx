@@ -95,12 +95,18 @@ const Register: React.FC = () => {
                   handleRegistre={registre}
                   login={userForm?.email || ""}
                   pass={userForm?.password || ""}
-                  passRep={""}
+                  passRep={userForm?.password_repeat || ""}
                   handleEmail={(value) =>
                     setUserForm((prev) => ({ ...prev!, email: value }))
                   }
                   handlePass={(value) =>
                     setUserForm((prev) => ({ ...prev!, password: value }))
+                  }
+                  handlePassRep={(value) =>
+                    setUserForm((prev) => ({
+                      ...prev!,
+                      password_repeat: value,
+                    }))
                   }
                 />
                 <div className={styles.loginText}>
