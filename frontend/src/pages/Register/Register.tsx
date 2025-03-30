@@ -22,7 +22,6 @@ const Register: React.FC = () => {
     }
   }
 
-  // Обработчик для верификации кода
   async function verify(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {

@@ -12,7 +12,7 @@ const HomeRegistration: React.FC = () => {
       />
       <div className={styles.homeRegistrationPart}>
         <h1>
-          Начинайте с Fast TASKI <br /> <span>прямо сейчас!</span>
+          Начинайте с Fast TASKI <br /> <span>прямо сейчас</span>!
         </h1>
         <div className={styles.homeRegistrationForm}>
           <div className={styles.registrationInputContainer}>
@@ -28,7 +28,7 @@ const HomeRegistration: React.FC = () => {
             Зарегистрироваться
           </Link>
         </div>
-        <AuthButtons></AuthButtons>
+        <AuthButtons />
       </div>
     </section>
   );

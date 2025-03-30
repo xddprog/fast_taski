@@ -1,5 +1,5 @@
 footer {
-  height: 142px;
+  height: auto;
   width: 100%;
   background: #1f1f1f;
 
@@ -37,10 +37,25 @@ footer {
     font-weight: 400;
     line-height: normal;
     margin-bottom: 8px;
+    text-wrap: nowrap;
   }
 
   .socialMediaRow {
     display: flex;
     gap: 16px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  footer {
+    padding: 16px 80px 49px;
+  }
+}
+
+@media (max-width: 767px) {
+  footer {
+    flex-direction: column;
+    padding: 24px 85.5px 52px;
+    gap: 54px;
   }
 }

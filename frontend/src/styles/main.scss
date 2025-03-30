@@ -22,3 +22,8 @@ input {
   border: none;
   outline: none;
 }
+
+.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
