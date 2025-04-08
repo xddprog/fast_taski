@@ -39,11 +39,7 @@ async def check_user_in_app(
 ) -> None:
     await auth_service.check_user_in_app(userForm)
     code = await two_factor_service.generate_code(userForm.username )
-    await smtp_clients.send_verification_code(
-        userForm.email,
-        code,
-        userForm.username,
-    )
+    await smtp_clients.send_verification_code(userForm.email, code, userForm.username)
 
 
 @router.post("/login")

@@ -1,5 +1,5 @@
 from dns import query, update
-from sqlalchemy import or_, select
+from sqlalchemy import delete, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from backend.core.repositories.base import SqlAlchemyRepository
@@ -49,3 +49,24 @@ class TeamRepository(SqlAlchemyRepository[Team]):
             .values(**kwargs)
             .returning(UserTeam)
         )
+
+    async def delete_member(self, team_id: int, user_id: int):
+        await self.session.execute(
+            delete(UserTeam).where(UserTeam.team_id == team_id, UserTeam.user_id == user_id)
+        )
+        await self.session.commit()
+
+    async def check_member(self, team_id: int, user_id: int):
+        query = select(UserTeam).where(UserTeam.team_id == team_id, UserTeam.user_id == user_id)
+        return (await self.session.execute(query)).scalar_one_or_none()
+    
+    async def check_admin(self, team_id: int, user_id: int):
+        query = (
+            select(UserTeam)
+            .where(
+                UserTeam.team_id == team_id, 
+                UserTeam.user_id == user_id, 
+                or_(UserTeam.role == TeamRoles.ADMIN, UserTeam.role == TeamRoles.OWNER)
+            )
+        )
+        return (await self.session.execute(query)).scalar_one_or_none()

@@ -43,6 +43,17 @@ class SMTPClients:
     #         MAIL_FROM=google_config.GOOGLE_SMTP_USER
     #     )
 
+    async def _send_email(self, message: MessageSchema, service: str, email: str):
+        if service == EmailServices.YANDEX.value:
+            await self.tasks_manager.add_base_task(
+                self.yandex_smtp.send_message, 
+                namespace=f"verify_email_{email}",
+                task_name="send_email",
+                func_args=(message,)
+            )
+        elif service == EmailServices.GOOGLE.value: 
+            self.tasks_manager.add_task(self.google_smtp.send_message, message)
+
     async def send_verification_code(
         self, 
         email: str, 
@@ -57,14 +68,17 @@ class SMTPClients:
             subtype="html"
         )
         service = email.split("@")[1].split(".")[0]
+        await self._send_email(message, service, email)
+    
+    async def invite_members(self, emails: list[str]):
+        template = self.templates.get_template("invite_member.html")
+        message = MessageSchema(
+            subject="Invite members",
+            recipients=emails,
+            body=template.render(),
+            subtype="html"
+        )
 
-        if service == EmailServices.YANDEX.value:
-            await self.tasks_manager.add_base_task(
-                self.yandex_smtp.send_message, 
-                namespace=f"verify_email_{email}",
-                task_name="send_email",
-                func_args=(message,)
-            )
-        elif service == EmailServices.GOOGLE.value: 
-            self.tasks_manager.add_task(self.google_smtp.send_message, message)
-        return 
+        for email in emails:
+            service = email.split("@")[1].split(".")[0]
+            await self._send_email(message, service, email)

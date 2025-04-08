@@ -4,7 +4,7 @@ from dishka.integrations.fastapi import inject
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.core import repositories, services
+from backend.core import clients, repositories, services
 from backend.core.clients.redis_client import RedisClient
 from backend.core.dto.user_dto import BaseUserModel
 from backend.infrastructure.database.connection.postgres_connection import DatabaseConnection
@@ -41,11 +41,19 @@ class RequestProvider(Provider):
     
     @provide(scope=Scope.REQUEST)
     def get_team_service(self, session: AsyncSession) -> services.TeamService:    
-        return services.TeamService(repository=repositories.TeamRepository(session=session))
+        return services.TeamService(
+            repository=repositories.TeamRepository(session=session),
+            smtp_clients=clients.SMTPClients(),
+            redis_client=clients.RedisClient()
+        )
     
     @provide(scope=Scope.REQUEST)
     def get_user_service(self, session: AsyncSession) -> services.UserService:    
         return services.UserService(repository=repositories.UserRepository(session=session))
+    
+    @provide(scope=Scope.REQUEST)
+    def get_tag_service(self, session: AsyncSession) -> services.TagService:    
+        return services.TagService(repository=repositories.TagRepository(session=session))
     
     @provide(scope=Scope.REQUEST)
     async def get_auth_requests(self) -> AuthRequests:

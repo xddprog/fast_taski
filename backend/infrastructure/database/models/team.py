@@ -1,3 +1,4 @@
+from uuid import uuid4
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.infrastructure.database.models.base import Base
@@ -11,6 +12,7 @@ class Team(Base):
     description: Mapped[str] = mapped_column(nullable=True)
     avatar: Mapped[str] = mapped_column(nullable=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    invite_code: Mapped[str] = mapped_column(default=uuid4())
     
     members: Mapped[list['UserTeam']] = relationship(
         back_populates="team", 
@@ -20,6 +22,7 @@ class Team(Base):
     owner = relationship("User", back_populates="created_teams")
     columns = relationship("Column",back_populates="team", cascade="all, delete-orphan")
     notes = relationship("Note", back_populates="team", cascade="all, delete-orphan")
+    tags = relationship("Tag", back_populates="team", cascade="all, delete-orphan")
     
 
 class UserTeam(Base):

@@ -2,10 +2,11 @@ from typing import Annotated
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
 from fastapi import APIRouter, Depends, Request
+from fastapi.responses import JSONResponse
 
 from backend.api.dependency.providers.request import get_current_user_dependency
-from backend.core import cache, services
-from backend.core.dto.team_dto import CreateTeamModel
+from backend.core import cache, clients, services
+from backend.core.dto.team_dto import CreateTeamModel, InviteMembersModel, UpdateTeamModel
 from backend.core.dto.user_dto import BaseUserModel
 
 
@@ -36,7 +37,14 @@ async def get_team(
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
     team_service: FromDishka[services.TeamService]
 ):
-    return await team_service.get(team_id)
+    return await team_service.get(team_id, current_user.id)
+
+
+@router.get("/")
+@inject
+@cache.get(namespace="dashboard", expire=60)
+async def get_team_dashboard():
+    pass
 
 
 @router.delete("/{team_id}")
@@ -48,7 +56,7 @@ async def delete_team(
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
     team_service: FromDishka[services.TeamService]
 ):
-    return await team_service.delete(team_id)
+    return await team_service.delete(team_id, current_user.id)
 
 
 @router.patch("/{team_id}/owner/{user_id}")
@@ -66,10 +74,65 @@ async def change_team_owner(
 
 @router.put("/{team_id}")
 @inject
+@cache.clear(namespaces=["team", "teams"])
 async def update_team(
     request: Request,
+    form: UpdateTeamModel,
     team_id: int,
+    current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
+    team_service: FromDishka[services.TeamService],
+):
+    return await team_service.update(team_id, form, current_user.id)
+
+
+@router.post("/{team_id}/members")
+@inject
+async def add_team_members(
+    form: InviteMembersModel,
+    team_id: int,
+    current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
+    team_service: FromDishka[services.TeamService],
+) -> JSONResponse:
+    return await team_service.invite_members(team_id, form, current_user.id)
+
+
+@router.patch("/{team_id}/members/{token}")
+@inject
+@cache.clear(namespaces=["team"])
+async def accept_invite(
+    request: Request, 
+    team_id: int, 
+    token: str, 
+    team_service: FromDishka[services.TeamService],
+    current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)]
+):
+    return await team_service.accept_invite(team_id, token, current_user.id)
+
+
+@router.delete("/{team_id}/members/{user_id}")
+@inject
+@cache.clear(namespaces=["team", "teams"])
+async def delete_team_member(
+    request: Request,
+    team_id: int,
+    user_id: int,
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
     team_service: FromDishka[services.TeamService]
 ):
-    pass
+    return await team_service.delete_member(team_id, user_id, current_user.id)
+
+
+@router.get("{team_id}/tasks/{task_id}")
+@inject
+@cache.get(namespace="task", expire=60)
+async def get_task(
+    request: Request,
+    team_id: int,
+    task_id: int,
+    current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
+    task_service: FromDishka[services.TaskService],
+    team_service: FromDishka[services.TeamService]
+):
+    await team_service.check_team_exist(task_id)
+    await team_service.check_user_rights(team_id, current_user.id, check_member=True)
+    return await task_service.get_task(task_id, current_user.id)

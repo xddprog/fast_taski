@@ -29,6 +29,8 @@ class Task(Base):
     column: Mapped['Column'] = relationship(back_populates="tasks")
     creator = relationship("User", back_populates="created_tasks")
     assignees = relationship("User", back_populates="assigned_tasks", secondary="task_assignees")
+    tags = relationship("Tag", back_populates="tasks", secondary="task_tags")
+    comments = relationship("Comment", back_populates="task")
     
 
 class TimeEntry(Base):

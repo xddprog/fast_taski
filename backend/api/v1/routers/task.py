@@ -1,42 +1,30 @@
 import asyncio
+from typing import Annotated
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
 
-import backend.core.cache.redis_cache as cache
-from backend.core.clients.aws_client import AWSClient
-from backend.core.clients.rabbit_client import RabbitClient
-from backend.core.clients.redis_client import RedisClient
+from backend.api.dependency.providers.request import get_current_user_dependency
+from backend.core import cache, services
+from backend.core.dto.task_dto import CreateTaskModel
+from backend.core.dto.user_dto import BaseUserModel
 
 
 router = APIRouter()
 
 
-@router.get("/{task_id}/notes/{zxc}")
+@router.post("/")
 @inject
-@cache.get(namespace="notes", expire=60)
-async def get_notes(request: Request, task_id: int, zxc: str):
-    await asyncio.sleep(1)
-    return {"detail": "hello"}
-
-
-# @router.delete("/{task_id}/notes/{zxc}")
-# @inject
-# async def get_notes(request: Request, task_id: int, zxc: str, aws: FromDishka[AWSClient]):
-#     t = TaskManager()
-#     await t.add_repeatable_task(
-#         RepeatableTask(
-#             func=aws.get_client, 
-#             namespace="notes", 
-#             task_name="test", 
-#             minutes=1
-#         )
-#     )
-#     await t.add_base_task(
-#         BaseTask(
-#             func=aws.get_client, 
-#             namespace="notes", 
-#             task_name="test1"
-#         )
-#     )
-#     return {"detail": "hello"}
+async def create_task(
+    request: Request,
+    form: CreateTaskModel,
+    task_service: FromDishka[services.TaskService],
+    team_service: FromDishka[services.TeamService],
+    user_service: FromDishka[services.UserService],
+    current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
+    tag_service: FromDishka[services.TagService]
+):
+    await team_service.check_team_exist(form.team_id)
+    assignees = await user_service.get_users_by_ids(form.assignees)
+    tags = await tag_service.get_tags_by_ids(form.tags, form.team_id)
+    return await task_service.create(form, assignees, tags, current_user)

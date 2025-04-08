@@ -20,10 +20,10 @@ class SqlAlchemyRepository[ModelType](RepositoryInterface[ModelType]):
         items: Result = await self.session.execute(query)
         return items.scalars().all()
 
-    async def get_by_attribute(self, attribute: str, value: str) -> list[ModelType] | None:
+    async def get_by_attribute(self, attribute: str, value: str, one: bool = False) -> list[ModelType] | None:
         query = select(self.model).where(getattr(self.model, attribute) == value)
         items: Result = await self.session.execute(query)
-        return items.scalars().all()
+        return items.scalars().all() if not one else items.scalar_one_or_none()
 
     async def add_item(self, **kwargs: int) -> ModelType:
         item = self.model(**kwargs)

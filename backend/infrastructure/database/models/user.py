@@ -24,3 +24,4 @@ class User(Base):
     time_entries = relationship("TimeEntry", back_populates="user")
     created_notes = relationship("Note", back_populates="creator")
     notes = relationship("Note", back_populates="members", secondary="user_notes")
+    comments = relationship("Comment", back_populates="user")

@@ -22,6 +22,8 @@ router = APIRouter()
 async def get_user_team(
     request: Request,
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
-    team_service: FromDishka[services.TeamService]
+    team_service: FromDishka[services.TeamService],
+    user_service: FromDishka[services.UserService]
 ) -> list[BaseTeamModel]:
+    await user_service.check_user_exist(current_user.id)
     return await team_service.get_user_teams(current_user.id)

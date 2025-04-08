@@ -20,11 +20,17 @@ class CreateTeamModel(BaseModel):
     members: list[int] = Form(default=[])   
 
 
-class UpdateTeamModel(CreateTeamModel):
-    name: str | None = Form(default=None)
+class UpdateTeamModel(BaseModel):
+    name: str
+    avatar: UploadFile = Form(default=None)
+    description: str | None = Form(default=None)
 
 class TeamModel(BaseTeamModel):
     owner: BaseUserModel
     members: list[UserTeamModel]
     owner: BaseUserModel
     columns: list[ColumnModel]
+
+
+class InviteMembersModel(BaseModel):
+    emails: list[str]
