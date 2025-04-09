@@ -3,6 +3,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.infrastructure.database.models.base import Base
 from backend.infrastructure.database.models.column import Column
+from backend.infrastructure.database.models.comment import Comment
 
 
 class Task(Base):
@@ -30,7 +31,7 @@ class Task(Base):
     creator = relationship("User", back_populates="created_tasks")
     assignees = relationship("User", back_populates="assigned_tasks", secondary="task_assignees")
     tags = relationship("Tag", back_populates="tasks", secondary="task_tags")
-    comments = relationship("Comment", back_populates="task")
+    comments: Mapped[list[Comment]] = relationship("Comment", back_populates="task")
     
 
 class TimeEntry(Base):

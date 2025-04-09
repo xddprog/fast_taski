@@ -36,3 +36,7 @@ class TaskRepository(SqlAlchemyRepository[Task]):
         )
         item = await self.session.execute(query)
         return item.first()
+    
+    async def check_task_exist(self, task_id: int, team_id: int):
+        query = select(Task).where(Task.id == task_id, Task.team_id == team_id)
+        return (await self.session.execute(query)).scalar_one_or_none()

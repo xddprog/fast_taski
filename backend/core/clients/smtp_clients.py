@@ -18,7 +18,8 @@ class SMTPClients:
         self.templates = Jinja2Templates(directory=self._get_path_to_templates())
 
     def _get_path_to_templates(self):
-        return Path(__file__).resolve().parent.parent.parent / "utils" / "email_templates"
+        return Path(__file__).resolve().parent.parent.parent / "utils" / "templates"
+    
     def create_yandex_config(self):
         return ConnectionConfig(
             MAIL_USERNAME=YANDEX_SMTP_CONFIG.YANDEX_SMTP_USER,
@@ -70,12 +71,12 @@ class SMTPClients:
         service = email.split("@")[1].split(".")[0]
         await self._send_email(message, service, email)
     
-    async def invite_members(self, emails: list[str]):
+    async def invite_members(self, emails: list[str], team_name: str):
         template = self.templates.get_template("invite_member.html")
         message = MessageSchema(
             subject="Invite members",
             recipients=emails,
-            body=template.render(),
+            body=template.render(team_name=team_name),
             subtype="html"
         )
 

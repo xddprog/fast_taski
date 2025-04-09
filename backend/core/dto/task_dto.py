@@ -25,9 +25,16 @@ class TaskModel(BaseTaskModel):
     parent: BaseTaskModel
     sub_tasks_count: int
 
+
 class CreateTaskModel(BaseModel):
     team_id: int
     name: str
     description: str | None = None
     tags: list[int] = []
     assignees: list[int] = []
+
+
+class UpdateTaskModel(BaseModel):
+    name: str | None = None
+    description: str | None = None
+    deadline: str | None = None

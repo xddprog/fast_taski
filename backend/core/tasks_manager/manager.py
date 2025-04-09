@@ -79,7 +79,6 @@ class TasksManager(metaclass=SingletonMeta):
             if task and task.max_repeat and task._repeat_count <= task.max_repeat:
                 await task.func(*(task.func_args or []), **(task.func_kwargs or {}))
                 task._repeat_count += 1
-                print(task._repeat_count, task.max_repeat)
             if task and task._repeat_count == task.max_repeat:
                 self._repeatable_tasks.pop(task_name)
             else:

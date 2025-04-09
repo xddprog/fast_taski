@@ -17,13 +17,14 @@ class CreateTeamModel(BaseModel):
     name: str
     avatar: UploadFile = Form(default=None)
     description: str | None = Form(default=None)
-    members: list[int] = Form(default=[])   
+    members: list[str] = Form(default=[])   
 
 
 class UpdateTeamModel(BaseModel):
     name: str
     avatar: UploadFile = Form(default=None)
     description: str | None = Form(default=None)
+    
 
 class TeamModel(BaseTeamModel):
     owner: BaseUserModel

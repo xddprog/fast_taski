@@ -24,8 +24,8 @@ async def create_team(
     user_service: FromDishka[services.UserService]
 ):
     await team_service.check_team_exist(form.name)
-    members = await user_service.get_users_by_ids(form.members)
-    return await team_service.create(form, current_user, members)
+    members = await user_service.get_users_by_emails(form.members, only_ids=True)
+    return await team_service.create_team(form, current_user, members)
 
 
 @router.get("/{team_id}")
@@ -37,7 +37,7 @@ async def get_team(
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
     team_service: FromDishka[services.TeamService]
 ):
-    return await team_service.get(team_id, current_user.id)
+    return await team_service.get_team(team_id, current_user.id)
 
 
 @router.get("/")
@@ -56,7 +56,7 @@ async def delete_team(
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
     team_service: FromDishka[services.TeamService]
 ):
-    return await team_service.delete(team_id, current_user.id)
+    return await team_service.delete_team(team_id, current_user.id)
 
 
 @router.patch("/{team_id}/owner/{user_id}")
@@ -82,7 +82,7 @@ async def update_team(
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
     team_service: FromDishka[services.TeamService],
 ):
-    return await team_service.update(team_id, form, current_user.id)
+    return await team_service.update_team(team_id, form, current_user.id)
 
 
 @router.post("/{team_id}/members")
@@ -106,7 +106,7 @@ async def accept_invite(
     team_service: FromDishka[services.TeamService],
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)]
 ):
-    return await team_service.accept_invite(team_id, token, current_user.id)
+    return await team_service.accept_invite(team_id, token, current_user)
 
 
 @router.delete("/{team_id}/members/{user_id}")
@@ -120,19 +120,3 @@ async def delete_team_member(
     team_service: FromDishka[services.TeamService]
 ):
     return await team_service.delete_member(team_id, user_id, current_user.id)
-
-
-@router.get("{team_id}/tasks/{task_id}")
-@inject
-@cache.get(namespace="task", expire=60)
-async def get_task(
-    request: Request,
-    team_id: int,
-    task_id: int,
-    current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
-    task_service: FromDishka[services.TaskService],
-    team_service: FromDishka[services.TeamService]
-):
-    await team_service.check_team_exist(task_id)
-    await team_service.check_user_rights(team_id, current_user.id, check_member=True)
-    return await task_service.get_task(task_id, current_user.id)

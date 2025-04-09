@@ -7,13 +7,11 @@ from backend.core.clients.smtp_clients import SMTPClients
 from backend.core.repositories.base import SqlAlchemyRepository
 from backend.core.tasks_manager.manager import TasksManager
 from backend.infrastructure.interfaces.repository import RepositoryInterface
-from backend.infrastructure.interfaces.service import DbModelServiceInterface
 
 
-class BaseDbModelService[ModelType](DbModelServiceInterface[ModelType]):
+class BaseDbModelService[ModelType]:
     def __init__(
-        self, 
-        repository: SqlAlchemyRepository[ModelType], 
+        self, repository: RepositoryInterface[ModelType],
         tasks_manager: TasksManager = None,
         aws_client: AWSClient = None,
         redis_client: RedisClient = None,
@@ -24,31 +22,4 @@ class BaseDbModelService[ModelType](DbModelServiceInterface[ModelType]):
         self.aws_client = aws_client
         self.redis_client = redis_client
         self.smtp_clients = smtp_clients
-        
-    async def get_model(self, item_id: int):
-        return await self.repository.get_item(item_id)
-    
-    async def get_one(self, item_id: int):
-        return await self.repository.get_item(item_id)
-    
-    async def get_all(self):
-        return await self.repository.get_all_items()
-    
-    async def create(self, **kwargs):
-        return await self.repository.add_item(**kwargs)
-    
-    async def update(self, item_id: int, item: BaseModel):
-        return await self.repository.update_item(item_id, **item)
-    
-    async def delete(self, item_id: int):
-        item = await self.repository.get_item(item_id)
-        return await self.repository.delete_item(item)
-    
-    async def delete_many(self, item_ids: list[int]):
-        for item_id in item_ids:
-            item = await self.repository.get_item(item_id)
-            await self.repository.delete_item(item)
-
-    async def get_by_attribute(self, attribute: str, value: Any):
-        return await self.repository.get_by_attribute(attribute, value)
     

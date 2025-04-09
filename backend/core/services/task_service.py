@@ -5,7 +5,6 @@ from backend.core.services.base import BaseDbModelService
 from backend.infrastructure.database.models.task import Task
 from backend.infrastructure.database.models.user import User
 from backend.infrastructure.errors.task_errors import TaskNotFound
-from backend.infrastructure.interfaces.service import DbModelServiceInterface
 
 
 class TaskService(BaseDbModelService[Task]):
@@ -31,3 +30,13 @@ class TaskService(BaseDbModelService[Task]):
             creator=task.creator,
             time_entries=task.time_entries
         )
+    
+    async def check_task_exist(self, task_id: int, team_id: int):
+        task = await self.repository.check_task_exist(task_id)
+        if task is None:
+            raise TaskNotFound
+        return task
+    
+    async def delete_assignee(self, task_id: int, user_id: int):
+        await self.repository.delete_assignee(task_id, user_id)
+        

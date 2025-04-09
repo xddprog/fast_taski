@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.core import clients, repositories, services
 from backend.core.clients.redis_client import RedisClient
 from backend.core.dto.user_dto import BaseUserModel
+from backend.core.tasks_manager.manager import TasksManager
 from backend.infrastructure.database.connection.postgres_connection import DatabaseConnection
 from backend.utils.auth_requests import AuthRequests
 
@@ -40,11 +41,17 @@ class RequestProvider(Provider):
         return services.TaskService(repository=repositories.TaskRepository(session=session))
     
     @provide(scope=Scope.REQUEST)
-    def get_team_service(self, session: AsyncSession) -> services.TeamService:    
+    def get_team_service(
+        self, 
+        session: AsyncSession, 
+        tasks_manager: TasksManager, 
+        redis_client: RedisClient
+    ) -> services.TeamService:    
         return services.TeamService(
             repository=repositories.TeamRepository(session=session),
-            smtp_clients=clients.SMTPClients(),
-            redis_client=clients.RedisClient()
+            smtp_clients=clients.SMTPClients(tasks_manager),
+            redis_client=redis_client,
+            tasks_manager=tasks_manager
         )
     
     @provide(scope=Scope.REQUEST)

@@ -12,7 +12,7 @@ class Team(Base):
     description: Mapped[str] = mapped_column(nullable=True)
     avatar: Mapped[str] = mapped_column(nullable=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    invite_code: Mapped[str] = mapped_column(default=uuid4())
+    invite_code: Mapped[str] = mapped_column(default=str(uuid4()))
     
     members: Mapped[list['UserTeam']] = relationship(
         back_populates="team", 

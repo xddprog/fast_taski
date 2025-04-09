@@ -18,7 +18,8 @@ class UserRepository(SqlAlchemyRepository[User]):
         await self.session.refresh(user)
         return user
 
-    async def get_by_ids(self, ids: list[int]):
-        query = select(self.model).where(self.model.id.in_(ids))
+    async def get_by_emails(self, emails: list[str], only_ids: bool = False):
+        query = select(self.model if not only_ids else self.model.id).where(self.model.email.in_(emails))
         users = await self.session.execute(query)
         return users.scalars().all()
+    
