@@ -1,11 +1,9 @@
 .aboutPanelBlock {
   display: flex;
-  height: 294px;
-  display: flex;
-  padding: 16px 258px 49px 258px;
+  padding: 104px 258px 60px 258px;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  margin-bottom: 120px;
 }
 
 .aboutPanelText {
@@ -17,6 +15,10 @@
   align-items: flex-start;
   border-radius: 16px;
   background: #1f1f1f;
+
+  .forAdaptive {
+    display: none;
+  }
 
   h1 {
     color: #fff;
@@ -97,5 +99,81 @@
     position: absolute;
     bottom: 0;
     right: 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  .aboutPanelBlock {
+    gap: 8px;
+
+    padding: 0px 80px 60px;
+
+    .aboutPanelText {
+      width: 197px;
+      height: 254px;
+      padding: 24px 16px;
+
+      .longTitle {
+        display: none;
+      }
+
+      .forAdaptive {
+        display: block;
+      }
+
+      .h1 {
+        font-size: 24px;
+      }
+
+      p {
+        font-size: 12px;
+      }
+    }
+    .supportBlock {
+      width: 403px;
+      height: 254px;
+      img {
+        width: 231px;
+        height: 231px;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .aboutPanelBlock {
+    flex-direction: column;
+    gap: 12px;
+
+    padding: 64px 20px 32px;
+
+    .aboutPanelText {
+      width: 335px;
+      height: 164px;
+    }
+    .supportBlock {
+      width: 335px;
+      height: 254px;
+      padding: 16px 32px 24px 24px;
+
+
+      button {
+        width: 81px;
+        height: 24px;
+        border-radius: 4px;
+        padding-top: 2px;
+        padding-right: 8px;
+        padding-bottom: 2px;
+        padding-left: 8px;
+        gap: 4px;
+
+        font-size: 12px;
+      }
+
+      img {
+        width: 188px;
+        height: 188px;     
+      }
+    }
   }
 }

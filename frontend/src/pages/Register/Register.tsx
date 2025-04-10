@@ -1,35 +1,62 @@
 import { Link } from "react-router-dom";
 import styles from "./Register.module.scss";
 import LoginForm from "../../components/LoginForm/LoginForm";
-import { useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import SuccessBunner from "../../components/SuccessBanner/SuccessBunner";
-import { registerUser } from "../../api/register/route";
+import { RegisterUserInterface } from "../../interfaces/authInterfaces";
+import AuthService from "../../api/services/authService";
 
 const Register: React.FC = () => {
   const [success, setSuccess] = useState(false);
   const [verifying, setVerifying] = useState(false);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [passwordRepeat, setPasswordRepeat] = useState<string>("");
-  // const [code, setCode] = useState<string>("");
 
-  function registre(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (password !== passwordRepeat) {
+  const authService = new AuthService();
+  const [userForm, setUserForm] = useState<RegisterUserInterface | null>(null);
+  const codeRef = useRef<HTMLInputElement>(null);
+
+  async function registre(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const registerData: RegisterUserInterface = {
+      username: formData.get("username") as string,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+    };
+
+    const passwordRepeat = formData.get("password_repeat") as string;
+    if (registerData.password !== passwordRepeat) {
       alert("Пароли не совпадают");
-    } else {
-      setSuccess(true);
+      return;
+    }
+
+    try {
+      const res = await authService.checkUserExist(registerData);
+      if (res.status === 200) {
+        setUserForm(registerData);
+        setSuccess(true);
+      }
+    } catch (error) {
+      console.error("Ошибка при проверке пользователя:", error);
+      alert("Ошибка при регистрации. Проверьте данные.");
     }
   }
 
-  async function verify(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function verify(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!codeRef.current || codeRef.current.value.length !== 6) {
+      alert("Введите корректный 6-значный код");
+      return;
+    }
+
     try {
-      const result = await registerUser("username", email, password);
-      console.log("Регистрация успешна:", result);
+      const res = await authService.registerUser(
+        userForm as RegisterUserInterface,
+        codeRef.current.value
+      );
+      console.log("Регистрация успешна:", res);
       setVerifying(true);
     } catch (error) {
-      console.error("Ошибка:", error);
+      console.error("Ошибка верификации:", error);
       alert("Ошибка верификации. Проверьте код или данные.");
     }
   }
@@ -47,15 +74,14 @@ const Register: React.FC = () => {
             {success ? (
               <form className={styles.verifyingCard} onSubmit={verify}>
                 <h1>Регистрация</h1>
-                <p>Введите 8-и значный код, отправленный на вашу почту</p>
+                <p>Введите 6-и значный код, отправленный на вашу почту</p>
                 <label htmlFor="code">Код</label>
                 <input
                   type="text"
                   id="code"
                   name="code"
                   placeholder="Код"
-                  // value={code}
-                  // onChange={(e) => setCode(e.target.value)}
+                  ref={codeRef}
                 />
                 <button type="submit">Продолжить</button>
               </form>
@@ -65,12 +91,21 @@ const Register: React.FC = () => {
                   title={"Регистрация"}
                   formType="register"
                   handleRegistre={registre}
-                  login={email}
-                  pass={password}
-                  passRep={passwordRepeat}
-                  handleEmail={setEmail}
-                  handlePass={setPassword}
-                  handlePassRep={setPasswordRepeat}
+                  login={userForm?.email || ""}
+                  pass={userForm?.password || ""}
+                  passRep={userForm?.password_repeat || ""}
+                  handleEmail={(value) =>
+                    setUserForm((prev) => ({ ...prev!, email: value }))
+                  }
+                  handlePass={(value) =>
+                    setUserForm((prev) => ({ ...prev!, password: value }))
+                  }
+                  handlePassRep={(value) =>
+                    setUserForm((prev) => ({
+                      ...prev!,
+                      password_repeat: value,
+                    }))
+                  }
                 />
                 <div className={styles.loginText}>
                   Есть аккаунт? <Link to="/login">Войти</Link>

@@ -39,7 +39,7 @@
         left: 265px;
       }
 
-      button {
+      .leftBlockButton {
         color: #ffffff;
         background-color: #6096fd;
 
@@ -95,11 +95,10 @@
       display: flex;
       flex-direction: column;
 
-      padding: 28px 32px 24px;
+      padding: 28px 32px 24px 24px;
 
       width: 362px;
       height: 254px;
-      justify-content: space-between;
       border-radius: 16px;
 
       .rightBlockUpperText {
@@ -208,7 +207,6 @@
         .containerForLi {
           display: flex;
           flex-direction: column;
-          gap: 12px;
 
           h3,
           ul {
@@ -234,5 +232,124 @@
   }
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 767px) {
+  .PanelsContainer {
+    padding: 0px 20px 64px;
+    .firstRow {
+      flex-direction: column;
+
+      .leftBlockInFirstRow {
+        width: 335px;
+        height: 226px;
+        overflow: hidden;
+        padding: 16px 32px 24px 24px;
+
+        img {
+          width: 201px;
+          height: 139px;
+          top: 87px;
+          left: 170px;
+          
+        }
+
+        .leftBlockButton {
+          width: 119px;
+          height: 24px;
+          border-radius: 4px;
+          padding-top: 2px;
+          padding-right: 8px;
+          padding-bottom: 2px;
+          padding-left: 8px;
+          gap: 4px;
+
+          font-size: 12px;
+        }
+
+        .leftBlockText {
+          h1 {
+            font-size: 20px;
+          }
+
+          h3 {
+            font-size: 10px;
+          }
+        }
+      }
+
+      .rightBlockInFirstRow {
+        width: 335px;
+        height: 164px;
+        gap: 37px;
+        padding: 16px 32px 24px 24px;
+
+        .rightBlockUpperText {
+          gap: 16px;
+
+          h1 {
+            font-size: 20px;
+          }
+
+          h2 {
+            font-size: 10px;
+          }
+        }
+
+        h3 {
+          font-size: 10px;
+        }
+      }
+    }
+    .secondRow {
+      flex-direction: column;
+
+      .leftBlockInSecondRow {
+        width: 335px;
+        height: 164px;
+        padding: 16px 32px 24px 24px;
+        gap: 30px;
+
+        h1 {
+          font-size: 20px;
+        }
+
+        h3 {
+          font-size: 10px;
+        }
+      }
+
+      .rightBlockInSecondRow {
+        width: 335px;
+        height: 226px;
+        padding: 16px 32px 24px 24px;
+
+        .aiTextBlock {
+          h1 {
+            font-size: 20px;
+          }
+          .containerForLi {
+            h3 {
+              font-size: 10px;
+            }
+
+            ul {
+              li {
+                font-size: 10px;
+              }
+            }
+          }
+        }
+
+        img {
+          width: 150px;
+          height: 110px;
+          top: 113px;
+          left: 185px;
+        }
+
+        .underTextAboutTarif {
+          font-size: 10px;
+        }
+      }
+    }
+  }
 }

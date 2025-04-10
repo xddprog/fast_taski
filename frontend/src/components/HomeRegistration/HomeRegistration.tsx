@@ -1,8 +1,21 @@
-import { Link } from "react-router-dom";
+// HomeRegistration.tsx
+import { Link, useNavigate } from "react-router-dom"; // Добавляем useNavigate
 import styles from "./HomeRegistration.module.scss";
 import AuthButtons from "../AuthButtons/AuthButtons";
+import { authWithVk, authWithYandex } from "../../utils/AuthWith";
 
 const HomeRegistration: React.FC = () => {
+  const navigate = useNavigate(); // Вызываем хук внутри компонента
+
+  // Оборачиваем функции, чтобы передать navigate
+  const handleVkAuth = (event: React.MouseEvent<HTMLButtonElement>) => {
+    authWithVk(event, navigate);
+  };
+
+  const handleYandexAuth = (event: React.MouseEvent<HTMLButtonElement>) => {
+    authWithYandex(event, navigate);
+  };
+
   return (
     <section className={styles.homeRegistrationContainer}>
       <img
@@ -28,7 +41,10 @@ const HomeRegistration: React.FC = () => {
             Зарегистрироваться
           </Link>
         </div>
-        <AuthButtons />
+        <AuthButtons
+          yandexAuth={handleYandexAuth}
+          vkauth={handleVkAuth}
+        />
       </div>
     </section>
   );

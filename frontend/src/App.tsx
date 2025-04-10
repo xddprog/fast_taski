@@ -8,13 +8,17 @@ import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import Footer from "./components/Footer/Footer";
 import { Routes, Route, useLocation } from "react-router-dom";
+import AuthCallback from "./pages/AuthCallback/AuthCallback";
 
 const App: React.FC = () => {
   const location = useLocation();
   const hideHeaderFooter =
+    location.pathname === "/register" ||
+    location.pathname === "/dashboard" ||
     location.pathname === "/login" ||
     location.pathname === "/register" ||
-    location.pathname === "/dashboard";
+    location.pathname === "/auth/callback";
+
   return (
     <>
       {!hideHeaderFooter && <Header />}
@@ -26,6 +30,7 @@ const App: React.FC = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         {/* <Route path="*" element={<NotFound />} />{" "} */}
         {/* 404 - для всех несуществующих путей */}
       </Routes>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./Panels.module.scss";
 
 const Panels: React.FC = () => {
@@ -16,14 +17,14 @@ const Panels: React.FC = () => {
               отдельности!
             </h3>
           </div>
-          <button className={styles.leftBlockButton}>Начать бесплатно</button>
+          <Link to='/register' className={styles.leftBlockButton}>Начать бесплатно</Link>
         </div>
         <div className={styles.rightBlockInFirstRow}>
           <div className={styles.rightBlockUpperText}>
             <h1>Скидки в честь запуска</h1>
             <h2>
               В честь запуска платформы Fast TASKI, мы предоставляем скидку на
-              все тарифыв размере 42%
+              все тарифы <br /> в размере 42%
             </h2>
           </div>
           <h3 className={styles.rightBlockSaleText}>
@@ -45,6 +46,7 @@ const Panels: React.FC = () => {
             <h1>Помощь от ИИ</h1>
             <div className={styles.containerForLi}>
               <h3>Благодаря нашему умному помощнику вы сможете:</h3>
+              <br />
               <ul>
                 <li>Оптимизировать распределение задач</li>
                 <li>Автоматизировать генерацию отчётов</li>
