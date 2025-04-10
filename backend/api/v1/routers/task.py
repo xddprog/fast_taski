@@ -26,7 +26,10 @@ async def create_task(
     tag_service: FromDishka[services.TagService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
-    assignees = await user_service.get_users_by_ids(form.assignees)
+    if not form.assignees:
+        assignees = [await user_service.get_user(current_user.id)]
+    else:
+        assignees = await user_service.get_users_by_ids(form.assignees)
     tags = await tag_service.get_tags_by_ids(form.tags, team_id)
     return await task_service.create_task(form, assignees, tags, current_user.id)
 
@@ -42,8 +45,8 @@ async def get_task(
     team_service: FromDishka[services.TeamService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
-    await task_service.check_task_exist(task_id, team_id)
     await team_service.check_user_rights(team_id, current_user.id, check_member=True)
+    await task_service.check_task_exist(task_id)
     return await task_service.get_task(task_id, current_user.id)
 
 
@@ -58,8 +61,8 @@ async def delete_task(
     team_service: FromDishka[services.TeamService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
-    await task_service.check_task_exist(task_id, team_id)
     await team_service.check_user_rights(team_id, current_user.id, check_admin=True)
+    await task_service.check_task_exist(task_id)
     return await task_service.delete_task(task_id)
 
 
@@ -79,9 +82,9 @@ async def update_task(
     team_service: FromDishka[services.TeamService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
-    await task_service.check_task_exist(team_id)
     await team_service.check_user_rights(team_id, current_user.id, check_admin=True)
-    return await task_service.update(task_id, form)
+    await task_service.check_task_exist(task_id)
+    return await task_service.update_task(task_id, form)
 
 
 @router.delete("/{task_id}/assignees/{user_id}")
@@ -96,8 +99,9 @@ async def delete_task_assignee(
     team_service: FromDishka[services.TeamService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ) -> JSONResponse:
-    await team_service.check_task_exist(task_id)
     await team_service.check_user_rights(team_id, current_user.id, check_admin=True)
+    await team_service.check_user_rights(team_id, user_id, check_admin=True)
+    await team_service.check_task_exist(task_id) 
     return await task_service.delete_assignee(task_id, user_id)
 
 
@@ -113,6 +117,43 @@ async def add_task_assignee(
     team_service: FromDishka[services.TeamService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ) -> JSONResponse:
-    await team_service.check_task_exist(task_id)
     await team_service.check_user_rights(team_id, current_user.id, check_admin=True)
+    await team_service.check_user_rights(team_id, user_id, check_member=True)
+    await task_service.check_task_exist(task_id)
     return await task_service.add_assignee(task_id, user_id)
+
+
+@router.delete("/{task_id}/tags/{tag_id}")
+@inject
+@cache.clear(namespaces=["task"], queries=["task_id"])
+async def delete_task_tag(
+    request: Request,
+    team_id: int,
+    task_id: int,
+    tag_id: int,
+    task_service: FromDishka[services.TaskService],
+    team_service: FromDishka[services.TeamService],
+    current_user: BaseUserModel = Depends(get_current_user_dependency)
+) -> None:
+    await team_service.check_user_rights(team_id, current_user.id, check_member=True)
+    await task_service.check_task_exist(task_id)
+    await task_service.check_tag_exist(tag_id)
+    return await task_service.delete_tag(task_id, tag_id)
+
+
+@router.post("/{task_id}/tags/{tag_id}")
+@inject
+@cache.clear(namespaces=["task"], queries=["task_id"])
+async def add_task_tag(
+    request: Request,
+    team_id: int,
+    task_id: int,
+    tag_id: int,
+    task_service: FromDishka[services.TaskService],
+    team_service: FromDishka[services.TeamService],
+    current_user: BaseUserModel = Depends(get_current_user_dependency)
+) -> None:
+    await team_service.check_user_rights(team_id, current_user.id, check_member=True)
+    await task_service.check_task_exist(task_id)
+    await task_service.check_tag_exist(tag_id)
+    return await task_service.add_tag(task_id, tag_id)

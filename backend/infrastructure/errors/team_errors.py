@@ -29,7 +29,7 @@ class UserNotInTeam(HTTPException):
     def __init__(self):
         super().__init__(
             status_code=403,
-            detail="Вы не состоите в этой команде!",
+            detail="Пользовтаель не состоит в этой команде!",
         )
 
 

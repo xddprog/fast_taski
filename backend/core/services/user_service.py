@@ -19,3 +19,6 @@ class UserService(BaseDbModelService[User]):
     
     async def get_users_by_emails(self, emails: list[str], only_ids: bool = False) -> list[User]:
         return await self.repository.get_by_emails(emails, only_ids)
+    
+    async def get_user(self, user_id: int) -> User:
+        return await self.repository.get_item(user_id)

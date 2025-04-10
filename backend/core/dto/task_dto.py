@@ -30,8 +30,10 @@ class TaskModel(BaseTaskModel):
     assignees: list[BaseUserModel]
     creator: BaseUserModel
     time_entries: list[TimeEntryModel]
-    parent: BaseTaskModel
+    parent: BaseTaskModel | None = None
+    parent_id: int | None = None
     sub_tasks_count: int
+    comments_count: int
 
 
 class CreateTaskModel(BaseModel):

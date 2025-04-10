@@ -22,7 +22,7 @@ async def create_column(
     column_service: FromDishka[services.ColumnService],
     team_service: FromDishka[services.TeamService],
     current_user: BaseUserModel = Depends(get_current_user_dependency),
-):
+) :
     await team_service.check_user_rights(team_id, current_user.id, check_admin=True)
     return await column_service.create_column(team_id, form)
 

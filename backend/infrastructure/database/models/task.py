@@ -19,12 +19,7 @@ class Task(Base):
     parent_id: Mapped[int] = mapped_column(ForeignKey("tasks.id"), nullable=True)
 
     parent: Mapped['Task'] = relationship(remote_side=[id], back_populates="sub_tasks")
-    sub_tasks: Mapped[list['Task']] = relationship(        
-        back_populates="parent",
-        lazy="joined",
-        cascade="all, delete-orphan",
-        join_depth=100
-    )
+    sub_tasks: Mapped[list['Task']] = relationship(back_populates="parent", cascade="all, delete-orphan",)
     time_entries: Mapped[list["TimeEntry"]] = relationship(back_populates="task")
     column: Mapped['Column'] = relationship(back_populates="tasks")
     creator = relationship("User", back_populates="created_tasks")

@@ -12,3 +12,8 @@ class TagService(BaseDbModelService[Tag]):
         if len(tags) != len(ids):
             raise TagNotFound
         return tags
+
+    async def check_tag_exist(self, tag_id: int):
+        tag = await self.repository.get_item(tag_id)
+        if tag is None:
+            raise TagNotFound
