@@ -13,13 +13,12 @@ class Task(Base):
     name: Mapped[str]
     description: Mapped[str]
     deadline: Mapped[datetime]
-    max_time: Mapped[int]
     is_completed: Mapped[bool] = mapped_column(default=False)
     creator_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     column_id: Mapped[int] = mapped_column(ForeignKey("columns.id"), nullable=False)
-    parent_id: Mapped[int] = mapped_column(ForeignKey("tasks.id"))
+    parent_id: Mapped[int] = mapped_column(ForeignKey("tasks.id"), nullable=True)
 
-    parent: Mapped['Task'] = relationship(remote_side=[id], lazy="selectin")
+    parent: Mapped['Task'] = relationship(remote_side=[id], back_populates="sub_tasks")
     sub_tasks: Mapped[list['Task']] = relationship(        
         back_populates="parent",
         lazy="joined",

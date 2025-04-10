@@ -15,13 +15,13 @@ handler.setFormatter(logging.Formatter('%(levelname)s - %(asctime)s - %(name)s -
 logger.addHandler(handler)
 
 
-def _key_builder(request: Request, namespace: str, user_id: int) -> str:
-    path_params = ":".join(f"{k}={v}" for k, v in sorted(request.path_params.items()))
-    router_prefix = request.url.path.split("/")[3]
-    return f"{user_id}:{namespace}:{router_prefix}:{path_params}"
+def _key_builder(namespace: str, user_id: int, queries: dict | None = None) -> str:
+    queries = ":".join([f"{k}={v}" for k, v in queries.items()])
+    print(f"{user_id}:{namespace}:{queries}")
+    return f"{user_id}:{namespace}:{queries}"
 
 
-def get(namespace: str, expire: int = 60) -> Callable:
+def get(namespace: str, expire: int = 60, queries: list[str] | None = None) -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         async def wrapper(
@@ -31,10 +31,14 @@ def get(namespace: str, expire: int = 60) -> Callable:
             **kwargs,
         ) -> Any:
             current_user = kwargs.get("current_user")
+            filter_queries = {k: v for k, v in kwargs.items() if k in queries} if queries else {}
+
             if not current_user:
                 logger.warning("No current_user provided in cache decorator")
                 return await func(request, *args, **kwargs)
-            cache_key = _key_builder(request, namespace, current_user.id)
+            
+            cache_key = _key_builder(namespace, current_user.id, filter_queries)
+
             try:
                 value = await redis_client.get(cache_key)
                 if value:
@@ -42,7 +46,9 @@ def get(namespace: str, expire: int = 60) -> Callable:
                     return value
             except Exception as e:
                 logger.error(f"Error fetching cache: key={cache_key}, error={e}")
+
             value = await func(request, *args, **kwargs)
+
             try:
                 if isinstance(value, dict):
                     dumped = orjson.dumps(value)
@@ -67,7 +73,8 @@ def clear(
     all: bool = False,
     by_key: bool = False,
     set_after: bool = False,
-    expire: int = 60
+    expire: int = 60,
+    queries: List[str] | dict | None = None
 ) -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
@@ -79,22 +86,40 @@ def clear(
         ) -> Any:
             value = await func(request, *args, **kwargs)
             current_user = kwargs.get("current_user")
+            if isinstance(queries, dict):
+                filter_queries = {}
+                for k, v in queries.items():
+                    if v in kwargs:
+                        filter_queries[k] = kwargs[v]
+            else:
+                filter_queries = {k: v for k, v in kwargs.items() if k in queries} if queries else {}
+
             if all:
                 try:
                     await redis_client.reset()
                 except Exception as e:
                     logger.error(f"Error clearing entire cache: {e}")
+
             elif by_key:
                 if not namespaces:
                     raise ValueError("Namespace required for by_key")
-                cache_key = _key_builder(request, namespaces[0], *args, **kwargs)
+                if isinstance(queries, list):
+                    cache_key = _key_builder(
+                        namespaces[0], 
+                        current_user.id, 
+                        {queries[0]: filter_queries.get(queries[0])}
+                    )
+                else:
+                    cache_key = _key_builder(namespaces[0], current_user.id, filter_queries)
                 try:
                     await redis_client.delete_by_key(cache_key)
                 except Exception as e:
                     logger.warning(f"Error clearing cache: key={cache_key}, error={e}")
+
             else:
                 if not namespaces:
                     raise ValueError("Namespaces required unless all=True")
+                
                 for namespace in namespaces:
                     try:
                         await redis_client.delete_by_prefix(f"{current_user.id}:{namespace}:*")
@@ -104,9 +129,29 @@ def clear(
             if set_after:
                 if not namespaces:
                     raise ValueError("Namespace required for set_after")
-                cache_key = _key_builder(request, namespaces[0], *args, **kwargs)
+                
+                if isinstance(queries, list):
+                    cache_key = _key_builder(
+                        namespaces[0], 
+                        current_user.id, 
+                        {queries[0]: filter_queries.get(queries[0])}
+                    )
+                else:
+                    cache_key = _key_builder(namespaces[0], current_user.id, filter_queries)
+
                 try:
-                    await redis_client.set(cache_key, orjson.dumps(value), ttl=expire)
+                    if isinstance(value, dict):
+                        dumped = orjson.dumps(value)
+                    elif isinstance(value, BaseModel):
+                        dumped = orjson.dumps(value.model_dump())
+                    elif isinstance(value, list):
+                        dumped = []
+                        for item in value:
+                            if isinstance(item, BaseModel):
+                                dumped.append(item.model_dump())
+                        dumped = orjson.dumps(dumped)
+
+                    await redis_client.set(cache_key, dumped, ttl=expire)
                     logger.info(f"Cache set after: key={cache_key}")
                 except Exception as e:
                     logger.error(f"Error setting cache after: key={cache_key}, error={e}")

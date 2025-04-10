@@ -63,6 +63,10 @@ class RequestProvider(Provider):
         return services.TagService(repository=repositories.TagRepository(session=session))
     
     @provide(scope=Scope.REQUEST)
+    def get_column_service(self, session: AsyncSession) -> services.ColumnService:    
+        return services.ColumnService(repository=repositories.ColumnRepository(session=session))
+    
+    @provide(scope=Scope.REQUEST)
     async def get_auth_requests(self) -> AuthRequests:
         return AuthRequests()
 

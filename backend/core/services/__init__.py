@@ -5,3 +5,4 @@ from backend.core.services.note_service import NoteService
 from backend.core.services.task_service import TaskService
 from backend.core.services.team_service import TeamService
 from backend.core.services.tag_service import TagService
+from backend.core.services.column_service import ColumnService

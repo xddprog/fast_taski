@@ -30,7 +30,6 @@ class TeamModel(BaseTeamModel):
     owner: BaseUserModel
     members: list[UserTeamModel]
     owner: BaseUserModel
-    columns: list[ColumnModel]
 
 
 class InviteMembersModel(BaseModel):

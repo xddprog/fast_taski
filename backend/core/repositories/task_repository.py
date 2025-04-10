@@ -9,7 +9,7 @@ from backend.infrastructure.database.models.team import Team
 
 class TaskRepository(SqlAlchemyRepository[Task]):
     def __init__(self, session: AsyncSession):
-        super().__init__(session, Team)
+        super().__init__(session, Task)
 
     async def get_team_tasks(self, team_id: int, offset: int, limit: int):
         query = (

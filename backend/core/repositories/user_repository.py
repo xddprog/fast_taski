@@ -23,3 +23,7 @@ class UserRepository(SqlAlchemyRepository[User]):
         users = await self.session.execute(query)
         return users.scalars().all()
     
+    async def get_by_ids(self, ids: list[int]):
+        query = select(self.model).where(self.model.id.in_(ids))
+        users = await self.session.execute(query)
+        return users.scalars().all()

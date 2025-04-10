@@ -10,10 +10,10 @@ from backend.infrastructure.errors.task_errors import TaskNotFound
 class TaskService(BaseDbModelService[Task]):
     repository: TaskRepository
 
-    async def create(self, form: CreateTaskModel, assignees: list[User], tags: list[Tag], current_user: int):
+    async def create_task(self, form: CreateTaskModel, assignees: list[User], tags: list[Tag], current_user: int):
         form.assignees = assignees
         form.tags = tags
-        return await self.repository.add_item(**form.model_dump(), owner_id=current_user)
+        return await self.repository.add_item(**form.model_dump(), creator_id=current_user)
     
     async def get_task(self, task_id: int, current_user_id: int):
         task, sub_tasks_count = await self.repository.get_item(task_id)

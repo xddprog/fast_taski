@@ -3,7 +3,14 @@ from pydantic import BaseModel
 from backend.core.dto.task_dto import BaseTaskModel
 
 
-class ColumnModel(BaseModel):
+class BaseColumnModel(BaseModel):
+    id: int
     name: str
     color: str
-    tasks: list[BaseTaskModel]
+
+class CreateColumnModel(BaseModel):
+    name: str
+    color: str
+
+class ColumnModel(BaseColumnModel):
+    tasks: list[BaseTaskModel] = []

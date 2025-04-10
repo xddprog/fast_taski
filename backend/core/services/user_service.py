@@ -14,5 +14,8 @@ class UserService(BaseDbModelService[User]):
             raise UserNotFound
         return user
     
+    async def get_users_by_ids(self, ids: list[int]) -> list[User]:
+        return await self.repository.get_by_ids(ids)
+    
     async def get_users_by_emails(self, emails: list[str], only_ids: bool = False) -> list[User]:
         return await self.repository.get_by_emails(emails, only_ids)

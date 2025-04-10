@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from datetime import datetime
+from pydantic import BaseModel, field_validator
 
 from backend.core.dto.tag_dto import TagModel
 from backend.core.dto.user_dto import BaseUserModel, UserTeamModel
@@ -8,7 +9,14 @@ class BaseTaskModel(BaseModel):
     id: int
     name: str
     description: str
-    deadline: str
+    deadline: str | datetime
+    column_id: int
+
+    @field_validator('deadline')
+    def convert_to_string(cls, v):
+        if isinstance(v, datetime):
+            return v.strftime('%Y-%m-%d %H:%M')
+        return v
 
 
 class TimeEntryModel(BaseModel):
@@ -27,11 +35,18 @@ class TaskModel(BaseTaskModel):
 
 
 class CreateTaskModel(BaseModel):
-    team_id: int
+    column_id: int
     name: str
+    deadline: datetime
     description: str | None = None
     tags: list[int] = []
     assignees: list[int] = []
+
+    @field_validator('deadline')
+    def convert_to_naive(cls, v):
+        if v.tzinfo is not None:  # If timezone-aware
+            return v.replace(tzinfo=None)  # Convert to naive
+        return v
 
 
 class UpdateTaskModel(BaseModel):

@@ -3,6 +3,7 @@ from sqlalchemy import delete, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from backend.core.repositories.base import SqlAlchemyRepository
+from backend.infrastructure.database.models.column import Column
 from backend.infrastructure.database.models.team import Team, UserTeam
 from backend.utils.enums import TeamRoles
 
@@ -27,7 +28,6 @@ class TeamRepository(SqlAlchemyRepository[Team]):
             query = query.options(
                 selectinload(Team.owner),
                 selectinload(Team.members).selectinload(UserTeam.user),
-                selectinload(Team.columns) 
             )
         else:
             query = query.options(selectinload(Team.owner))
