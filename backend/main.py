@@ -1,3 +1,4 @@
+import asyncio
 from contextlib import asynccontextmanager
 import multiprocessing
 from dishka import AsyncContainer, FromDishka
@@ -29,6 +30,7 @@ def create_lifespan(di_container: AsyncContainer):
 
 di_container = setup_container()
 app = FastAPI(lifespan=create_lifespan(di_container))
+# asyncio.get_event_loop().set_debug(True)
 
 
 app.add_middleware(

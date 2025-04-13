@@ -21,7 +21,6 @@ async def set_cookie_tokens(access_token: str, refresh_token: str, response: Res
 
 @router.get("/current_user")
 @inject
-@cache.get(namespace="current_user", expire=60)
 async def get_current_user(
     request: Request,
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],
@@ -38,7 +37,7 @@ async def check_user_in_app(
     smtp_clients: FromDishka[clients.SMTPClients],
 ) -> None:
     await auth_service.check_user_in_app(userForm)
-    code = await two_factor_service.generate_code(userForm.username )
+    code = await two_factor_service.generate_code(userForm.username)
     await smtp_clients.send_verification_code(userForm.email, code, userForm.username)
 
 
@@ -69,11 +68,9 @@ async def refresh_token(
 
 @router.delete("/logout")
 @inject
-@cache.clear(namespaces=["current_user"])
 async def logout_user(
     response: Response,
     request: Request,
-    current_user: BaseUserModel = Depends(get_current_user_dependency)
 ) -> dict[str, str]:
     response.delete_cookie(key="access_token")
     response.delete_cookie(key="refresh_token")

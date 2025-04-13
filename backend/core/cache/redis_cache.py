@@ -15,13 +15,12 @@ handler.setFormatter(logging.Formatter('%(levelname)s - %(asctime)s - %(name)s -
 logger.addHandler(handler)
 
 
-def _key_builder(namespace: str, user_id: int, queries: dict | None = None) -> str:
-    queries = ":".join([f"{k}={v}" for k, v in queries.items()])
-    print(f"{user_id}:{namespace}:{queries}")
-    return f"{user_id}:{namespace}:{queries}"
+def _key_builder(namespace: str, queries: dict | None = None, user_id: str | None = None) -> str:
+    queries = ":".join([f"{k}={v}" for k, v in queries.items()]) 
+    return f"{namespace}:{queries}" if user_id is None else f"{namespace}:user_id={user_id}:{queries}"
 
 
-def get(namespace: str, expire: int = 60, queries: list[str] | None = None) -> Callable:
+def get(namespace: str, expire: int = 60, queries: list[str] | None = None, by_current_user: bool = False) -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         async def wrapper(
@@ -30,14 +29,9 @@ def get(namespace: str, expire: int = 60, queries: list[str] | None = None) -> C
             *args,
             **kwargs,
         ) -> Any:
-            current_user = kwargs.get("current_user")
             filter_queries = {k: v for k, v in kwargs.items() if k in queries} if queries else {}
-
-            if not current_user:
-                logger.warning("No current_user provided in cache decorator")
-                return await func(request, *args, **kwargs)
-            
-            cache_key = _key_builder(namespace, current_user.id, filter_queries)
+            current_user: BaseUserModel = kwargs.get("current_user") if current_user else None
+            cache_key = _key_builder(namespace, filter_queries, current_user.id)
 
             try:
                 value = await redis_client.get(cache_key)
@@ -74,7 +68,8 @@ def clear(
     by_key: bool = False,
     set_after: bool = False,
     expire: int = 60,
-    queries: List[str] | dict | None = None
+    queries: List[str] | dict | None = None,
+    by_current_user: bool = False
 ) -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
@@ -85,7 +80,8 @@ def clear(
             **kwargs
         ) -> Any:
             value = await func(request, *args, **kwargs)
-            current_user = kwargs.get("current_user")
+            current_user: BaseUserModel = kwargs["current_user"] if by_current_user else None
+
             if isinstance(queries, dict):
                 filter_queries = {}
                 for k, v in queries.items():
@@ -104,13 +100,9 @@ def clear(
                 if not namespaces:
                     raise ValueError("Namespace required for by_key")
                 if isinstance(queries, list):
-                    cache_key = _key_builder(
-                        namespaces[0], 
-                        current_user.id, 
-                        {queries[0]: filter_queries.get(queries[0])}
-                    )
+                    cache_key = _key_builder(namespaces[0], {queries[0]: filter_queries.get(queries[0])}, current_user.id)
                 else:
-                    cache_key = _key_builder(namespaces[0], current_user.id, filter_queries)
+                    cache_key = _key_builder(namespaces[0], filter_queries, current_user.id)
                 try:
                     await redis_client.delete_by_key(cache_key)
                 except Exception as e:
@@ -122,7 +114,7 @@ def clear(
                 
                 for namespace in namespaces:
                     try:
-                        await redis_client.delete_by_prefix(f"{current_user.id}:{namespace}:*")
+                        await redis_client.delete_by_prefix(f"{namespace}:*")
                     except Exception as e:
                         logger.warning(f"Error clearing cache: namespace={namespace}, error={e}")
                         
@@ -131,13 +123,9 @@ def clear(
                     raise ValueError("Namespace required for set_after")
                 
                 if isinstance(queries, list):
-                    cache_key = _key_builder(
-                        namespaces[0], 
-                        current_user.id, 
-                        {queries[0]: filter_queries.get(queries[0])}
-                    )
+                    cache_key = _key_builder(namespaces[0], {queries[0]: filter_queries.get(queries[0])}, current_user.id)
                 else:
-                    cache_key = _key_builder(namespaces[0], current_user.id, filter_queries)
+                    cache_key = _key_builder(namespaces[0], filter_queries, current_user.id)
 
                 try:
                     if isinstance(value, dict):
@@ -150,7 +138,7 @@ def clear(
                             if isinstance(item, BaseModel):
                                 dumped.append(item.model_dump())
                         dumped = orjson.dumps(dumped)
-
+        
                     await redis_client.set(cache_key, dumped, ttl=expire)
                     logger.info(f"Cache set after: key={cache_key}")
                 except Exception as e:

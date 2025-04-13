@@ -1,7 +1,7 @@
 from typing import Annotated
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, Request
 from fastapi.responses import JSONResponse
 
 from backend.api.dependency.providers.request import get_current_user_dependency
@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.post("/")
 @inject
-@cache.clear(namespaces=["teams"])
+@cache.clear(namespaces=["teams"], by_current_user=True)
 async def create_team(
     request: Request,
     form: CreateTeamModel,
@@ -47,8 +47,10 @@ async def get_team_dashboard(
     request: Request,
     team_id: int,
     column_service: FromDishka[services.ColumnService],
+    team_service: FromDishka[services.TeamService],
     current_user: BaseUserModel = Depends(get_current_user_dependency),
 ):
+    await team_service.check_user_rights(team_id, current_user.id, check_member=True)
     return await column_service.get_by_team(team_id)
 
 
@@ -61,6 +63,7 @@ async def delete_team(
     team_service: FromDishka[services.TeamService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
+    await team_service.check_user_rights(team_id, current_user.id, check_owner=True)
     return await team_service.delete_team(team_id, current_user.id)
 
 
@@ -96,7 +99,7 @@ async def add_team_members(
     form: InviteMembersModel,
     team_id: int,
     team_service: FromDishka[services.TeamService],
-    current_user: BaseUserModel = Depends(get_current_user_dependency)
+    current_user: BaseUserModel = Depends(get_current_user_dependency),
 ) -> JSONResponse:
     return await team_service.invite_members(team_id, form, current_user.id)
 

@@ -1,5 +1,4 @@
 import asyncio
-from typing import Annotated
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
 from fastapi import APIRouter, Depends, Request
@@ -16,7 +15,7 @@ router = APIRouter()
 
 @router.post("/")
 @inject
-@cache.clear(namespaces=["dashboard"], queries=["team_id"])
+@cache.clear(namespaces=["dashboard"], queries=["team_id"], by_key=True)
 async def create_task(
     request: Request,
     form: CreateTaskModel,
@@ -24,8 +23,12 @@ async def create_task(
     task_service: FromDishka[services.TaskService],
     user_service: FromDishka[services.UserService],
     tag_service: FromDishka[services.TagService],
+    team_service: FromDishka[services.TeamService],
+    column_service: FromDishka[services.ColumnService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
+    await team_service.check_user_rights(team_id, current_user.id, check_member=True)
+    await column_service.check_column_exist(form.column_id)
     if not form.assignees:
         assignees = [await user_service.get_user(current_user.id)]
     else:
@@ -52,7 +55,7 @@ async def get_task(
 
 @router.delete("/{task_id}")
 @inject
-@cache.clear(namespaces=["task", "dashboard"], queries={"task": "task_id", "team": "team_id"})
+@cache.clear(namespaces=["task", "dashboard"], queries={"task": "task_id", "team": "team_id"}, by_key=True)
 async def delete_task(
     request: Request,
     team_id: int,
@@ -89,7 +92,7 @@ async def update_task(
 
 @router.delete("/{task_id}/assignees/{user_id}")
 @inject
-@cache.clear(namespaces=["task"], queries=["task_id"])
+@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True)
 async def delete_task_assignee(
     request: Request,
     team_id: int,
@@ -107,7 +110,7 @@ async def delete_task_assignee(
 
 @router.post("/{task_id}/assignees/{user_id}")
 @inject
-@cache.clear(namespaces=["task"], queries=["task_id"])
+@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True)
 async def add_task_assignee(
     request: Request,
     team_id: int,
@@ -125,7 +128,7 @@ async def add_task_assignee(
 
 @router.delete("/{task_id}/tags/{tag_id}")
 @inject
-@cache.clear(namespaces=["task"], queries=["task_id"])
+@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True)
 async def delete_task_tag(
     request: Request,
     team_id: int,
@@ -143,7 +146,7 @@ async def delete_task_tag(
 
 @router.post("/{task_id}/tags/{tag_id}")
 @inject
-@cache.clear(namespaces=["task"], queries=["task_id"])
+@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True)
 async def add_task_tag(
     request: Request,
     team_id: int,

@@ -49,7 +49,7 @@ class RequestProvider(Provider):
     ) -> services.TeamService:    
         return services.TeamService(
             repository=repositories.TeamRepository(session=session),
-            smtp_clients=clients.SMTPClients(tasks_manager),
+            smtp_clients=clients.SMTPClients(),
             redis_client=redis_client,
             tasks_manager=tasks_manager
         )

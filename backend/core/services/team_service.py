@@ -74,9 +74,10 @@ class TeamService(BaseDbModelService[Team]):
         return [BaseTeamModel.model_validate(team, from_attributes=True) for team in teams]
     
     async def update_team(self, team_id: int, item: UpdateTeamModel, current_user_id: int):
-        team = await self.check_user_rights(team_id, current_user_id, check_owner=True)
         if item.name:
             await self.check_team_exist(item.name)
+            
+        team = await self.check_user_rights(team_id, current_user_id, check_owner=True)
 
         if item.avatar:
             self.tasks_manager.add_base_task(
@@ -96,12 +97,8 @@ class TeamService(BaseDbModelService[Team]):
         return JSONResponse(content={"detail": f"Команда {team.name} успешно удалена"})
     
     async def change_owner(self, team_id: int, user_id: int, current_user_id: int):
-        team = await self.repository.get_item(team_id)
-        if team is None:
-            raise TeamNotFound
-        if team.owner_id != current_user_id:
-            raise UserNotFoundRights
-        
+        team = await self.check_user_rights(team_id, current_user_id, check_admin=True)
+        await self.repository.check_member(team_id, user_id)        
         await self.repository.update_member(team_id, user_id, role=TeamRoles.OWNER)
         await self.repository.update_member(team_id, current_user_id, role=TeamRoles.ADMIN)
         await self.repository.refresh_item(team)
@@ -113,13 +110,12 @@ class TeamService(BaseDbModelService[Team]):
         tokens = [uuid4() for _ in range(len(form.emails))]
         for email, token in zip(form.emails, tokens):
             await self.redis_client.set(f"{team_id}:{token}", email, ttl=1000000)
-
-        await self.tasks_manager.add_base_task(
-            func=self.smtp_clients.invite_members,
-            namespace=f"team_{team_id}",
-            task_name="invite_member",
-            func_args=(form.emails, team.name),
-        )
+            await self.tasks_manager.add_base_task(
+                func=self.smtp_clients.invite_members,
+                namespace=f"team_{team_id}",
+                task_name="send_verification_code",
+                func_args=([email], team.id, team.name, token),
+            )
         return JSONResponse(content={"detail": "Запросы успешно отправлены"})
     
     async def accept_invite(self, team_id: int, token: str, current_user: BaseUserModel):

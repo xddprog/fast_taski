@@ -1,11 +1,10 @@
-from typing import Annotated
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
 from fastapi import APIRouter, Depends, Request
 
 from backend.api.dependency.providers.request import get_current_user_dependency
 from backend.core import cache, services
-from backend.core.dto.column_dto import BaseColumnModel, CreateColumnModel
+from backend.core.dto.column_dto import CreateColumnModel
 from backend.core.dto.user_dto import BaseUserModel
 
 
@@ -29,7 +28,7 @@ async def create_column(
 
 @router.put("/{column_id}")
 @inject
-@cache.clear(namespaces=["dashboard"], queries=["team_id"])
+@cache.clear(namespaces=["dashboard"], queries=["team_id"], by_key=True)
 async def update_column(
     request: Request,
     team_id: int,
@@ -39,12 +38,12 @@ async def update_column(
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
     await team_service.check_user_rights(team_id, current_user.id, check_admin=True)
-    return await column_service.update_column(team_id)
+    return await column_service.update_column(team_id, form)
 
 
 @router.delete("/{column_id}")
 @inject
-@cache.clear(namespaces=["dashboard"], queries=["team_id"]) 
+@cache.clear(namespaces=["dashboard"], queries=["team_id"], by_key=True) 
 async def delete_column(
     request: Request,
     team_id: int,

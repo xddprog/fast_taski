@@ -75,6 +75,7 @@ class TasksManager(metaclass=SingletonMeta):
 
     async def _run_repeatable_task(self, task_name: str):
         try:
+            start = time.perf_counter()
             task = self._repeatable_tasks.get(task_name)
             if task and task.max_repeat and task._repeat_count <= task.max_repeat:
                 await task.func(*(task.func_args or []), **(task.func_kwargs or {}))
@@ -83,6 +84,7 @@ class TasksManager(metaclass=SingletonMeta):
                 self._repeatable_tasks.pop(task_name)
             else:
                 await self._send_delayed_task(task)
+            print(f"Task {task_name} took {time.perf_counter() - start} seconds")
         except Exception:
             logger.error("Error running repeatable task, task_name={task_name}", exc_info=True)
             pass
@@ -100,15 +102,16 @@ class TasksManager(metaclass=SingletonMeta):
             await self._rabbit.send_delayed_message(
                 self._delayed_queue.name,
                 task.to_dict(),
-                timedelta(seconds=10)
+                timedelta(seconds=delay)
             )
 
     async def _run_default_task(self, task_name: str):
         try:
-            task = self._default_tasks.get(task_name)
+            start = time.perf_counter()
+            task = self._default_tasks.pop(task_name)
             if task:
                 await task.func(*(task.func_args or []), **(task.func_kwargs or {}))
-                self._default_tasks.pop(task.full_name)
+            print(f"Task default {task_name} took {time.perf_counter() - start} seconds")
         except Exception as e:
             print(e)
             logger.error("Error running default task, task_name={task_name}", exc_info=True)
@@ -135,9 +138,9 @@ class TasksManager(metaclass=SingletonMeta):
                     task_data = orjson.loads(message.body)
                     task_name = task_data.get("task_name")
                     if task_name in self._repeatable_tasks:
-                        await self._run_repeatable_task(task_name)
+                        asyncio.create_task(self._run_repeatable_task(task_name))
                     elif task_name in self._default_tasks:
-                        await self._run_default_task(task_name)
+                        asyncio.create_task(self._run_default_task(task_name))
 
     async def start(self):
         self._running = True
