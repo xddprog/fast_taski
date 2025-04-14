@@ -1,3 +1,4 @@
+from uuid import uuid4
 from pydantic import Tag
 from backend.core.dto.tag_dto import TagModel
 from backend.core.dto.task_dto import BaseTaskModel, CreateTaskModel, TaskModel
@@ -15,6 +16,20 @@ class TaskService(BaseDbModelService[Task]):
     async def create_task(self, form: CreateTaskModel, assignees: list[User], tags: list[Tag], current_user: int):
         form.assignees = assignees
         form.tags = tags
+
+        if form.files:
+            paths = [
+                f'teams/{form.column_id}/tasks/{uuid4()}.{file.content_type.split("/")[1]}'
+                for file in form.files
+            ]
+            await self.tasks_manager.add_base_task(
+                func=self.aws_client.upload_many_files,
+                namespace=f"upload_task_files_{form.column_id}",
+                task_name=str(uuid4()),
+                func_args=(form.files, paths),
+            )
+            form.files = paths
+
         task = await self.repository.add_item(**form.model_dump(), creator_id=current_user)
         return BaseTaskModel.model_validate(task, from_attributes=True)
     

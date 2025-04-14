@@ -1,4 +1,5 @@
 from datetime import datetime
+from fastapi import Form, UploadFile
 from pydantic import BaseModel, field_validator
 
 from backend.core.dto.tag_dto import TagModel
@@ -37,17 +38,18 @@ class TaskModel(BaseTaskModel):
 
 
 class CreateTaskModel(BaseModel):
-    column_id: int
-    name: str
-    deadline: datetime
-    description: str | None = None
-    tags: list[int] = []
-    assignees: list[int] = []
+    column_id: int = Form()
+    name: str = Form()
+    deadline: datetime = Form()
+    description: str | None = Form(default=None)
+    tags: list[int] = Form(default=[])
+    assignees: list[int] = Form(default=[])
+    files: list[UploadFile] = Form(default=[])
 
     @field_validator('deadline')
     def convert_to_naive(cls, v):
-        if v.tzinfo is not None:  # If timezone-aware
-            return v.replace(tzinfo=None)  # Convert to naive
+        if v.tzinfo is not None:
+            return v.replace(tzinfo=None)
         return v
 
 

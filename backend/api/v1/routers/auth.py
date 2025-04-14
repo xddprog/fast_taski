@@ -87,7 +87,7 @@ async def register_user(
     two_factor_service: FromDishka[services.TwoFactorAuthService]
 ) -> BaseUserModel:
     await auth_service.check_user_in_app(form)
-    await two_factor_service.check_code(form.username, code)
+    # await two_factor_service.check_code(form.username, code)
     new_user, access_token, refresh_token = await auth_service.register_user(form)
     await set_cookie_tokens(access_token, refresh_token, response)
     return new_user

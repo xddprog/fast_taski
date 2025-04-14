@@ -97,14 +97,16 @@ def clear(
                     logger.error(f"Error clearing entire cache: {e}")
 
             elif by_key:
-                if not namespaces:
-                    raise ValueError("Namespace required for by_key")
-                if isinstance(queries, list):
-                    cache_key = _key_builder(namespaces[0], {queries[0]: filter_queries.get(queries[0])}, current_user.id)
-                else:
-                    cache_key = _key_builder(namespaces[0], filter_queries, current_user.id)
                 try:
-                    await redis_client.delete_by_key(cache_key)
+                    if not namespaces:
+                        raise ValueError("Namespace required for by_key")
+                    if isinstance(queries, list):
+                        cache_key = _key_builder(namespaces[0], {queries[0]: filter_queries.get(queries[0])}, current_user.id)
+                        await redis_client.delete_by_key(cache_key)
+                    else:
+                        for namespace, query in queries.items():
+                            cache_key = _key_builder(namespace, {query: filter_queries.get(query)}, current_user.id)
+                            await redis_client.delete_by_key(cache_key)
                 except Exception as e:
                     logger.warning(f"Error clearing cache: key={cache_key}, error={e}")
 

@@ -1,3 +1,4 @@
+from copy import copy
 from uuid import uuid4
 
 from fastapi.responses import JSONResponse
@@ -45,13 +46,14 @@ class TeamService(BaseDbModelService[Team]):
         
     async def create_team(self, form: CreateTeamModel, current_user: BaseUserModel, members: list[int]):
         if form.avatar:
+            path = f"teams/{form.name}/avatar.{form.avatar.content_type.split("/")[1]}"
             self.tasks_manager.add_base_task(
                 func=self.aws_client.upload_one_file,
                 namespace=f"team_{form.name}",
                 task_name="upload_team_avatar",
-                func_args=(form.avatar, f"teams/{form.name}/{form.avatar.filename}"),
+                func_args=(form.avatar, path),
             )
-            form.avatar = await self.aws_client.get_url(f"teams/{form.name}/{form.avatar.filename}")
+            form.avatar = path
 
         new_team = await self.repository.add_item(
             name=form.name, 
@@ -59,9 +61,9 @@ class TeamService(BaseDbModelService[Team]):
             avatar=form.avatar, 
             owner_id=current_user.id
         )
-        await self.repository.add_members(new_team.id, members, TeamRoles.OWNER)
-        await self.repository.refresh_item(new_team)
-        await self.repository.add_members(new_team.id, [current_user.id], TeamRoles.OWNER)
+        new_team_id = copy(new_team.id)
+        await self.repository.add_members(new_team_id, members, TeamRoles.OWNER)
+        await self.repository.add_members(new_team_id, [current_user.id], TeamRoles.OWNER)
         await self.repository.refresh_item(new_team)
         return BaseTeamModel.model_validate(new_team, from_attributes=True)
     
@@ -73,22 +75,23 @@ class TeamService(BaseDbModelService[Team]):
         teams = await self.repository.get_user_teams(user_id)
         return [BaseTeamModel.model_validate(team, from_attributes=True) for team in teams]
     
-    async def update_team(self, team_id: int, item: UpdateTeamModel, current_user_id: int):
-        if item.name:
-            await self.check_team_exist(item.name)
-            
+    async def update_team(self, team_id: int, form: UpdateTeamModel, current_user_id: int):
+        if form.name:
+            await self.check_team_exist(form.name)
+
         team = await self.check_user_rights(team_id, current_user_id, check_owner=True)
 
-        if item.avatar:
+        if form.avatar:
+            path = f"teams/{team.name if form.name else team.name}/avatar.{form.avatar.content_type.split("/")[1]}"
             self.tasks_manager.add_base_task(
                 func=self.aws_client.upload_one_file,
-                namespace="team",
-                task_name="upload_team_avatar",
-                func_args=(item.avatar, f"teams/{team.name}/{item.avatar.filename}"),
+                namespace="upload_team_avatar",
+                task_name=f"{uuid4()}",
+                func_args=(form.avatar, path),
             )
-            item.avatar = await self.aws_client.get_url(f"teams/{team.name}/{item.avatar.filename}")
+            form.avatar = path
             
-        team = await self.repository.update_item(team_id, **item.model_dump())
+        team = await self.repository.update_item(team_id, **form.model_dump())
         return BaseTeamModel.model_validate(team, from_attributes=True)
     
     async def delete_team(self, team_id: int, current_user_id: int):

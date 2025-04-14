@@ -55,7 +55,7 @@ async def get_task(
 
 @router.delete("/{task_id}")
 @inject
-@cache.clear(namespaces=["task", "dashboard"], queries={"task": "task_id", "team": "team_id"}, by_key=True)
+@cache.clear(namespaces=["task", "dashboard"], queries={"task": "task_id", "dashboard": "team_id"}, by_key=True)
 async def delete_task(
     request: Request,
     team_id: int,
@@ -74,6 +74,7 @@ async def delete_task(
 @cache.clear(
     namespaces=["task", "dashboard"], 
     queries={"task": "task_id", "team": "team_id"}, 
+    by_key=True,
     set_after=True
 )
 async def update_task(

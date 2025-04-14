@@ -128,3 +128,17 @@ async def delete_team_member(
     team_service: FromDishka[services.TeamService]
 ):
     return await team_service.delete_member(team_id, user_id, current_user.id)
+
+
+@router.get("/{team_id}/notes")
+@inject
+@cache.get(namespace="notes", expire=60, queries=["team_id"])
+async def get_team_notes(
+    request: Request,
+    team_id: int,
+    note_service: FromDishka[services.NoteService],
+    team_service: FromDishka[services.TeamService],
+    current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)]
+):
+    await team_service.check_user_rights(team_id, current_user.id, check_member=True)
+    return await note_service.get_team_notes(team_id)

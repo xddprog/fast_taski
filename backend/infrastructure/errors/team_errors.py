@@ -21,7 +21,7 @@ class UserNotFoundRights(HTTPException):
     def __init__(self):
         super().__init__(
             status_code=403,
-            detail="У вас нет доступа к изменениям данной команды!",
+            detail="У вас нет достаточно прав!",
         )
 
 
