@@ -1,0 +1,37 @@
+.navbarGroups {
+  margin: 32px 0;
+
+  h3 {
+    color: #fff;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 16px;
+  }
+}
+
+.navbarGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.navbarLine {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  p {
+    color: #fff;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+  }
+
+  img {
+    cursor: pointer;
+  }
+}
