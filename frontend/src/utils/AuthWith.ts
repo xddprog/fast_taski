@@ -6,6 +6,7 @@ export function authWithVk(
   navigate: NavigateFunction
 ) {
   event.preventDefault();
+  navigate("/auth/callback", { state: { service: "vk" } });
   window.location.assign(
     `${import.meta.env.VITE_VK_API_URL}?client_id=${
       import.meta.env.VITE_VK_APP_ID
