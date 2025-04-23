@@ -27,9 +27,8 @@ const LoginForm: React.FC<FormProps> = ({
     }
   };
 
-  const navigate = useNavigate(); // Вызываем хук внутри компонента
+  const navigate = useNavigate(); 
 
-  // Оборачиваем функции, чтобы передать navigate
   const handleVkAuth = (event: React.MouseEvent<HTMLButtonElement>) => {
     authWithVk(event, navigate);
   };
