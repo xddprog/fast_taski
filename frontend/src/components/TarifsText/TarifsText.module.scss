@@ -34,3 +34,60 @@
     align-items: center;
   }
 }
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  .tarifsText {
+    justify-content: center;
+    gap: 30px;
+    padding: 0;
+
+    div {
+      width: 300px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 20px;
+    }
+
+    .imgContainer {
+      width: 300px;
+      height: 300px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .tarifsText {
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 64px;
+    padding: 0;
+    margin-bottom: 64px;
+
+    div {
+      text-align: center;
+      width: 335px;
+    }
+
+    h1 {
+      font-size: 40px;
+      margin-top: 64px;
+      margin-bottom: 5px;
+    }
+
+    p {
+      font-size: 24px;
+    }
+
+    .imgContainer {
+      width: 279px;
+      height: 279px;
+    }
+  }
+}
