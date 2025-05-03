@@ -13,20 +13,20 @@ const NavbarGroup: React.FC<NavbarGroupProps> = ({ item }) => {
     <div className={styles.navbarGroups}>
       {item.title !== undefined ? <h3>{item.title}</h3> : <></>}
       <div className={styles.navbarGroup}>
-        {item.labels.map((_, index) => (
+        {item.labels.map((label, index) => (
           <>
             {item.title === "Команды" ? (
-              <div className={styles.navbarLine}>
+              <div key={item.title} className={styles.navbarLine}>
                 <img src={item.icons[index]} alt="icon" />
-                <p key={index}>Команда 1</p>
+                <p>Команда 1</p>
                 <img src={"icons/arrow-downlight.png"} alt="icon" />
               </div>
             ) : (
               <></>
             )}
-            <div className={styles.navbarLine}>
+            <div key={index} className={styles.navbarLine}>
               <img src={item.icons[index]} alt="icon" />
-              <p key={index}>{item.labels[index]}</p>
+              <p>{label}</p>
             </div>
           </>
         ))}
