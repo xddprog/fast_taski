@@ -1,6 +1,6 @@
 .dashboard {
   width: 100vw;
-  margin: 36px;
+  margin: 36px 36px 0 36px;
 
   .dashboardTools {
     display: flex;
@@ -52,10 +52,11 @@
 
 .tasksContainer {
   display: flex;
+  height: calc(100vh - 90px);
   padding: 24px 24px 0px 24px;
   gap: 24px;
   flex: 1 0 0;
   border-radius: 16px 16px 0px 0px;
-  background: var(--color-main-01-100, #1f1f1f);
+  background: #1f1f1f;
   margin-top: 16px;
 }

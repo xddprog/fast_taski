@@ -1,4 +1,36 @@
+import Task from "../Task/Task";
 import styles from "./TasksContainer.module.scss";
+
+const tasksList = [
+  {
+    id: 1,
+    columnCategory: "Новые задачи",
+    tasks: [
+      {
+        task_id: 1,
+        tag: "tag",
+        title: "title",
+        text: "some text",
+        people: "people",
+        comments: ["1", "2", "3"],
+      },
+    ],
+  },
+  {
+    id: 2,
+    columnCategory: "В работе",
+    tasks: [
+      {
+        task_id: 1,
+        tag: "tag",
+        title: "title",
+        text: "some text",
+        people: "people",
+        comments: ["1", "2", "3"],
+      },
+    ],
+  },
+];
 
 const TasksContainer: React.FC = () => {
   return (
@@ -15,7 +47,9 @@ const TasksContainer: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className={styles.tasksContainer}></div>
+      <div className={styles.tasksContainer}>
+        <Task tasksList={tasksList}></Task>
+      </div>
     </section>
   );
 };
