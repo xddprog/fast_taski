@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.scss";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import { FormEvent, useState } from "react";
@@ -8,34 +8,52 @@ import { LoginUserInterface } from "../../interfaces/authInterfaces";
 
 const Login: React.FC = () => {
   const [success, setSuccess] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const navigate = useNavigate();
   const authService = new AuthService();
 
   async function login(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const loginData: LoginUserInterface = {
       email: formData.get("email") as string,
       password: formData.get("password") as string,
     };
 
-    await authService.loginUser(loginData).then(res => {
-      console.log(res);
-    });
-    setSuccess(true);
+    try {
+      const res = await authService.loginUser(loginData);
+      console.log("Вход успешен:", res);
+      setSuccess(true);
+      setTimeout(() => {
+        navigate("/dashboard"); // Переход на /dashboard после успешного логина
+      }, 2000); // Задержка 2 секунды, чтобы пользователь увидел SuccessBunner
+    } catch (error) {
+      console.error("Ошибка:", error);
+      alert("Ошибка при входе. Проверьте данные.");
+    }
   }
 
   return (
     <>
       <Link to="/">
-        <img className={styles.closeBtn} src="/icons/close.png" />
+        <img className={styles.closeBtn} src="/icons/close.png" alt="Close" />
       </Link>
       <div className={styles.loginContainer}>
         {success ? (
-          <SuccessBunner
-            description={"Вы успешно вошли в аккаунт"}
-          ></SuccessBunner>
+          <SuccessBunner />
         ) : (
           <>
-            <LoginForm title={"Войти"} handleLogin={login} formType="login"></LoginForm>
+            <LoginForm
+              title={"Войти"}
+              formType="login"
+              handleLogin={login}
+              login={email}
+              pass={password}
+              handleEmail={setEmail}
+              handlePass={setPassword}
+            />
             <div className={styles.registrationText}>
               Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
             </div>

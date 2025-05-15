@@ -1,0 +1,62 @@
+.dashboard {
+  width: 100vw;
+  margin: 36px 36px 0 36px;
+
+  .dashboardTools {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+      color: #fff;
+      font-size: 32px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+
+    .toolsBtns {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      button:first-child {
+        display: flex;
+        padding: 8px 12px;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        border-radius: 16px;
+        background: #1f1f1f;
+        cursor: pointer;
+      }
+
+      button:last-child {
+        display: flex;
+        padding: 8px 12px;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        border-radius: 16px;
+        background: #1f1f1f;
+        color: #fff;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.tasksContainer {
+  display: flex;
+  height: calc(100vh - 90px);
+  padding: 24px 24px 0px 24px;
+  gap: 24px;
+  flex: 1 0 0;
+  border-radius: 16px 16px 0px 0px;
+  background: #1f1f1f;
+  margin-top: 16px;
+}

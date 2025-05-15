@@ -5,32 +5,34 @@ import AuthService from "../../api/services/authService";
 import { BaseUserInterface } from "../../interfaces/authInterfaces";
 
 export default function useUserAuthCallback(
-    searchParam: URLSearchParams,
-    navigate: NavigateFunction,
-    authService: AuthService,
-    setUser: React.Dispatch<React.SetStateAction<BaseUserInterface | null>>
+  searchParam: URLSearchParams,
+  navigate: NavigateFunction,
+  authService: AuthService,
+  setUser: React.Dispatch<React.SetStateAction<BaseUserInterface | null>>
 ) {
-    useEffect(() => {
-        const code = searchParam.get("code");
-        const service = searchParam.get("service");
+  useEffect(() => {
+    const code = searchParam.get("code");
+    const service = searchParam.get("service");
 
-        if (service === "yandex") {
-            const hashParams = new URLSearchParams(window.location.hash.slice(1))
-            const access_token = hashParams.get("access_token")
+    if (service === "yandex") {
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      const access_token = hashParams.get("access_token");
 
-            if (access_token) {
-                authService.authWithYandex(access_token).then((response: AxiosResponse) => {
-                    setUser(response.data)
-                })
-            }
-        } else if (code) {
-            authService.authWithVk(code).then((response: AxiosResponse) => {
-                setUser(response.data)
-            })
-        } else {
-            navigate("/register")
-        }
-        // navigate("/")
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+      if (access_token) {
+        authService
+          .authWithYandex(access_token)
+          .then((response: AxiosResponse) => {
+            setUser(response.data);
+          });
+      }
+    } else if (code) {
+      authService.authWithVk(code).then((response: AxiosResponse) => {
+        setUser(response.data);
+      });
+    } else {
+      navigate("/register");
+    }
+    // navigate("/")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }

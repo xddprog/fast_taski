@@ -4,14 +4,22 @@ import About from "./pages/About";
 import Tarifs from "./pages/Tarifs";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
 import Footer from "./components/Footer/Footer";
 import { Routes, Route, useLocation } from "react-router-dom";
 import AuthCallback from "./pages/AuthCallback/AuthCallback";
 
 const App: React.FC = () => {
-  const location = useLocation(); // Получаем текущий маршрут
+  const location = useLocation();
   const hideHeaderFooter =
-    location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/auth/callback";
+    location.pathname === "/register" ||
+    location.pathname === "/dashboard" ||
+    location.pathname === "/login" ||
+    location.pathname === "/register" ||
+    location.pathname === "/auth/callback" ||
+    location.pathname === "/profile";
+
   return (
     <>
       {!hideHeaderFooter && <Header />}
@@ -21,6 +29,8 @@ const App: React.FC = () => {
         <Route path="/tarifs" element={<Tarifs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         {/* <Route path="*" element={<NotFound />} />{" "} */}
         {/* 404 - для всех несуществующих путей */}

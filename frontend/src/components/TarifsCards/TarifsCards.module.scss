@@ -1,7 +1,39 @@
+.tarifsCardsContainerMob {
+  display: none;
+  margin-bottom: 71px;
+}
+
 .tarifsCardsContainer {
   display: flex;
   padding: 16px 258px 49px 258px;
   gap: 12px;
+  justify-content: center;
   align-items: center;
   margin-bottom: 71px;
+}
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  .tarifsCardsContainer {
+    display: flex;
+    padding: 0 16px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 767px) {
+  .tarifsCardsContainer {
+    display: none;
+  }
+
+  .tarifsCardsContainerMob {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0;
+    gap: 0px;
+    overflow: auto;
+  }
+
+  .tarifsCardsContainerMob::-webkit-scrollbar {
+    width: 0;
+  }
 }

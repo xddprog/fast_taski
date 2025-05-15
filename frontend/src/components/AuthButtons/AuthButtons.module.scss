@@ -1,0 +1,76 @@
+.otherVariant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+    gap: 8px;
+
+  h3 {
+    color: #ffffff;
+
+    font-weight: 400;
+    font-size: 12px;
+  }
+
+  .buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 12px;
+
+    .yandexID,
+    .vkID {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background-color: #ffffff;
+      color: #161616;
+      border: none;
+
+      width: 175.5px;
+      height: 36px;
+      border-radius: 8px;
+      padding: 8px 16px;
+
+      font-weight: 500;
+      font-size: 16px;
+
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        background-color: grey;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  .otherVariant {
+    .buttonContainer {
+      .yandexID,
+      .vkID {
+        width: 118.5px;
+        height: 28px;
+
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .otherVariant {
+    .buttonContainer {
+      .yandexID,
+      .vkID {
+        width: 128px;
+        height: 36px;
+
+        font-size: 16px;
+
+      }
+    }
+  }
+}

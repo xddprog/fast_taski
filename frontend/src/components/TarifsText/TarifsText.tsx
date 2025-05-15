@@ -6,7 +6,7 @@ const TarifsText: React.FC = () => {
       <div className={styles.tarifsTextContent}>
         <h1>Тарифные планы</h1>
         <p>
-          У нас есть тарифы, которые <span>подойдут каждому!</span>
+          У нас есть тарифы, которые<br></br> <span>подойдут каждому!</span>
         </p>
       </div>
       <div className={styles.imgContainer}>

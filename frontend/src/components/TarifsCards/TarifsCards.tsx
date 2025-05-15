@@ -41,20 +41,42 @@ const tariffs = [
 ];
 
 const TarifsCards: React.FC = () => {
+  const reorderedTariffs = [
+    ...tariffs.filter((t) => t.id === 2),
+    ...tariffs.filter((t) => t.id !== 1 && t.id !== 2),
+    ...tariffs.filter((t) => t.id === 1),
+  ];
+
   return (
-    <section className={styles.tarifsCardsContainer}>
-      {tariffs.map((tariff) => (
-        <TarifCard
-          key={tariff.id}
-          id={tariff.id}
-          title={tariff.title}
-          price={tariff.price}
-          description={tariff.description}
-          feature_description={tariff.feature_description}
-          features={tariff.features}
-        />
-      ))}
-    </section>
+    <>
+      <section className={styles.tarifsCardsContainer}>
+        {tariffs.map((tariff) => (
+          <TarifCard
+            key={tariff.id}
+            id={tariff.id}
+            title={tariff.title}
+            price={tariff.price}
+            description={tariff.description}
+            feature_description={tariff.feature_description}
+            features={tariff.features}
+          />
+        ))}
+      </section>
+
+      <section className={styles.tarifsCardsContainerMob}>
+        {reorderedTariffs.map((tariff) => (
+          <TarifCard
+            key={tariff.id}
+            id={tariff.id}
+            title={tariff.title}
+            price={tariff.price}
+            description={tariff.description}
+            feature_description={tariff.feature_description}
+            features={tariff.features}
+          />
+        ))}
+      </section>
+    </>
   );
 };
 

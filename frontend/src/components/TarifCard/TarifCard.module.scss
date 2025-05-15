@@ -1,3 +1,27 @@
+.slide {
+  display: none;
+}
+
+.tarifCard_mobile {
+  display: none;
+  width: 269px;
+  height: 512px;
+  padding: 16px 32px 24px 32px;
+  flex-direction: column;
+  border-radius: 16px;
+  background: #1f1f1f;
+}
+
+.tarifSpecialCard_mobile {
+  display: none;
+  width: 362px;
+  height: 552px;
+  padding: 16px 32px 24px 32px;
+  flex-direction: column;
+  border-radius: 16px;
+  background: #fff;
+}
+
 .tarifCard {
   display: flex;
   width: 269px;
@@ -35,6 +59,11 @@
     align-items: center;
     border-radius: 8px;
     background: #fff;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      background-color: grey;
+    }
   }
 
   .featuresTitle {
@@ -83,6 +112,11 @@
     border-radius: 8px;
     background: #6096fd;
     color: #fff;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      background-color: #0059ff;
+    }
   }
 
   .featuresTitle {
@@ -171,5 +205,164 @@
     background-image: url("/icons/plus.png");
     background-size: contain;
     background-repeat: no-repeat;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  .tarifCard {
+    padding: 16px 16px 24px 16px;
+    width: 210px;
+    height: 512px;
+
+    h1 {
+      font-size: 16px;
+    }
+
+    .description {
+      font-size: 10px;
+    }
+
+    .price {
+      font-size: 28px;
+    }
+
+    button {
+      height: 28px;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  }
+  .tarifSpecialCard {
+    padding: 16px 32px 24px 32px;
+    width: 300px;
+    height: 552px;
+
+    h1 {
+      font-size: 22px;
+    }
+
+    .description {
+      font-size: 12px;
+    }
+
+    .price {
+      font-size: 32px;
+    }
+
+    button {
+      height: 42px;
+      padding: 8px 16px;
+      font-size: 16px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .slide {
+    display: flex;
+    justify-content: center;
+    flex: 0 0 100vw;
+  }
+
+  .tarifCard {
+    display: none;
+  }
+
+  .tarifSpecialCard {
+    display: none;
+  }
+
+  .tarifCard_mobile {
+    display: flex;
+    width: 335px;
+    height: auto;
+    padding: 16px 32px 24px 32px;
+
+    h1 {
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .description {
+      color: #fff;
+      font-size: 10px;
+      margin-bottom: 24px;
+    }
+
+    .price {
+      margin: 34px 0 16px 0;
+      color: #fff;
+      font-size: 32px;
+    }
+
+    button {
+      height: 36px;
+      padding: 8px 16px;
+      font-size: 16px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      background: #fff;
+      transition: all 0.3s ease-in-out;
+      margin-bottom: 0;
+
+      &:hover {
+        background-color: grey;
+      }
+    }
+
+    span,
+    .featuresDescription {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .featuresTitle {
+      color: #fff;
+    }
+
+    ul {
+      color: #fff;
+    }
+  }
+
+  .tarifSpecialCard_mobile {
+    display: flex;
+    width: 335px;
+    height: auto !important;
+    height: 480px;
+    padding: 16px 32px 24px 32px;
+    flex: 0 0 335px;
+
+    h1 {
+      font-size: 20px;
+    }
+
+    .description {
+      font-size: 10px;
+      margin-bottom: 24px;
+    }
+
+    .price {
+      margin: 34px 0 16px 0;
+      font-size: 32px;
+    }
+
+    button {
+      height: 36px;
+      padding: 8px 16px;
+      font-size: 16px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      background: #6096fd;
+      color: #fff;
+      transition: all 0.3s ease-in-out;
+      margin-bottom: 0;
+
+      &:hover {
+        background-color: #0059ff;
+      }
+    }
   }
 }

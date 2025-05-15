@@ -1,12 +1,9 @@
 .aboutBlock {
-  display: inline-flex;
-  height: 294px;
   display: flex;
   padding: 16px 258px 49px 258px;
-  // justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 106px;
-  margin: 56px 0 120px 0;
 }
 
 .aboutText {
@@ -33,5 +30,62 @@
 
   span {
     color: #6096fd;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  .aboutBlock {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding: 66px 80px 122px;
+    
+    .aboutText {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      h1 {
+        font-size: 32px;
+      }
+
+      p {
+        font-size: 20px;
+      }
+    }
+    img {
+      width: 300px;
+      height: 208px;      
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .aboutBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 68px;
+    padding: 64px 20px 64px;
+    
+    .aboutText {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      h1 {
+        font-size: 40px;
+        text-align: center;
+      }
+
+      p {
+        font-size: 24px;
+        text-align: center;
+      }
+    }
+    img {
+      width: 278.3505859375px;
+      height: 193px;
+    }
   }
 }

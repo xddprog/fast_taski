@@ -1,11 +1,14 @@
 .header {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding: 16px 164px 12px;
-
+  transition: padding 0.3s ease-in-out;
+  width: 100%;
   background-color: #1f1f1f;
+  z-index: 100001; 
 
   .leftHeaderBlock {
     display: flex;
@@ -32,7 +35,8 @@
       justify-content: center;
       gap: 12px;
 
-      .headerHref {
+      .headerHref,
+      .helpHref {
         color: #ffffffbf;
         padding: 8px 16px 8px;
 
@@ -43,12 +47,136 @@
         cursor: pointer;
         transition: all 0.3s ease-in-out;
 
-        &:hover,
-        &:active,
-        &:focus {
+        &:hover {
           color: #ffffff;
         }
       }
+
+      @media (max-width: 767px) {
+        .helpHref {
+          display: none;
+          opacity: 1;
+        }
+      }
+
+      .active {
+        color: #ffffff;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .burgerMenu {
+    display: none;
+    position: relative;
+  }
+
+  @media (max-width: 1439px) {
+    .leftHeaderBlock {
+      display: none;
+    }
+
+    .burgerMenu {
+      display: flex;
+      transition: all 0.3s ease-in-out;
+
+      .burgerButton {
+        width: 28px;
+        height: 28px;
+        background-color: #1f1f1f;
+      }
+
+      .menu {
+        display: none;
+      }
+
+      .activeMenu {
+        background-color: rgba(31, 31, 31, 1);
+        z-index: 100000;
+
+        width: 197px;
+        height: 242.6032257080078px;
+        border-radius: 0px 0px 16px 16px;
+        padding-right: 16px;
+        padding-bottom: 16px;
+        padding-left: 16px;
+        gap: 16px;
+
+        position: fixed;
+        top: 60px;
+        left: 80px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0px 58px 16px 58px;
+
+        .menuContent {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 16px;
+
+          hr {
+            border: 1px solid rgba(64, 64, 64, 1);
+            width: 162px;
+          }
+
+          .headerHref {
+            color: #ffffffbf;
+            padding: 8px 16px 8px;
+
+            font-weight: 400;
+            font-size: 16px;
+
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+
+            &:hover {
+              color: #ffffff;
+            }
+          }
+
+          .active {
+            color: #ffffff;
+            font-weight: 500;
+          }
+
+          .mainPartOfLinks {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .active {
+              color: #ffffff;
+              font-weight: 500;
+            }
+          }
+        }
+
+        img {
+          width: 16.32551754197042px;
+          height: 31.999999779587213px;
+          transform: rotate(-11px);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    .burgerMenu {
+      .activeMenu {
+        left: 0;
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    .activeMenu {
+      left: 0;
     }
   }
 
@@ -56,8 +184,8 @@
     display: flex;
     gap: 12px;
 
-    width: 175px;
-    height: auto;
+    width: auto;
+    height: 36px;
 
     .helpButton {
       display: flex;
@@ -76,10 +204,14 @@
       cursor: pointer;
       transition: all 0.3s ease-in-out;
 
-      &:hover,
-      &:active,
-      &:focus {
+      &:hover {
         color: #ffffff;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .helpButton {
+        display: none;
       }
     }
 
@@ -108,4 +240,31 @@
       }
     }
   }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(22, 22, 22, 0.75);
+  z-index: 9999;
+  transition: opacity 0.3s ease-in-out;
+}
+
+@media (max-width: 767px) {
+  .header {
+    padding: 16px 12px 12px 20px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  .header {
+    padding: 16px 80px 12px 80px;
+  }
+}
+
+.no-scroll {
+  overflow: hidden;
 }

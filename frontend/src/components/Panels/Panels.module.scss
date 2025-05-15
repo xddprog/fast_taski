@@ -13,6 +13,10 @@
   width: 100%;
   max-width: 100%;
 
+  .mediumDisplay {
+    display: none;
+  }
+
   .firstRow {
     display: flex;
     flex-direction: row;
@@ -21,6 +25,7 @@
     .leftBlockInFirstRow {
       position: relative;
       background-color: #1f1f1f;
+      z-index: -1;
 
       display: flex;
       flex-direction: column;
@@ -38,7 +43,7 @@
         left: 265px;
       }
 
-      button {
+      .leftBlockButton {
         color: #ffffff;
         background-color: #6096fd;
 
@@ -94,12 +99,12 @@
       display: flex;
       flex-direction: column;
 
-      padding: 28px 32px 24px;
+      padding: 28px 32px 24px 24px;
 
       width: 362px;
       height: 254px;
-      justify-content: space-between;
       border-radius: 16px;
+      justify-content: space-between;
 
       .rightBlockUpperText {
         display: flex;
@@ -131,13 +136,36 @@
         }
       }
 
+      .rightBlockSaleTextPhone {
+        display: none;
+      }
+
+      @media (max-width: 767px) {
+        .rightBlockSaleTextPhone {
+          display: flex;
+          color: rgba(128, 128, 128, 1);
+
+          font-weight: 400;
+          font-size: 12px;
+        }
+
+        .rightBlockSaleText {
+          display: none;
+        }
+      }
+
       .rightBlockSaleText {
-        color: #ffffff80;
+        color: rgba(96, 150, 253, 1);
+        background-color: rgba(255, 255, 255, 1); 
 
         font-weight: 400;
         font-size: 12px;
-        line-height: 14.06px;
-        letter-spacing: 0%;
+
+        width: 200px;
+        height: 30px;
+        border-radius: 8px;
+        gap: 10px;
+        padding: 8px;
       }
     }
   }
@@ -175,6 +203,7 @@
     .rightBlockInSecondRow {
       position: relative;
       background-color: #1f1f1f;
+      z-index: -1;
 
       display: flex;
       flex-direction: column;
@@ -206,7 +235,6 @@
         .containerForLi {
           display: flex;
           flex-direction: column;
-          gap: 12px;
 
           h3,
           ul {
@@ -232,5 +260,363 @@
   }
 }
 
-@media (max-width: 1440px) {
+@media (min-width: 768px) and (max-width: 1439px) {
+  .PanelsContainer {
+    padding: 0px 80px 60px;
+
+    .firstRow {
+      display: none;
+    }
+    .secondRow {
+      display: none;
+    }
+
+    .mediumDisplay {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .rightBlockInSecondRow {
+        position: relative;
+        background-color: #1f1f1f;
+        z-index: -1;
+  
+        display: flex;
+        flex-direction: column;
+  
+        width: 608px;
+        height: 254px;
+        border-radius: 16px;
+        justify-content: space-between;
+        padding: 28px 32px;
+  
+        img {
+          position: absolute;
+          top: 73px;
+          left: 303px;
+        }
+  
+        .aiTextBlock {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+  
+          h1 {
+            color: #ffffff;
+  
+            font-weight: 700;
+            font-size: 24px;
+          }
+  
+          .containerForLi {
+            display: flex;
+            flex-direction: column;
+  
+            h3,
+            ul {
+              color: #ffffff;
+  
+              font-weight: 400;
+              font-size: 12px;
+            }
+  
+            ul {
+              padding-left: 16px;
+            }
+          }
+        }
+  
+        .underTextAboutTarif {
+          color: #ffffff80;
+  
+          font-weight: 400;
+          font-size: 12px;
+        }
+      }
+
+      .leftBlockInFirstRow {
+        position: relative;
+        background-color: #1f1f1f;
+        z-index: -1;
+  
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 28px 32px 24px;
+  
+        width: 608px;
+        height: 254px;
+        border-radius: 16px;
+         
+        img {
+          position: absolute;
+  
+          top: 45px;
+          left: 265px;
+        }
+  
+        .leftBlockButton {
+          color: #ffffff;
+          background-color: #6096fd;
+  
+          width: 165px;
+          height: 36px;
+          gap: 8px;
+  
+          padding: 8.5px 16px;
+  
+          font-weight: 400;
+          font-size: 16px;
+  
+          border: none;
+          border-radius: 8px;
+  
+          white-space: nowrap;
+  
+          cursor: pointer;
+          transition: all 0.3s ease-in-out;
+  
+          &:hover {
+            background-color: #0059ff;
+          }
+        }
+  
+        .leftBlockText {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+  
+          h1 {
+            color: #ffffff;
+  
+            font-weight: 700;
+            font-size: 25px;
+          }
+  
+          h3 {
+            color: #ffffff;
+  
+            font-weight: 400;
+            font-size: 12px;
+  
+            word-break: break-word;
+            white-space: normal;
+          }
+        }
+      }
+
+      .centralBlock {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+    
+        .rightBlockInFirstRow {
+          background-color: #6096fd;
+    
+          display: flex;
+          flex-direction: column;
+    
+          width: 300px;
+          height: 254px;
+          border-radius: 16px;
+          justify-content: space-between;
+          padding-top: 24px;
+          padding-right: 32px;
+          padding-bottom: 24px;
+          padding-left: 32px;
+          
+    
+          .rightBlockUpperText {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+    
+            h1 {
+              color: #ffffff;
+    
+              font-weight: 700;
+              font-size: 24px;
+              line-height: 100%;
+              letter-spacing: 0%;
+              margin-bottom: 12px;
+    
+              word-break: break-word;
+              white-space: normal;
+            }
+    
+            h2 {
+              color: #ffffff;
+    
+              font-weight: 400;
+              font-size: 12px;
+              line-height: 100%;
+              letter-spacing: 0%;
+              
+    
+              word-break: break-word;
+              white-space: normal;
+            }
+          }
+    
+          .rightBlockSaleText {
+            color: #ffffff80;
+    
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 14.06px;
+            letter-spacing: 0%;
+          }
+        }
+
+        .leftBlockInSecondRow {
+          background-color: #ffffff;
+    
+          display: flex;
+          flex-direction: column;
+    
+          width: 300px;
+          height: 254px;
+          border-radius: 16px;
+          padding-top: 24px;
+          padding-right: 32px;
+          padding-bottom: 24px;
+          padding-left: 32px;
+          
+    
+          h1 {
+            font-weight: 700;
+            font-size: 24px;
+            margin-bottom: 16px;
+          }
+    
+          h3 {
+            font-weight: 400;
+            font-size: 12px;
+          }
+        }
+  
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .PanelsContainer {
+    padding: 0px 20px 64px;
+    .firstRow {
+      flex-direction: column;
+
+      .leftBlockInFirstRow {
+        width: 335px;
+        height: 226px;
+        overflow: hidden;
+        padding: 16px 32px 24px 24px;
+
+        img {
+          width: 201px;
+          height: 139px;
+          top: 87px;
+          left: 170px;
+        }
+
+        .leftBlockButton {
+          width: 119px;
+          height: 24px;
+          border-radius: 4px;
+          padding-top: 2px;
+          padding-right: 8px;
+          padding-bottom: 2px;
+          padding-left: 8px;
+          gap: 4px;
+
+          font-size: 12px;
+        }
+
+        .leftBlockText {
+          h1 {
+            font-size: 20px;
+          }
+
+          h3 {
+            font-size: 10px;
+          }
+        }
+      }
+
+      .rightBlockInFirstRow {
+        width: 335px;
+        height: 164px;
+        gap: 37px;
+        padding: 16px 32px 24px 24px;
+
+        .rightBlockUpperText {
+          gap: 16px;
+
+          h1 {
+            font-size: 20px;
+          }
+
+          h2 {
+            font-size: 10px;
+          }
+        }
+
+        h3 {
+          font-size: 10px;
+        }
+      }
+    }
+    .secondRow {
+      flex-direction: column;
+
+      .leftBlockInSecondRow {
+        width: 335px;
+        height: 164px;
+        padding: 16px 32px 24px 24px;
+        gap: 30px;
+
+        h1 {
+          font-size: 20px;
+        }
+
+        h3 {
+          font-size: 10px;
+        }
+      }
+
+      .rightBlockInSecondRow {
+        width: 335px;
+        height: 226px;
+        padding: 16px 32px 24px 24px;
+
+        .aiTextBlock {
+          h1 {
+            font-size: 20px;
+          }
+          .containerForLi {
+            h3 {
+              font-size: 10px;
+            }
+
+            ul {
+              li {
+                font-size: 10px;
+              }
+            }
+          }
+        }
+
+        img {
+          width: 150px;
+          height: 110px;
+          top: 113px;
+          left: 185px;
+        }
+
+        .underTextAboutTarif {
+          font-size: 10px;
+        }
+      }
+    }
+  }
 }

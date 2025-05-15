@@ -1,0 +1,82 @@
+.taskColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .taskColumnHeader {
+    display: flex;
+    justify-content: space-between;
+
+    img {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    span {
+      color: #808080;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+  }
+}
+
+.taskCard {
+  width: 221px;
+  height: 151px;
+  display: flex;
+  padding: 16px 16px 16px 20px;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 16px;
+  background: #161616;
+
+  h3 {
+    color: #bfbfbf;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  h2 {
+    color: #fff;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  p {
+    color: #808080;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #404040;
+  }
+
+  .taskCardComments {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    span {
+      color: #808080;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+}
