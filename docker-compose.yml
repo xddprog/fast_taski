@@ -80,6 +80,8 @@ services:
       - JWT_ACCESS_TOKEN_TIME=10000
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     ports:
       - 8000:8000
     healthcheck:
