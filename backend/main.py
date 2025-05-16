@@ -1,6 +1,7 @@
 import asyncio
 from contextlib import asynccontextmanager
 import multiprocessing
+import time
 from dishka import AsyncContainer, FromDishka
 from dishka.integrations.fastapi import setup_dishka
 from fastapi.exceptions import RequestValidationError
@@ -18,8 +19,9 @@ from backend.infrastructure.database.connection.postgres_connection import Datab
 def create_lifespan(di_container: AsyncContainer):
     @asynccontextmanager
     async def lifespan(app: FastAPI):
+        time.sleep(5)
         db: DatabaseConnection = await di_container.get(DatabaseConnection)
-        # await db.create_tables()
+        await db.create_tables()
 
         task_manager = TasksManager()
         await task_manager.start()

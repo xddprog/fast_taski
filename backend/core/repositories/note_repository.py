@@ -1,6 +1,5 @@
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 from backend.core.repositories.base import SqlAlchemyRepository
 from backend.infrastructure.database.models.note import Note, UserNote
 

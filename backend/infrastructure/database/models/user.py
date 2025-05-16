@@ -25,7 +25,7 @@ class User(Base):
     assigned_tasks = relationship("Task", secondary="task_assignees", back_populates="assignees")
     time_entries = relationship("TimeEntry", back_populates="user")
     created_notes = relationship("Note", back_populates="creator")
-    notes = relationship("Note", back_populates="members", secondary="user_notes")
+    notes = relationship("Note", secondary="user_notes", back_populates="members", uselist=True)
     comments = relationship("Comment", back_populates="user")
 
     @hybrid_property

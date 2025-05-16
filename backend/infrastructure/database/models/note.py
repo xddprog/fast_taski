@@ -17,21 +17,23 @@ class Note(Base):
     
     team = relationship("Team", back_populates="notes")
     creator = relationship("User", back_populates="created_notes", lazy="selectin")
-    members = relationship("User", back_populates="notes", secondary="user_notes", lazy="selectin")
+    members = relationship(
+        "User",
+        secondary="user_notes",
+        back_populates="notes",
+        uselist=True,
+    )
 
     @hybrid_property
     def files(self):
         return [
             f"{AWS_STORAGE_CONFIG.AWS_ENDPOINT_URL}/{AWS_STORAGE_CONFIG.AWS_BUCKET_NAME}/{file}" 
-            for file in self._files
+            for file in self._files or []
         ]
-    
+
 
 class UserNote(Base):
     __tablename__ = "user_notes"
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    note_id: Mapped[int] = mapped_column(ForeignKey("notes.id"), nullable=False)
-
-    user = relationship("User", back_populates="notes")
-    note = relationship("Note", back_populates="members")
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    note_id: Mapped[int] = mapped_column(ForeignKey("notes.id"), primary_key=True)
