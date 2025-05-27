@@ -30,7 +30,7 @@ def get(namespace: str, expire: int = 60, queries: list[str] | None = None, by_c
             **kwargs,
         ) -> Any:
             filter_queries = {k: v for k, v in kwargs.items() if k in queries} if queries else {}
-            current_user: BaseUserModel = kwargs.get("current_user") if current_user else None
+            current_user: BaseUserModel = kwargs.get("current_user") if kwargs.get("current_user") else None
             cache_key = _key_builder(namespace, filter_queries, current_user.id)
 
             try:
