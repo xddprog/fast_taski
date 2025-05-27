@@ -3,7 +3,7 @@ import { FormProps } from "../../types/form.ts";
 import { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthButtons from "../AuthButtons/AuthButtons.tsx";
-import { authWithVk, authWithYandex } from '../../utils/AuthWith.ts'
+import { authWithVk, authWithYandex } from "../../utils/AuthWith.ts";
 
 const LoginForm: React.FC<FormProps> = ({
   login,
@@ -21,21 +21,22 @@ const LoginForm: React.FC<FormProps> = ({
     event.preventDefault();
     if (formType === "register" && handleRegistre) {
       handleRegistre(event);
+      console.log("lol");
     } else if (handleLogin) {
       handleLogin(event);
     }
   };
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-//   function authWithYandex(event: React.MouseEvent<HTMLButtonElement>) {
-//     event.preventDefault();
-//     window.location.assign(
-//       `${import.meta.env.VITE_YANDEX_API_URL}/authorize?response_type=token&client_id=${
-//         import.meta.env.VITE_YANDEX_CLIENT_ID
-//       }`
-//     );
-//   }
+  //   function authWithYandex(event: React.MouseEvent<HTMLButtonElement>) {
+  //     event.preventDefault();
+  //     window.location.assign(
+  //       `${import.meta.env.VITE_YANDEX_API_URL}/authorize?response_type=token&client_id=${
+  //         import.meta.env.VITE_YANDEX_CLIENT_ID
+  //       }`
+  //     );
+  //   }
 
   const handleVkAuth = (event: React.MouseEvent<HTMLButtonElement>) => {
     authWithVk(event, navigate);
@@ -111,10 +112,7 @@ const LoginForm: React.FC<FormProps> = ({
           </button>
         </div>
       </div> */}
-        <AuthButtons
-          yandexAuth={handleYandexAuth}
-          vkauth={handleVkAuth}
-        />
+      <AuthButtons yandexAuth={handleYandexAuth} vkauth={handleVkAuth} />
     </form>
   );
 };
