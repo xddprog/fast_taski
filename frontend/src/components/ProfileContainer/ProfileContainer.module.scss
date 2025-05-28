@@ -34,81 +34,122 @@
             margin-bottom: 12px;
         }
 
-        .blockWithAvatar {
+        .rowWith {
             display: flex;
             flex-direction: row;
+            justify-content: space-between;
             gap: 24px;
 
-            .profilePhoto {
+            .blockWithAvatar {
                 display: flex;
-                flex-direction: row;
-                width: 100%;
-                justify-content: space-between;
-                border-radius: 40px;
-                padding: 32px;
+                flex-direction: column;
                 gap: 24px;
+                width: 100%;
 
-                background-color: rgba(31, 31, 31, 1);
-
-                .btns {
+                .profilePhoto {
                     display: flex;
-                    flex-direction: column;
-                    gap: 12px;
+                    flex-direction: row;
+                    width: 100%;
+                    justify-content: space-between;
+                    border-radius: 40px;
+                    padding: 32px;
+                    gap: 24px;
 
-                    .firstButton {
-                        background-color: rgba(93, 145, 245, 0.9);
-                        color: rgba(255, 255, 255, 1);
+                    background-color: rgba(31, 31, 31, 1);
+
+                    .btns {
                         display: flex;
-                        justify-content: center;
-                        align-items: center;
+                        flex-direction: column;
+                        gap: 12px;
 
-                        border-radius: 14px;
-                        padding-top: 12px;
-                        padding-right: 16px;
-                        padding-bottom: 12px;
-                        padding-left: 16px;
-                        gap: 10px;
+                        .firstButton {
+                            background-color: rgba(93, 145, 245, 0.9);
+                            color: rgba(255, 255, 255, 1);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
 
-                        font-weight: 400;
-                        font-size: 19px;
+                            border-radius: 14px;
+                            padding-top: 12px;
+                            padding-right: 16px;
+                            padding-bottom: 12px;
+                            padding-left: 16px;
+                            gap: 10px;
+
+                            font-weight: 400;
+                            font-size: 19px;
+                        }
+                        .secondButton {
+                            background-color: rgba(255, 255, 255, 0.1);
+                            color: rgba(255, 255, 255, 1);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            border-radius: 14px;
+                            padding-top: 12px;
+                            padding-right: 16px;
+                            padding-bottom: 12px;
+                            padding-left: 16px;
+                            gap: 10px;
+
+                            font-family: Roboto;
+                            font-weight: 400;
+                            font-size: 19px;
+                            line-height: 19px;
+                            letter-spacing: 0%;
+                        }
                     }
-                    .secondButton {
-                        background-color: rgba(255, 255, 255, 0.1);
+
+                    h2 {
                         color: rgba(255, 255, 255, 1);
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
+                        font-weight: 600;
+                        font-size: 24px;
+                        margin-bottom: 24px;
+                    }
 
-                        border-radius: 14px;
-                        padding-top: 12px;
-                        padding-right: 16px;
-                        padding-bottom: 12px;
-                        padding-left: 16px;
-                        gap: 10px;
-
-                        font-family: Roboto;
-                        font-weight: 400;
-                        font-size: 19px;
-                        line-height: 19px;
-                        letter-spacing: 0%;
+                    .photo {
+                        margin-left: 30px;
                     }
                 }
 
-                h2 {
-                    color: rgba(255, 255, 255, 1);
-                    font-weight: 600;
-                    font-size: 24px;
-                    margin-bottom: 24px;
-                }
+                .personalData {
+                    border-radius: 40px;
+                    gap: 32px;
 
-                .photo {
-                    margin-left: 30px;
-                }
-            }
+                    h2 {
+                        color: rgba(255, 255, 255, 1);
+                        font-weight: 600;
+                        font-size: 24px;
+                        margin-bottom: 24px;
+                    }
 
-            @media (max-width: 1440px) {
-                .profilePhoto{
-                    width: 712px;
+                    .containerForInputs {
+                        background-color: rgba(31, 31, 31, 1);
+                        display: flex;
+                        flex-direction: column;
+                        border-radius: 40px;
+                        gap: 24px;
+                        padding: 32px;
+
+                        label {
+                            color: rgba(255, 255, 255, 1);
+                            display: flex;
+                            flex-direction: column;
+                            gap: 8px;
+
+                            input {
+                                background-color: rgba(22, 22, 22, 1);
+                                color: rgba(128, 128, 128, 1);
+                                font-weight: 400;
+                                font-size: 16px;
+                                width: 600px;
+                                height: 43px;
+                                border-radius: 16px;
+                                padding: 12px 16px;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -122,6 +163,8 @@
                 border-radius: 40px;
                 padding: 32px;
                 gap: 29px;
+                width: 328px;
+                height: 164px;
 
                 .uSure {
                     color: rgba(255, 255, 255, 1);
@@ -164,51 +207,6 @@
                         font-size: 19px;
                     }
                 }
-            }
-        }
-    }
-
-    .personalData {
-        border-radius: 40px;
-        gap: 32px;
-
-        h2 {
-            color: rgba(255, 255, 255, 1);
-            font-weight: 600;
-            font-size: 24px;
-            margin-bottom: 24px;
-        }
-
-        .containerForInputs {
-            background-color: rgba(31, 31, 31, 1);
-            display: flex;
-            flex-direction: column;
-            border-radius: 40px;
-            gap: 24px;
-            padding: 32px;
-
-            label {
-                color: rgba(255, 255, 255, 1);
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-
-                input {
-                    background-color: rgba(22, 22, 22, 1);
-                    color: rgba(128, 128, 128, 1);
-                    font-weight: 400;
-                    font-size: 16px;
-                    width: 600px;
-                    height: 43px;
-                    border-radius: 16px;
-                    padding: 12px 16px;
-                }
-            }
-        }
-
-        @media (max-width: 1440px) {
-            .containerForInputs {
-                width: 712px;
             }
         }
     }
