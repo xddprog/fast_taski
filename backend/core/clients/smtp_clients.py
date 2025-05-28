@@ -4,10 +4,12 @@ from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
 from starlette.templating import Jinja2Templates
 
 from backend.infrastructure.config.smtp_configs import YANDEX_SMTP_CONFIG
+from backend.core.tasks_manager.manager import TasksManager
 
 
 class SMTPClients:
-    def __init__(self):
+    def __init__(self, tasks_manager: TasksManager = None):
+        self.tasks_manager = tasks_manager
         self.yandex_smtp = FastMail(self.create_yandex_config())
         self.templates = Jinja2Templates(directory=self._get_path_to_templates())
 

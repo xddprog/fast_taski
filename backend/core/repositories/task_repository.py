@@ -89,3 +89,7 @@ class TaskRepository(SqlAlchemyRepository[Task]):
         assignee = TasksAssignees(task_id=task_id, user_id=user_id)
         self.session.add(assignee)
         await self.session.commit()
+
+    async def check_tag_exist(self, task_id: int, tag_id: int):
+        query = select(TaskTag).where(TaskTag.tag_id == tag_id, TaskTag.task_id == task_id)
+        return (await self.session.execute(query)).scalar_one_or_none()

@@ -68,5 +68,7 @@ class RabbitClient:
         await self.channel.queue_delete(queue_name)
 
     async def close(self):
-        await self.connection.close()
-        await self.channel.close()
+        if self.connection:
+            await self.connection.close()
+        if self.channel:
+            await self.channel.close()

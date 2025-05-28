@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.post("/")
 @inject
-@cache.clear(namespaces=["teams"], by_current_user=True)
+@cache.clear(namespaces=["teams"], set_after=True)
 async def create_team(
     request: Request,
     form: CreateTeamModel,
@@ -75,8 +75,10 @@ async def change_team_owner(
     team_id: int,
     user_id: int,
     team_service: FromDishka[services.TeamService],
+    user_service: FromDishka[services.UserService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
+    await user_service.check_user_exist(user_id)
     return await team_service.change_owner(team_id, user_id, current_user.id)
 
 

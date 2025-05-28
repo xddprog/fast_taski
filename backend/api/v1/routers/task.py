@@ -93,7 +93,7 @@ async def update_task(
 
 @router.delete("/{task_id}/assignees/{user_id}")
 @inject
-@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True)
+@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True, set_after=True)
 async def delete_task_assignee(
     request: Request,
     team_id: int,
@@ -111,7 +111,7 @@ async def delete_task_assignee(
 
 @router.post("/{task_id}/assignees/{user_id}")
 @inject
-@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True)
+@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True, set_after=True)
 async def add_task_assignee(
     request: Request,
     team_id: int,
@@ -129,7 +129,7 @@ async def add_task_assignee(
 
 @router.delete("/{task_id}/tags/{tag_id}")
 @inject
-@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True)
+@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True, set_after=True)
 async def delete_task_tag(
     request: Request,
     team_id: int,
@@ -137,17 +137,18 @@ async def delete_task_tag(
     tag_id: int,
     task_service: FromDishka[services.TaskService],
     team_service: FromDishka[services.TeamService],
+    tag_service: FromDishka[services.TagService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ) -> None:
     await team_service.check_user_rights(team_id, current_user.id, check_member=True)
     await task_service.check_task_exist(task_id)
-    await task_service.check_tag_exist(tag_id)
+    await tag_service.check_tag_exist(tag_id)
     return await task_service.delete_tag(task_id, tag_id)
 
 
 @router.post("/{task_id}/tags/{tag_id}")
 @inject
-@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True)
+@cache.clear(namespaces=["task"], queries=["task_id"], by_key=True, set_after=True)
 async def add_task_tag(
     request: Request,
     team_id: int,
@@ -155,9 +156,10 @@ async def add_task_tag(
     tag_id: int,
     task_service: FromDishka[services.TaskService],
     team_service: FromDishka[services.TeamService],
+    tag_service: FromDishka[services.TagService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ) -> None:
     await team_service.check_user_rights(team_id, current_user.id, check_member=True)
     await task_service.check_task_exist(task_id)
-    await task_service.check_tag_exist(tag_id)
+    await tag_service.check_tag_exist(tag_id)
     return await task_service.add_tag(task_id, tag_id)

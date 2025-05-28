@@ -1,8 +1,8 @@
 import DashboardHeader from "../components/DashboardHeader/DashboardHeader";
 import DashboardNavbar from "../components/DashboardNavbar/DashboardNavbar";
-import ProfileContainer from "../components/ProfileContainer/ProfileContainer";
+import DashboardSettings from "../components/DashboardSettings/DashboardSettings";
 
-const Profile: React.FC = () => {
+const Settings: React.FC = () => {
   const style = {
     display: "flex",
   };
@@ -12,10 +12,10 @@ const Profile: React.FC = () => {
       <DashboardHeader />
       <div style={style}>
         <DashboardNavbar />
-        <ProfileContainer />
+        <DashboardSettings />
       </div>
     </>
   );
 };
 
-export default Profile;
+export default Settings;

@@ -3,6 +3,7 @@ from fastapi import Form, UploadFile
 from pydantic import BaseModel, field_validator
 
 from backend.core.dto.user_dto import BaseUserModel
+from backend.infrastructure.config.aws_config import AWS_STORAGE_CONFIG
 
 
 class BaseNoteModel(BaseModel):
@@ -19,8 +20,15 @@ class BaseNoteModel(BaseModel):
 
 class NoteModel(BaseNoteModel):
     text: str
-    files: list[str]
+    files: list[str] | None = None
     members: list[BaseUserModel]
+
+    @field_validator("files")
+    def validate_files(cls, v):
+        return [
+            f"{AWS_STORAGE_CONFIG.AWS_ENDPOINT_URL}/{AWS_STORAGE_CONFIG.AWS_BUCKET_NAME}/{file}" 
+            for file in v or []
+        ]
 
 
 class CreateNoteModel(BaseModel):

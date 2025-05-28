@@ -5,11 +5,10 @@
 
   .taskColumnHeader {
     display: flex;
+    align-items: center;
     justify-content: space-between;
 
     img {
-      width: 16px;
-      height: 16px;
       cursor: pointer;
     }
 
@@ -33,7 +32,7 @@
 
 .taskCard {
   width: 221px;
-  height: 151px;
+  height: 101px;
   display: flex;
   padding: 16px 16px 16px 20px;
   flex-direction: column;
@@ -62,8 +61,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #404040;
   }
 
   .taskCardComments {

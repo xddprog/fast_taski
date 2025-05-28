@@ -1,36 +1,46 @@
+// import React, { useEffect, useState } from "react";
 import styles from "./NavbarGroup.module.scss";
 
-interface NavbarGroupProps {
-  item: {
-    title?: string;
-    icons: Array<string>;
-    labels: Array<string>;
-  };
-}
+// interface Team {
+//   id: number;
+//   name: string;
+// }
 
-const NavbarGroup: React.FC<NavbarGroupProps> = ({ item }) => {
+const NavbarGroup: React.FC = () => {
+  // const [teams, setTeams] = useState<Team[]>([]);
+
+  // useEffect(() => {
+  //   const getTeams = async (): Promise<void> => {
+  //     try {
+  //       const response = await fetch("https://fasttaski.ru/api/v1/user/teams", {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+
+  //       if (!response.ok) {
+  //         const errorText = await response.text();
+  //         throw new Error(`Ошибка запроса: ${response.status} - ${errorText}`);
+  //       }
+
+  //       const data = await response.json();
+  //       setTeams(data);
+  //     } catch (error) {
+  //       console.error("Ошибка при GET-запросе:", error);
+  //     }
+  //   };
+
+  //   getTeams();
+  // }, []);
+
   return (
     <div className={styles.navbarGroups}>
-      {item.title !== undefined ? <h3>{item.title}</h3> : <></>}
-      <div className={styles.navbarGroup}>
-        {item.labels.map((label, index) => (
-          <>
-            {item.title === "Команды" ? (
-              <div key={item.title} className={styles.navbarLine}>
-                <img src={item.icons[index]} alt="icon" />
-                <p>Команда 1</p>
-                <img src={"icons/arrow-downlight.png"} alt="icon" />
-              </div>
-            ) : (
-              <></>
-            )}
-            <div key={index} className={styles.navbarLine}>
-              <img src={item.icons[index]} alt="icon" />
-              <p>{label}</p>
-            </div>
-          </>
-        ))}
-      </div>
+      {/* {teams.map((team) => (
+        <div key={team.id} className={styles.navbarLine}>
+          <p>{team.name}</p>
+        </div>
+      ))} */}
     </div>
   );
 };

@@ -108,7 +108,6 @@ class AuthService:
     
     async def auth_extarnal_service_user(self, form: RegisterForm) -> BaseUserModel:
         user_registered = await self.authenticate_user(form, is_external=True)
-        print(user_registered)
         if not user_registered:
             return await self.register_external_service_user(form)
         return user_registered
