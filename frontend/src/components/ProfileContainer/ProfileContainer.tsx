@@ -12,21 +12,30 @@ export default function ProfileContainer() {
             <h1 className={styles.title}>Параметры профиля</h1>
             <div className={styles.containerForInfo}>
                 <h2>Фото профиля</h2>
-                <div className={styles.profilePhoto}>
-                    <img
-                        src="/icons/Avatar.png"
-                        alt="Фото профиля"
-                        className={styles.photo}
-                    />
-                    <div className={styles.btns}>
-                        <button className={styles.firstButton}>
-                            <img src="/images/ImageUpload.png" alt="" />
-                            Загрузить
-                        </button>
-                        <button className={styles.secondButton}>
-                            <img src="/images/Trash.png" alt="" />
-                            Удалить
-                        </button>
+                <div className={styles.blockWithAvatar}>
+                    <div className={styles.profilePhoto}>
+                        <img
+                            src="/images/Avatar.png"
+                            alt="Фото профиля"
+                            className={styles.photo}
+                        />
+                        <div className={styles.btns}>
+                            <button className={styles.firstButton}>
+                                <img src="/images/ImageUpload.png" alt="" />
+                                Загрузить
+                            </button>
+                            <button className={styles.secondButton}>
+                                <img src="/images/Trash.png" alt="" />
+                                Удалить
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.changesButton}>
+                        <h1 className={styles.uSure}>Сохранить изменения?</h1>
+                        <div className={styles.containerForBtns}>
+                            <button className={styles.first}>Сохранить</button>
+                            <button className={styles.second}>Отменить</button>
+                        </div>
                     </div>
                 </div>
 
@@ -70,6 +79,8 @@ export default function ProfileContainer() {
                             />
                         </label>
                     </div>
+
+                    
                 </div>
             </div>
         </section>
