@@ -1,20 +1,20 @@
 import { useState } from "react";
-import styles from "./DashboardSettings.module.scss";
+import styles from "./ProfileContainer.module.scss";
 
-export default function DashboardSettings() {
+export default function TeamSettings() {
     const [fullName, setFullName] = useState("");
     const [publicName, setPublicName] = useState("");
 
     return (
         <section className={styles.profileContainer}>
-            <h1 className={styles.title}>Параметры команды</h1>
+            <h1 className={styles.title}>Параметры профиля</h1>
             <div className={styles.containerForInfo}>
-                <h2>Фото команды</h2>
+                <h2>Фото профиля</h2>
                 <div className={styles.rowWith}>
                     <div className={styles.blockWithAvatar}>
                         <div className={styles.profilePhoto}>
                             <img
-                                src="/images/BlueScreen.png"
+                                src="/images/Avatar.png"
                                 alt="Фото профиля"
                                 className={styles.photo}
                             />
@@ -57,13 +57,7 @@ export default function DashboardSettings() {
                             </div>
                         </div>
                         <div className={styles.personalData}>
-                            <div className={styles.upperPart}>
-                                <h2>Участники</h2>
-                                <button className={styles.addPeople}>
-                                    <img src="/images/Plus.png" alt="" />
-                                    Добавить участников
-                                </button>
-                            </div>
+                            <h2>Основная информация</h2>
                             <div className={styles.containerForInputs}>
                                 <label>
                                     Название
