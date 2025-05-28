@@ -39,30 +39,32 @@ const TasksContainer: React.FC = () => {
   const [activeSettingsForm, setActiveSettingsForm] = useState(false);
   const [activeFilterForm, setActiveFilterForm] = useState(false);
 
-  function handleSettingsClick() {
-    setActiveSettingsForm(true);
-  }
+  function handleActionForm(param: string) {
+    switch (param) {
+      case "settings":
+        setActiveSettingsForm(!activeSettingsForm);
+        break;
 
-  function handleCloseSettings() {
-    setActiveSettingsForm(false);
-  }
-
-  function handleFiltersClick() {
-    setActiveFilterForm(true);
-  }
-
-  function handleCloseFilters() {
-    setActiveFilterForm(false);
+      case "filter":
+        setActiveFilterForm(!activeFilterForm);
+        break;
+    }
   }
 
   return (
     <>
       {activeSettingsForm ? (
-        <div className={styles.overlay} onClick={handleCloseSettings}>
+        <div
+          className={styles.overlay}
+          onClick={() => handleActionForm("settings")}
+        >
           <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
             <div className={styles.popupHeader}>
               <div className={styles.title}>Доска задач</div>
-              <img src="/icons/Cross.svg" onClick={handleCloseSettings} />
+              <img
+                src="/icons/Cross.svg"
+                onClick={() => handleActionForm("settings")}
+              />
             </div>
             <SettingsForm />
           </div>
@@ -72,11 +74,17 @@ const TasksContainer: React.FC = () => {
       )}
 
       {activeFilterForm ? (
-        <div className={styles.overlay} onClick={handleCloseFilters}>
+        <div
+          className={styles.overlay}
+          onClick={() => handleActionForm("filter")}
+        >
           <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
             <div className={styles.popupHeader}>
               <div className={styles.title}>Фильтры</div>
-              <img src="/icons/Cross.svg" onClick={handleCloseFilters} />
+              <img
+                src="/icons/Cross.svg"
+                onClick={() => handleActionForm("filter")}
+              />
             </div>
             <FiltersFrom />
           </div>
@@ -89,10 +97,10 @@ const TasksContainer: React.FC = () => {
         <div className={styles.dashboardTools}>
           <h1>Задачи</h1>
           <div className={styles.toolsBtns}>
-            <button onClick={() => handleSettingsClick()}>
+            <button onClick={() => handleActionForm("settings")}>
               <img src={"/icons/Gear.svg"} alt="settings" />
             </button>
-            <button onClick={() => handleFiltersClick()}>
+            <button onClick={() => handleActionForm("filter")}>
               <img src={"/icons/filter.png"} alt="settings" />
               <span>Фильтры</span>
             </button>
