@@ -34,6 +34,7 @@ const DashboardNavbar: React.FC = () => {
       {groups.map((item, index) => (
         <NavbarGroup key={index} item={item} />
       ))}
+      
     </nav>
   );
 };

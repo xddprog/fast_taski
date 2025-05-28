@@ -6,22 +6,28 @@ export default function ProfileContainer() {
     const [publicName, setPublicName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [position, setPosition] = useState("");
-    const [department, setDepartment] = useState("");
-    const [organization, setOrganization] = useState("");
-    const [location, setLocation] = useState("");
 
     return (
         <section className={styles.profileContainer}>
-            <h1 className={styles.title}>Профиль</h1>
+            <h1 className={styles.title}>Параметры профиля</h1>
             <div className={styles.containerForInfo}>
+                <h2>Фото профиля</h2>
                 <div className={styles.profilePhoto}>
-                    <h2>Фото профиля</h2>
                     <img
                         src="/icons/Avatar.png"
                         alt="Фото профиля"
                         className={styles.photo}
                     />
+                    <div className={styles.btns}>
+                        <button className={styles.firstButton}>
+                            <img src="/images/ImageUpload.png" alt="" />
+                            Загрузить
+                        </button>
+                        <button className={styles.secondButton}>
+                            <img src="/images/Trash.png" alt="" />
+                            Удалить
+                        </button>
+                    </div>
                 </div>
 
                 <div className={styles.personalData}>
@@ -61,52 +67,6 @@ export default function ProfileContainer() {
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
                                 placeholder="+99999999999"
-                            />
-                        </label>
-                    </div>
-                </div>
-
-                <div className={styles.personalData}>
-                    <h2>Дополнительная информация</h2>
-                    <div className={styles.containerForInputs}>
-                        <label>
-                            Должность
-                            <input
-                                type="text"
-                                value={position}
-                                onChange={(e) => setPosition(e.target.value)}
-                                placeholder="Должность"
-                            />
-                        </label>
-                        <label>
-                            Отдел
-                            <input
-                                type="text"
-                                value={department}
-                                onChange={(e) => setDepartment(e.target.value)}
-                                placeholder="Отдел"
-                            />
-                        </label>
-                        <label>
-                            Организация
-                            <input
-                                type="text"
-                                value={organization}
-                                onChange={(e) =>
-                                    setOrganization(e.target.value)
-                                }
-                                placeholder="Организация"
-                            />
-                        </label>
-                        <label>
-                            Расположение
-                            <input
-                                type="text"
-                                value={location}
-                                onChange={(e) =>
-                                    setLocation(e.target.value)
-                                }
-                                placeholder="Расположение"
                             />
                         </label>
                     </div>

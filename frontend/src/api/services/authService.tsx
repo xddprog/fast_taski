@@ -2,9 +2,6 @@ import { AxiosResponse } from "axios";
 import { LoginUserInterface, RegisterUserInterface } from "../../interfaces/authInterfaces";
 import { axiosClient } from "../client/axiosClient";
 
-
-
-
 export default class AuthService {
     public BASE_URL = "/auth";
 

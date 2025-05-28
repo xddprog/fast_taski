@@ -18,7 +18,7 @@ const App: React.FC = () => {
     location.pathname === "/login" ||
     location.pathname === "/register" ||
     location.pathname === "/auth/callback" ||
-    location.pathname === "/profile";
+    location.pathname === "/profile"; 
 
   return (
     <>

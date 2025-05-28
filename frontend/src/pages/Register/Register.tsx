@@ -31,13 +31,16 @@ const Register: React.FC = () => {
 
     try {
       const res = await authService.checkUserExist(registerData);
-      if (res.status === 200) {
-        setUserForm(registerData);
-        setSuccess(true);
+      if (res.status === 409) {
+        alert("Пользователь с таким email или именем уже существует");
+        return;
       }
+
+      setUserForm(registerData);
+      setSuccess(true);
     } catch (error) {
       console.error("Ошибка при проверке пользователя:", error);
-      alert("Ошибка при регистрации. Проверьте данные.");
+      alert("Ошибка при проверке. Попробуйте позже.");
     }
   }
 
