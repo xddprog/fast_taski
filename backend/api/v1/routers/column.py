@@ -13,7 +13,7 @@ router = APIRouter()
 
 @router.post("/")
 @inject
-@cache.clear(namespaces=["team"], queries=["team_id"], by_key=True)
+@cache.clear(namespaces=["team"], queries=["team_id"], by_key=True, set_after=True)
 async def create_column(
     request: Request,
     team_id: int,
@@ -26,9 +26,10 @@ async def create_column(
     return await column_service.create_column(team_id, form)
 
 
+
 @router.put("/{column_id}")
 @inject
-@cache.clear(namespaces=["dashboard"], queries=["team_id"], by_key=True)
+@cache.clear(namespaces=["dashboard"], queries=["team_id"], by_key=True, set_after=True)
 async def update_column(
     request: Request,
     team_id: int,
@@ -43,7 +44,7 @@ async def update_column(
 
 @router.delete("/{column_id}")
 @inject
-@cache.clear(namespaces=["dashboard"], queries=["team_id"], by_key=True) 
+@cache.clear(namespaces=["dashboard"], queries=["team_id"], by_key=True, set_after=True) 
 async def delete_column(
     request: Request,
     team_id: int,

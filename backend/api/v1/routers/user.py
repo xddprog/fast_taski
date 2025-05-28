@@ -18,7 +18,7 @@ router = APIRouter()
 
 @router.get("/teams")
 @inject
-@cache.get(namespace="teams", expire=60, queries=["user_id"], by_current_user=True)
+@cache.get(namespace="teams", expire=60, queries=["user_id"])
 async def get_user_teams(
     request: Request,
     current_user: Annotated[BaseUserModel, Depends(get_current_user_dependency)],

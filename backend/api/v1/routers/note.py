@@ -54,7 +54,7 @@ async def get_note(
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
     await team_service.check_user_rights(team_id, current_user.id, check_member=True)
-    return await note_service.get_note(note_id, current_user.id)
+    return await note_service.get_note(note_id)
 
 
 @router.delete("/{note_id}")
@@ -79,7 +79,7 @@ async def delete_note(
 
 @router.patch("/{note_id}/members/add/{user_id}")
 @inject
-@cache.clear(namespaces=["note"], queries=["note_id"], by_key=True)
+@cache.clear(namespaces=["note"], queries=["note_id"], by_key=True, set_after=True)
 async def add_note_member(
     request: Request,
     note_id: int,

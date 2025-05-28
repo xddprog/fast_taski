@@ -12,7 +12,7 @@ from backend.infrastructure.errors.task_errors import TaskNotFound
 
 class TaskService(BaseDbModelService[Task]):
     repository: TaskRepository
-
+    
     async def create_task(self, form: CreateTaskModel, assignees: list[User], tags: list[Tag], current_user: int):
         form.assignees = assignees
         form.tags = tags
@@ -44,7 +44,7 @@ class TaskService(BaseDbModelService[Task]):
         if task is None:
             raise TaskNotFound
         return task
-    
+ 
     async def delete_assignee(self, task_id: int, user_id: int):
         await self.repository.delete_assignee(task_id, user_id)
 
@@ -52,15 +52,14 @@ class TaskService(BaseDbModelService[Task]):
         await self.repository.add_assignee(task_id, user_id)
         
     async def delete_tag(self, task_id: int, tag_id: int):
-        tag = await self.repository.delete_tag(task_id, tag_id)
-        if not tag:
-            raise TagNotFound
+        await self.repository.delete_tag(task_id, tag_id)
+        task = await self.repository.get_item(task_id)
+        return TaskModel.model_validate(task, from_attributes=True)
 
     async def add_tag(self, task_id: int, tag_id: int):
-        tag = await self.repository.check_task_tag_exist(task_id, tag_id)
-        if not tag:
-            raise TagNotFound
-        return TagModel.model_validate(tag, from_attributes=True)
+        await self.repository.add_tag(task_id, tag_id)
+        task = await self.repository.get_item(task_id)
+        return TaskModel.model_validate(task, from_attributes=True)
     
     async def update_task(self, task_id: int, form: CreateTaskModel):
         task = await self.repository.update_item(task_id, **form.model_dump(exclude_none=True))

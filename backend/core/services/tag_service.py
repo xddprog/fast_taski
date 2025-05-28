@@ -18,7 +18,7 @@ class TagService(BaseDbModelService[Tag]):
         tag = await self.repository.get_item(tag_id)
         if tag is None:
             raise TagNotFound
-        
+    
     async def create_tag(self, form: Tag, team_id: int) -> TagModel:
         tag = await self.repository.add_item(**form.model_dump(), team_id=team_id)
         return TagModel.model_validate(tag, from_attributes=True)

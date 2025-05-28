@@ -100,11 +100,12 @@ class TeamService(BaseDbModelService[Team]):
         return JSONResponse(content={"detail": f"Команда {team.name} успешно удалена"})
     
     async def change_owner(self, team_id: int, user_id: int, current_user_id: int):
-        team = await self.check_user_rights(team_id, current_user_id, check_admin=True)
+        team = await self.check_user_rights(team_id, current_user_id, check_owner=True)
         await self.repository.check_member(team_id, user_id)        
+        await self.repository.update_item(team_id, owner_id=user_id)
         await self.repository.update_member(team_id, user_id, role=TeamRoles.OWNER)
         await self.repository.update_member(team_id, current_user_id, role=TeamRoles.ADMIN)
-        await self.repository.refresh_item(team)
+        team = await self.repository.get_item(team_id, full_load=True)
         return TeamModel.model_validate(team, from_attributes=True)
     
     async def invite_members(self, team_id: int, form: InviteMembersModel, current_user_id: int):

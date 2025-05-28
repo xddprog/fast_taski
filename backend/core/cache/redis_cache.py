@@ -20,7 +20,7 @@ def _key_builder(namespace: str, queries: dict | None = None, user_id: str | Non
     return f"{namespace}:{queries}" if user_id is None else f"{namespace}:user_id={user_id}:{queries}"
 
 
-def get(namespace: str, expire: int = 60, queries: list[str] | None = None, by_current_user: bool = False) -> Callable:
+def get(namespace: str, expire: int = 60, queries: list[str] | None = None) -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         async def wrapper(
@@ -31,7 +31,7 @@ def get(namespace: str, expire: int = 60, queries: list[str] | None = None, by_c
         ) -> Any:
             filter_queries = {k: v for k, v in kwargs.items() if k in queries} if queries else {}
             current_user: BaseUserModel = kwargs.get("current_user") if kwargs.get("current_user") else None
-            cache_key = _key_builder(namespace, filter_queries, current_user.id)
+            cache_key = _key_builder(namespace, filter_queries, current_user.id if current_user else None)
 
             try:
                 value = await redis_client.get(cache_key)
@@ -69,7 +69,6 @@ def clear(
     set_after: bool = False,
     expire: int = 60,
     queries: List[str] | dict | None = None,
-    by_current_user: bool = False
 ) -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
@@ -80,7 +79,7 @@ def clear(
             **kwargs
         ) -> Any:
             value = await func(request, *args, **kwargs)
-            current_user: BaseUserModel = kwargs["current_user"] if by_current_user else None
+            current_user: BaseUserModel = kwargs.get("current_user")
 
             if isinstance(queries, dict):
                 filter_queries = {}
@@ -97,6 +96,7 @@ def clear(
                     logger.error(f"Error clearing entire cache: {e}")
 
             elif by_key:
+                cache_key = None
                 try:
                     if not namespaces:
                         raise ValueError("Namespace required for by_key")

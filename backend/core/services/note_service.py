@@ -13,13 +13,14 @@ class NoteService(BaseDbModelService[Note]):
 
     async def check_user_rights(self, note_id: int, user_id: int, is_admin: bool = False):
         note = await self.repository.get_item(note_id)
+        print(note)
         if note is None:
             raise NoteNotFound
         elif note.creator_id != user_id and not is_admin:
             raise UserNotFoundRights
         return note
     
-    async def get_note(self, note_id: int, user_id: int):
+    async def get_note(self, note_id: int) -> NoteModel:
         note = await self.repository.get_item(note_id)
         if note is None:
             raise NoteNotFound
@@ -39,7 +40,7 @@ class NoteService(BaseDbModelService[Note]):
             )
             form.files = paths
         
-        note = await self.repository.create(team_id=team_id, creator_id=user_id, **form.model_dump())
+        note = await self.repository.add_item(team_id=team_id, creator_id=user_id, **form.model_dump())
         return NoteModel.model_validate(note, from_attributes=True)
     
     async def get_team_notes(self, team_id: int):
@@ -64,5 +65,7 @@ class NoteService(BaseDbModelService[Note]):
         if not is_admin:
             await self.check_user_rights(note_id, current_user_id)
 
-        member = await self.repository.add_member(note_id, user_id)
-        return BaseUserModel.model_validate(member, from_attributes=True)
+        await self.repository.add_member(note_id, user_id)
+
+        note = await self.get_note(note_id)
+        return NoteModel.model_validate(note, from_attributes=True)
