@@ -22,10 +22,9 @@ class SMTPClients:
             MAIL_PASSWORD=YANDEX_SMTP_CONFIG.YANDEX_SMTP_PASSWORD,
             MAIL_PORT=YANDEX_SMTP_CONFIG.YANDEX_SMTP_PORT,
             MAIL_SERVER=YANDEX_SMTP_CONFIG.YANDEX_SMTP_HOST,
-            MAIL_STARTTLS=True, 
-            MAIL_SSL_TLS=False, 
+            MAIL_STARTTLS=False, 
+            MAIL_SSL_TLS=True, 
             MAIL_FROM=YANDEX_SMTP_CONFIG.YANDEX_SMTP_USER,
-            VALIDATE_CERTS=False,
             SUPPRESS_SEND=0,
             TIMEOUT=10
         )
