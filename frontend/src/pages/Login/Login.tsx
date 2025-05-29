@@ -27,8 +27,8 @@ const Login: React.FC = () => {
       console.log("Вход успешен:", res);
       setSuccess(true);
       setTimeout(() => {
-        navigate("/dashboard"); // Переход на /dashboard после успешного логина
-      }, 2000); // Задержка 2 секунды, чтобы пользователь увидел SuccessBunner
+        navigate("/dashboard");
+      }, 2000);
     } catch (error) {
       console.error("Ошибка:", error);
       alert("Ошибка при входе. Проверьте данные.");

@@ -19,7 +19,7 @@ export default class AuthService {
     code: string
   ): Promise<AxiosResponse> {
     return axiosClient.post(
-      `${this.BASE_URL}/register?code=123`,
+      `${this.BASE_URL}/register?code=${code}`,
       registerData,
       { params: { code: code } }
     );
