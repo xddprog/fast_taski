@@ -48,5 +48,4 @@ async def delete_user(
     user_service: FromDishka[services.UserService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
-    await user_service.check_user_exist(current_user.id)
     return await user_service.delete_user(current_user.id)

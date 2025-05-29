@@ -32,3 +32,7 @@ class UserService(BaseDbModelService[User]):
             
         await self.repository.update_item(user_id, **form.model_dump(exclude_none=True))
         return await self.get_user(user_id)
+    
+    async def delete_user(self, user_id: int):
+        user = await self.check_user_exist(user_id)
+        await self.repository.delete_item(user)
