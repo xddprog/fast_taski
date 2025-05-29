@@ -28,17 +28,17 @@ async def get_current_user(
     return current_user
 
 
-@router.post("/check-exist")
-@inject
-async def check_user_in_app(
-    userForm: RegisterForm,
-    auth_service: FromDishka[services.AuthService],
-    two_factor_service: FromDishka[services.TwoFactorAuthService],
-    smtp_clients: FromDishka[clients.SMTPClients],
-) -> None:
-    await auth_service.check_user_in_app(userForm)
-    code = await two_factor_service.generate_code(userForm.username)
-    await smtp_clients.send_verification_code(userForm.email, code, userForm.username)
+# @router.post("/check-exist")
+# @inject
+# async def check_user_in_app(
+#     userForm: RegisterForm,
+#     auth_service: FromDishka[services.AuthService],
+#     two_factor_service: FromDishka[services.TwoFactorAuthService],
+#     smtp_clients: FromDishka[clients.SMTPClients],
+# ) -> None:
+#     await auth_service.check_user_in_app(userForm)
+#     code = await two_factor_service.generate_code(userForm.username)
+#     await smtp_clients.send_verification_code(userForm.email, code, userForm.username)
 
 
 @router.post("/login")
@@ -81,7 +81,7 @@ async def logout_user(
 @inject
 async def register_user(
     form: RegisterForm,
-    code: str,
+    # code: str,
     response: Response,
     auth_service: FromDishka[services.AuthService],
     two_factor_service: FromDishka[services.TwoFactorAuthService]
