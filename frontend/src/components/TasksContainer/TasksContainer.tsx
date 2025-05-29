@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Task from "../Task/Task";
 import styles from "./TasksContainer.module.scss";
 import SettingsForm from "../SettingsForm/SettingsForm";
@@ -40,6 +40,9 @@ const TasksContainer: React.FC = () => {
   const [activeSettingsForm, setActiveSettingsForm] = useState(false);
   const [activeFilterForm, setActiveFilterForm] = useState(false);
   const [activeAddingForm, setActiveAddingForm] = useState("");
+  const [storageValue] = useState<string | null>(
+    localStorage.getItem("currentTeamId")
+  );
 
   function handleActionForm(param: string) {
     switch (param) {
@@ -67,6 +70,37 @@ const TasksContainer: React.FC = () => {
         break;
     }
   }
+
+  useEffect(() => {
+    const getTasks = async (): Promise<void> => {
+      try {
+        const response = await fetch(
+          `https://fasttaski.ru/api/v1/team/${localStorage.getItem(
+            "currentTeamId"
+          )}/dashboard`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Ошибка запроса: ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Ошибка при GET-запросе:", error);
+      }
+    };
+
+    getTasks();
+  }, [storageValue]);
 
   return (
     <>

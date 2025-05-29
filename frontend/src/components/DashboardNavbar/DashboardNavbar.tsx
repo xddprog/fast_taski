@@ -6,7 +6,7 @@ const DashboardNavbar: React.FC = () => {
   return (
     <nav className={styles.navbar}>
       <section className={styles.navSection}>
-        <div>
+        <div className={styles.group}>
           <div className={styles.titleGroup}>Команды</div>
           <NavbarGroup />
 

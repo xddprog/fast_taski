@@ -1,0 +1,49 @@
+.navbarLine {
+  display: flex;
+  justify-content: space-between;
+
+  p {
+    display: flex;
+    padding: 8px 12px;
+    align-items: center;
+    gap: var(--size-nav-list-in-gap, 16px);
+    flex: 1 0 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+    cursor: pointer;
+  }
+
+  img {
+    cursor: pointer;
+  }
+}
+
+.teamsContainer {
+  min-width: 213px;
+  position: absolute;
+  top: 65px;
+  left: 70px;
+  display: flex;
+  padding: 12px 24px;
+  flex-direction: column;
+  gap: 9px;
+  border-radius: 16px;
+  background: #2a2a2a;
+  z-index: 100;
+}
+
+.addTeamBtn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  cursor: pointer;
+}
