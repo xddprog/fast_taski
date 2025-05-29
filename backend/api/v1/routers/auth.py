@@ -15,8 +15,8 @@ router = APIRouter()
 
 
 async def set_cookie_tokens(access_token: str, refresh_token: str, response: Response):
-    response.set_cookie(key="access_token", value=access_token)
-    response.set_cookie(key="refresh_token", value=refresh_token)
+    response.set_cookie(key="access_token", value=access_token, httponly=True)
+    response.set_cookie(key="refresh_token", value=refresh_token, httponly=True)
 
 
 @router.get("/current_user")
