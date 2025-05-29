@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./ProfileContainer.module.scss";
+import styles from "./TeamSettings.module.scss";
 
 export default function TeamSettings() {
     const [fullName, setFullName] = useState("");

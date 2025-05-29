@@ -78,6 +78,12 @@
 
                             font-weight: 400;
                             font-size: 19px;
+
+                            transition: background-color 0.3s ease;
+
+                            &:hover {
+                              background-color: #2b6dd5; 
+                            }
                         }
                         .secondButton {
                             background-color: rgba(255, 255, 255, 0.1);
@@ -98,6 +104,12 @@
                             font-size: 19px;
                             line-height: 19px;
                             letter-spacing: 0%;
+
+                            transition: background-color 0.3s ease;
+
+                            &:hover {
+                              background-color: #575a5f; 
+                            }
                         }
                     }
 
@@ -196,6 +208,12 @@
                         padding-bottom: 12px;
                         padding-left: 16px;
                         gap: 10px;
+
+                        transition: background-color 0.3s ease;
+
+                        &:hover {
+                          background-color: #2b6dd5; 
+                        }
                     }
 
                     .second {
@@ -210,6 +228,12 @@
 
                         font-weight: 400;
                         font-size: 19px;
+
+                        transition: background-color 0.3s ease;
+
+                        &:hover {
+                          background-color: #575a5f; 
+                        }
                     }
                 }
             }
