@@ -40,3 +40,11 @@ class CodeIsIncorrectOrExpired(HTTPException):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Код не верен или устарел!",
         )
+
+
+class UserAlreadyExists(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Пользователь с такой почтой уже существует!",
+        )

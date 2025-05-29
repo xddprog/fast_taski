@@ -7,7 +7,7 @@ const SuccessBunner: React.FC = () => {
       <h1>Успех!</h1>
       <p>Операция прошла успешно</p>
       <img src="/images/success_img.png" />
-      <Link to="/dashboard">Продолжить</Link>
+      <Link to="/profile">Продолжить</Link>
     </div>
   );
 };
