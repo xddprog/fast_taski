@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./Login.module.scss";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import { FormEvent, useState } from "react";
@@ -11,7 +11,6 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const navigate = useNavigate();
   const authService = new AuthService();
 
   async function login(event: FormEvent<HTMLFormElement>) {
@@ -26,12 +25,9 @@ const Login: React.FC = () => {
       const res = await authService.loginUser(loginData);
       console.log("Вход успешен:", res);
       setSuccess(true);
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
     } catch (error) {
       console.error("Ошибка:", error);
-      alert("Ошибка при входе. Проверьте данные.");
+      alert("Неверный логин или пароль. Попробуйте еще раз :(");
     }
   }
 

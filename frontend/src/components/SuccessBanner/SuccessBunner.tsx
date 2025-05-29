@@ -5,9 +5,9 @@ const SuccessBunner: React.FC = () => {
   return (
     <div className={styles.successCard}>
       <h1>Успех!</h1>
-      <p>Вы успешно зарегистрировались</p>
+      <p>Операция прошла успешно</p>
       <img src="/images/success_img.png" />
-      <Link to="/">Продолжить</Link>
+      <Link to="/dashboard">Продолжить</Link>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./Register.module.scss";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import { FormEvent, useState } from "react";
@@ -7,7 +7,6 @@ import { RegisterUserInterface } from "../../interfaces/authInterfaces";
 import AuthService from "../../api/services/authService";
 
 const Register: React.FC = () => {
-  const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
   const [userForm, setUserForm] = useState<RegisterUserInterface | null>(null);
 
@@ -32,9 +31,6 @@ const Register: React.FC = () => {
       const res = await authService.registerUser(registerData, "123");
       if (res.status === 201) {
         setSuccess(true);
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 2000);
       } else {
         alert("Произошла ошибка при регистрации. Попробуйте снова.");
       }
