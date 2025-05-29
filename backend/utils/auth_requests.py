@@ -51,4 +51,7 @@ class AuthRequests:
                 },
                 ssl=False
             ) as response:
+                if response.status != 200:
+                    print(await response.json())
+                    raise HTTPException(status_code=400, detail="Во время авторизации произошла ошибка")
                 return await response.json()
