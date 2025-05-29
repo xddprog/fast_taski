@@ -8,7 +8,7 @@ export default function ProfileContainer() {
     const [email, setEmail] = useState("");
     const [initialEmail, setInitialEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+    const [_, setAvatarUrl] = useState<string | null>(null);
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
 
