@@ -10,7 +10,7 @@ from backend.api.dependency.providers.request import get_current_user_dependency
 from backend.core import cache, services
 from backend.core.clients.redis_client import RedisClient
 from backend.core.dto.team_dto import BaseTeamModel
-from backend.core.dto.user_dto import BaseUserModel
+from backend.core.dto.user_dto import BaseUserModel, UpdateUserModel
 
 
 router = APIRouter()
@@ -33,8 +33,7 @@ async def get_user_teams(
 @router.put("/")
 @inject
 async def update_user(
-    request: Request,
-    form: BaseUserModel,
+    form: UpdateUserModel,
     user_service: FromDishka[services.UserService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
@@ -49,5 +48,4 @@ async def delete_user(
     user_service: FromDishka[services.UserService],
     current_user: BaseUserModel = Depends(get_current_user_dependency)
 ):
-    await user_service.check_user_exist(current_user.id)
     return await user_service.delete_user(current_user.id)

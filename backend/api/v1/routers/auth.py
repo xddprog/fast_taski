@@ -1,10 +1,10 @@
 from typing import Annotated
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, BackgroundTasks, Depends, Request, Response
+from fastapi import APIRouter, Depends, Request, Response
 
 from backend.api.dependency.providers.request import get_current_user_dependency
-from backend.core import cache, clients, services
+from backend.core import services
 from backend.core.dto.auth_dto import ExternalServiceUserData, LoginForm, RegisterForm
 from backend.core.dto.user_dto import BaseUserModel
 from backend.utils.enums import AuthServices
@@ -15,8 +15,8 @@ router = APIRouter()
 
 
 async def set_cookie_tokens(access_token: str, refresh_token: str, response: Response):
-    response.set_cookie(key="access_token", value=access_token, httponly=True)
-    response.set_cookie(key="refresh_token", value=refresh_token, httponly=True)
+    response.set_cookie(key="access_token", value=access_token, httponly=True, secure=True, samesite="none")
+    response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, secure=True, samesite="none")
 
 
 @router.get("/current_user")
