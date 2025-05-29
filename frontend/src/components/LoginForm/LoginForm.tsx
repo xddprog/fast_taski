@@ -21,7 +21,7 @@ const LoginForm: React.FC<FormProps> = ({
     event.preventDefault();
     if (formType === "register" && handleRegistre) {
       handleRegistre(event);
-      console.log("lol");
+      console.log(import.meta.env.VITE_BASE_API_URL);
     } else if (handleLogin) {
       handleLogin(event);
     }
