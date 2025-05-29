@@ -1,7 +1,8 @@
-from backend.core.dto.team_dto import BaseTeamModel
+from backend.core.dto.user_dto import UpdateUserModel
 from backend.core.repositories.user_repository import UserRepository
 from backend.core.services.base import BaseDbModelService
 from backend.infrastructure.database.models.user import User
+from backend.infrastructure.errors.auth_errors import UserAlreadyExists
 from backend.infrastructure.errors.user_errors import UserNotFound
 
 
@@ -22,3 +23,12 @@ class UserService(BaseDbModelService[User]):
     
     async def get_user(self, user_id: int) -> User:
         return await self.repository.get_item(user_id)
+    
+    async def update_user(self, user_id: int, form: UpdateUserModel):
+        if form.email:
+            user = await self.repository.get_by_attribute("email", form.email)
+            if user:
+                raise UserAlreadyExists
+            
+        await self.repository.update_item(user_id, **form.model_dump(exclude_none=True))
+        return await self.get_user(user_id)
