@@ -23,7 +23,7 @@ class SMTPClients:
             MAIL_PORT=YANDEX_SMTP_CONFIG.YANDEX_SMTP_PORT,
             MAIL_SERVER=YANDEX_SMTP_CONFIG.YANDEX_SMTP_HOST,
             MAIL_STARTTLS=True, 
-            MAIL_SSL_TLS=True, 
+            MAIL_SSL_TLS=False, 
             MAIL_FROM=YANDEX_SMTP_CONFIG.YANDEX_SMTP_USER,
             SUPPRESS_SEND=0,
             TIMEOUT=30
