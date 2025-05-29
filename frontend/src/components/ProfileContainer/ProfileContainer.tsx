@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import styles from "./ProfileContainer.module.scss";
 
 export default function ProfileContainer() {
     const [fullName, setFullName] = useState("");
     const [publicName, setPublicName] = useState("");
     const [email, setEmail] = useState("");
+    const [initialEmail, setInitialEmail] = useState("");
     const [phone, setPhone] = useState("");
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         async function fetchUserData() {
             try {
-                const response = await fetch('https://fasttaski.ru/api/v1/auth/current_user', {
-                    credentials: 'include',
+                const response = await fetch("https://fasttaski.ru/api/v1/auth/current_user", {
+                    credentials: "include",
                 });
                 if (!response.ok) throw new Error("Ошибка при получении пользователя");
                 const data = await response.json();
@@ -22,20 +22,41 @@ export default function ProfileContainer() {
                 setFullName(data.username || "");
                 setPublicName(data.public_name || data.username || "");
                 setEmail(data.email || "");
+                setInitialEmail(data.email || "");
                 if (data.phone) setPhone(data.phone);
+                if (data.avatar) setAvatarUrl(`https://fasttaski.ru${data.avatar}`);
             } catch (err) {
                 console.error("Ошибка загрузки профиля:", err);
-                setError("Не удалось загрузить данные.");
             }
         }
 
         fetchUserData();
     }, []);
 
+    interface UserUpdatePayload {
+        username: string;
+        public_name: string;
+        phone: string;
+        email?: string;
+        avatar?: string;
+    }
+
     async function handleSave() {
         setLoading(true);
-        setError("");
-        setSuccess(false);
+
+        const payload: UserUpdatePayload = {
+            username: fullName,
+            public_name: publicName,
+            phone,
+        };
+
+        if (email !== initialEmail) {
+            payload.email = email;
+        }
+
+        if (avatarUrl) {
+            payload.avatar = avatarUrl.replace("https://fasttaski.ru", "");
+        }
 
         try {
             const response = await fetch("https://fasttaski.ru/api/v1/user/", {
@@ -44,26 +65,56 @@ export default function ProfileContainer() {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({
-                    username: fullName,
-                    public_name: publicName,
-                    email: email,
-                    phone: phone,
-                }),
+                body: JSON.stringify(payload),
             });
 
             if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || "Ошибка обновления профиля");
-            }
+                const errorData = await response.json();
 
-            setSuccess(true);
+                if (
+                    errorData?.detail &&
+                    typeof errorData.detail === "string" &&
+                    errorData.detail.includes("почтой")
+                ) {
+                    alert("Пользователь с таким e-mail уже существует.");
+                    throw new Error("Email занят");
+                }
+
+                throw new Error(errorData.detail || "Ошибка обновления профиля");
+            }
         } catch (err) {
             console.error(err);
-            setError("Не удалось сохранить изменения.");
         } finally {
             setLoading(false);
         }
+    }
+
+    async function handleAvatarUpload(event: ChangeEvent<HTMLInputElement>) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("avatar", file);
+
+        try {
+            const response = await fetch("https://fasttaski.ru/api/v1/user/", {
+                method: "POST",
+                credentials: "include",
+                body: formData,
+            });
+
+            if (!response.ok) throw new Error("Ошибка загрузки аватара");
+
+            const data = await response.json();
+            setAvatarUrl(`https://fasttaski.ru${data.path}`);
+        } catch (err) {
+            console.error(err);
+            alert("Не удалось загрузить аватар");
+        }
+    }
+
+    function handleAvatarRemove() {
+        setAvatarUrl(null);
     }
 
     return (
@@ -75,16 +126,22 @@ export default function ProfileContainer() {
                     <div className={styles.blockWithAvatar}>
                         <div className={styles.profilePhoto}>
                             <img
-                                src="/images/Avatar.png"
+                                src={avatarUrl || "/images/avatarImage.png"}
                                 alt="Фото профиля"
                                 className={styles.photo}
                             />
                             <div className={styles.btns}>
-                                <button className={styles.firstButton}>
+                                <label className={styles.firstButton}>
                                     <img src="/images/ImageUpload.png" alt="" />
                                     Загрузить
-                                </button>
-                                <button className={styles.secondButton}>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleAvatarUpload}
+                                        hidden
+                                    />
+                                </label>
+                                <button className={styles.secondButton} onClick={handleAvatarRemove}>
                                     <img src="/images/Trash.png" alt="" />
                                     Удалить
                                 </button>
@@ -149,8 +206,6 @@ export default function ProfileContainer() {
                                 Отменить
                             </button>
                         </div>
-                        {error && <p className={styles.error}>{error}</p>}
-                        {success && <p className={styles.success}>Изменения сохранены!</p>}
                     </div>
                 </div>
             </div>
