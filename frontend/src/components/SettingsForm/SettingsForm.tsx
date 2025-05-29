@@ -1,12 +1,16 @@
 import styles from "./SettingsForm.module.scss";
 
-const SettingsForm: React.FC = () => {
+type Props = {
+  onClick: (param: string) => void;
+};
+
+const SettingsForm: React.FC<Props> = ({ onClick }) => {
   return (
     <section className={styles.settingsForm}>
       <div className={styles.settingsGroup}>
         <div className={styles.settingsGroupLine}>
           <span>Столбцы</span>
-          <img src="/icons/plus.svg" />
+          <img src="/icons/plus.svg" onClick={() => onClick("column")} />
         </div>
         <div className={styles.settingsContainer}>
           <div className={styles.columnSettingsCard}>
@@ -43,7 +47,7 @@ const SettingsForm: React.FC = () => {
       <div className={styles.settingsGroup}>
         <div className={styles.settingsGroupLine}>
           <span>Тэги</span>
-          <img src="/icons/plus.svg" />
+          <img src="/icons/plus.svg" onClick={() => onClick("tag")} />
         </div>
         <div className={styles.settingsContainer}>
           <div className={styles.columnSettingsCard}>

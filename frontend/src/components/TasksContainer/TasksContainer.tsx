@@ -3,6 +3,7 @@ import Task from "../Task/Task";
 import styles from "./TasksContainer.module.scss";
 import SettingsForm from "../SettingsForm/SettingsForm";
 import FiltersFrom from "../FiltersFrom/FiltersFrom";
+import AddingForm from "../AddingForm/AddingForm";
 
 const tasksList = [
   {
@@ -38,6 +39,7 @@ const tasksList = [
 const TasksContainer: React.FC = () => {
   const [activeSettingsForm, setActiveSettingsForm] = useState(false);
   const [activeFilterForm, setActiveFilterForm] = useState(false);
+  const [activeAddingForm, setActiveAddingForm] = useState("");
 
   function handleActionForm(param: string) {
     switch (param) {
@@ -47,6 +49,21 @@ const TasksContainer: React.FC = () => {
 
       case "filter":
         setActiveFilterForm(!activeFilterForm);
+        break;
+    }
+  }
+
+  function handleAddingFormClick(param: string) {
+    switch (param) {
+      case "column":
+        setActiveAddingForm("column");
+        break;
+
+      case "tag":
+        setActiveAddingForm("tag");
+        break;
+      case "close":
+        setActiveAddingForm("");
         break;
     }
   }
@@ -66,7 +83,7 @@ const TasksContainer: React.FC = () => {
                 onClick={() => handleActionForm("settings")}
               />
             </div>
-            <SettingsForm />
+            <SettingsForm onClick={handleAddingFormClick} />
           </div>
         </div>
       ) : (
@@ -89,6 +106,22 @@ const TasksContainer: React.FC = () => {
             <FiltersFrom />
           </div>
         </div>
+      ) : (
+        <></>
+      )}
+
+      {activeAddingForm === "column" ? (
+        <AddingForm
+          title={"Новый столбец"}
+          text={"Название"}
+          onClick={handleAddingFormClick}
+        />
+      ) : activeAddingForm === "tag" ? (
+        <AddingForm
+          title={"Новый тэг"}
+          text={"Тэг"}
+          onClick={handleAddingFormClick}
+        />
       ) : (
         <></>
       )}
