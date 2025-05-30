@@ -92,7 +92,6 @@ const NavbarGroup: React.FC = () => {
 
     getTeams();
   }, []);
-  console.log(teams);
 
   function handleFormClick() {
     setTeamsForm(!teamsForm);
