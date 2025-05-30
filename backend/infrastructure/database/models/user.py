@@ -10,6 +10,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(nullable=True)
     password: Mapped[str] = mapped_column(nullable=True)
     avatar: Mapped[str] = mapped_column(nullable=True)
+    phone_number: Mapped[str] = mapped_column(nullable=True)
 
     teams = relationship("UserTeam", back_populates="user")    
     created_teams = relationship("Team", back_populates="owner")

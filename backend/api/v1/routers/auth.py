@@ -63,7 +63,7 @@ async def refresh_token(
     refresh_token = request.cookies.get("refresh_token")
     email = await auth_service.verify_token(refresh_token)
     access_token = await auth_service.create_access_token(email)
-    response.set_cookie(key="access_token", value=access_token, httponly=True)
+    await set_cookie_tokens(access_token, refresh_token, response)
     
 
 @router.delete("/logout")

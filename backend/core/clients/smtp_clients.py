@@ -26,7 +26,7 @@ class SMTPClients:
             MAIL_SSL_TLS=False, 
             MAIL_FROM=YANDEX_SMTP_CONFIG.YANDEX_SMTP_USER,
             SUPPRESS_SEND=0,
-            TIMEOUT=30
+            TIMEOUT=10
         )
 
     async def send_verification_code(

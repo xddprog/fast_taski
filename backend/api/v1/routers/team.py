@@ -1,7 +1,7 @@
 from typing import Annotated
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, BackgroundTasks, Depends, Request
+from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import JSONResponse
 
 from backend.api.dependency.providers.request import get_current_user_dependency
@@ -18,10 +18,10 @@ router = APIRouter()
 @cache.clear(namespaces=["teams"], set_after=True)
 async def create_team(
     request: Request,
-    form: CreateTeamModel,
     team_service: FromDishka[services.TeamService],
     user_service: FromDishka[services.UserService],
-    current_user: BaseUserModel = Depends(get_current_user_dependency)
+    current_user: BaseUserModel = Depends(get_current_user_dependency),
+    form: CreateTeamModel = Form(...),
 ):
     await team_service.check_team_exist(form.name)
     members = await user_service.get_users_by_emails(form.members, only_ids=True)
@@ -87,10 +87,10 @@ async def change_team_owner(
 @cache.clear(namespaces=["team", "teams"], queries=["team_id"], set_after=True)
 async def update_team(
     request: Request,
-    form: UpdateTeamModel,
     team_id: int,
     team_service: FromDishka[services.TeamService],
-    current_user: BaseUserModel = Depends(get_current_user_dependency)
+    current_user: BaseUserModel = Depends(get_current_user_dependency),
+    form: UpdateTeamModel = Form(...),
 ):
     return await team_service.update_team(team_id, form, current_user.id)
 
