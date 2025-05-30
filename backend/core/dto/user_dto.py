@@ -1,4 +1,4 @@
-from fastapi import Form
+from fastapi import Form, UploadFile
 from pydantic import BaseModel, field_validator
 
 from backend.infrastructure.config.aws_config import AWS_STORAGE_CONFIG
@@ -9,6 +9,7 @@ class BaseUserModel(BaseModel):
     username: str
     email: str | None = None
     avatar: str | None = None
+    phone_number: str | None = None
 
     @field_validator("avatar")
     def validate_avatar(cls, v):
@@ -25,4 +26,5 @@ class UserTeamModel(BaseModel):
 class UpdateUserModel(BaseModel):
     username: str | None = Form(None)
     email: str | None = Form(None)
-    avatar: str | None = Form(None)
+    avatar: UploadFile | None = Form(None)
+    phone_number: str | None = Form(None)

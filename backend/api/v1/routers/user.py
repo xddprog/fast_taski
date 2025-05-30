@@ -2,7 +2,7 @@ import time
 from typing import Annotated
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Form, Request
 from fastapi import Depends
 import orjson
 
@@ -33,9 +33,9 @@ async def get_user_teams(
 @router.put("/")
 @inject
 async def update_user(
-    form: UpdateUserModel,
     user_service: FromDishka[services.UserService],
-    current_user: BaseUserModel = Depends(get_current_user_dependency)
+    form: UpdateUserModel,
+    current_user: BaseUserModel = Depends(get_current_user_dependency),
 ):
     await user_service.check_user_exist(current_user.id)
     return await user_service.update_user(current_user.id, form)
