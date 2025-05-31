@@ -26,7 +26,7 @@ class AWSClient:
     async def upload_one_file(self, file: UploadFile, path: str):
         await self.client.put_object(
             Key=path, 
-            Body=file.file,
+            Body=file.file.read(),
             Bucket=AWS_STORAGE_CONFIG.AWS_BUCKET_NAME
         )
 

@@ -5,7 +5,6 @@ from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.core import clients, repositories, services
-from backend.core.clients.redis_client import RedisClient
 from backend.core.dto.user_dto import BaseUserModel
 from backend.core.tasks_manager.manager import TasksManager
 from backend.infrastructure.database.connection.postgres_connection import DatabaseConnection
@@ -26,7 +25,7 @@ class RequestProvider(Provider):
         return services.AuthService(repository=repositories.UserRepository(session=session))
 
     @provide(scope=Scope.REQUEST)
-    def get_tfa_service(self, session: AsyncSession, redis_client: RedisClient) -> services.TwoFactorAuthService:
+    def get_tfa_service(self, session: AsyncSession, redis_client: clients.RedisClient) -> services.TwoFactorAuthService:
         return services.TwoFactorAuthService(
             repository=repositories.UserRepository(session=session),
             redis_client=redis_client
@@ -45,18 +44,29 @@ class RequestProvider(Provider):
         self, 
         session: AsyncSession, 
         tasks_manager: TasksManager, 
-        redis_client: RedisClient
+        redis_client: clients.RedisClient,
+        aws_client: clients.AWSClient
     ) -> services.TeamService:    
         return services.TeamService(
             repository=repositories.TeamRepository(session=session),
             smtp_clients=clients.SMTPClients(),
             redis_client=redis_client,
-            tasks_manager=tasks_manager
+            tasks_manager=tasks_manager,
+            aws_client=aws_client
         )
     
     @provide(scope=Scope.REQUEST)
-    def get_user_service(self, session: AsyncSession) -> services.UserService:    
-        return services.UserService(repository=repositories.UserRepository(session=session))
+    def get_user_service(
+        self, 
+        session: AsyncSession, 
+        tasks_manager: TasksManager,
+        aws_client: clients.AWSClient
+    ) -> services.UserService:    
+        return services.UserService(
+            repository=repositories.UserRepository(session=session),
+            aws_client=aws_client,
+            tasks_manager=tasks_manager
+        )
     
     @provide(scope=Scope.REQUEST)
     def get_tag_service(self, session: AsyncSession) -> services.TagService:    

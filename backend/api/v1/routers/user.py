@@ -34,7 +34,7 @@ async def get_user_teams(
 @inject
 async def update_user(
     user_service: FromDishka[services.UserService],
-    form: UpdateUserModel,
+    form: UpdateUserModel = Form(...),
     current_user: BaseUserModel = Depends(get_current_user_dependency),
 ):
     await user_service.check_user_exist(current_user.id)

@@ -64,7 +64,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
                     "input": input,
                 }
             )
-        print(str(exc.errors())[:300])
         return JSONResponse(content=errors, status_code=422)
     except TypeError:
         return JSONResponse(

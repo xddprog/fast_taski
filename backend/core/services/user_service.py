@@ -1,4 +1,5 @@
-from backend.core.dto.user_dto import UpdateUserModel
+from uuid import uuid4
+from backend.core.dto.user_dto import BaseUserModel, UpdateUserModel
 from backend.core.repositories.user_repository import UserRepository
 from backend.core.services.base import BaseDbModelService
 from backend.infrastructure.database.models.user import User
@@ -30,8 +31,19 @@ class UserService(BaseDbModelService[User]):
             if user:
                 raise UserAlreadyExists
             
-        await self.repository.update_item(user_id, **form.model_dump(exclude_none=True))
-        return await self.get_user(user_id)
+        if form.avatar:
+            path = f"user/{user_id}/avatar.{form.avatar.content_type.split("/")[1]}"
+            await self.tasks_manager.add_base_task(
+                func=self.aws_client.upload_one_file,
+                namespace="upload_team_avatar",
+                task_name=f"{uuid4()}",
+                func_args=(form.avatar, path),
+            )
+            form.avatar = path
+        print(form.avatar)
+                
+        user = await self.repository.update_item(user_id, **form.model_dump(exclude_none=True))
+        return BaseUserModel.model_validate(user, from_attributes=True)
     
     async def delete_user(self, user_id: int):
         user = await self.check_user_exist(user_id)

@@ -25,7 +25,7 @@ class AppProvider(Provider):
     
     @provide(scope=Scope.APP)
     async def get_aws_client(self) -> AWSClient:
-        return AWSClient()
+        return await AWSClient()()
     
     @provide(scope=Scope.APP)
     async def get_tasks_manager(self) -> TasksManager:

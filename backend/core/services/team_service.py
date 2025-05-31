@@ -47,7 +47,7 @@ class TeamService(BaseDbModelService[Team]):
     async def create_team(self, form: CreateTeamModel, current_user: BaseUserModel, members: list[int]):
         if form.avatar:
             path = f"teams/{form.name}/avatar.{form.avatar.content_type.split("/")[1]}"
-            self.tasks_manager.add_base_task(
+            await self.tasks_manager.add_base_task(
                 func=self.aws_client.upload_one_file,
                 namespace=f"team_{form.name}",
                 task_name="upload_team_avatar",
@@ -83,7 +83,7 @@ class TeamService(BaseDbModelService[Team]):
 
         if form.avatar:
             path = f"teams/{team.name if form.name else team.name}/avatar.{form.avatar.content_type.split("/")[1]}"
-            self.tasks_manager.add_base_task(
+            await self.tasks_manager.add_base_task(
                 func=self.aws_client.upload_one_file,
                 namespace="upload_team_avatar",
                 task_name=f"{uuid4()}",
