@@ -10,7 +10,7 @@ export default function ProfileContainer() {
     const [phone, setPhone] = useState("");
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
-    const [avatarBase64, setAvatarBase64] = useState<string | null>(null);
+    const [_, setAvatarBase64] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [phoneError, setPhoneError] = useState<string | null>(null);
