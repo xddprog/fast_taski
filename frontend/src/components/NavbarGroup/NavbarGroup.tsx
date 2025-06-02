@@ -29,7 +29,7 @@ const NavbarGroup: React.FC = () => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      alert("Команда с таким названием уже существует");
+      // alert("Команда с таким названием уже существует");
       throw new Error(`Ошибка запроса: ${response.status} - ${errorText}`);
     }
 
